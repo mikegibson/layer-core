@@ -26,6 +26,7 @@
         "symfony/yaml": "2.5.*@dev",
         "twig/twig": ">=1.8,<2.0-dev",
         "illuminate/database": "*",
+        "kriswallsmith/assetic": "1.2.*@dev",
         "mrclay/minify": "*",
         "knplabs/console-service-provider": "dev-master"
     },
