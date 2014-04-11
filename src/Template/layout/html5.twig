@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+{% block tag_html %}<html>{% endblock %}
+
+	<head>
+
+		{% block head %}
+
+		<title>{% block title %}{{ app_name }}{% endblock %}</title>
+
+		{% block meta %}
+		<meta charset="{{ app_charset }}" />
+		{% if block('meta_description') is not empty %}
+		<meta name="description" content="{% block meta_description %}{% endblock %}">
+		{% endif %}
+		{% endblock %}
+
+		{% block stylesheets %}{% endblock %}
+
+		{% endblock %}
+
+	</head>
+
+	{% block tag_body %}<body>{% endblock %}
+
+		{% block body %}
+
+		{% block content %}{% endblock %}
+
+		{% endblock %}
+
+		{% block javascripts %}{% endblock %}
+
+	</body>
+
+</html>

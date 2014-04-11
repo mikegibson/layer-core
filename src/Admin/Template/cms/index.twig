@@ -1,0 +1,15 @@
+{% extends "@admin/layout/admin.twig" %}
+
+{% block content %}
+
+	<h1>{{ dataType.pluralHumanName }}</h1>
+
+	{{ admin_link( dataType ) }}
+
+	{{ link( 'List link', 'admin_scaffold', {'namespace': dataType.namespace, 'type': dataType.slug, 'action': 'index'}) }}
+
+	{{ table_render( paginator ) }}
+
+	{{ paginator.count }}
+
+{% endblock %}

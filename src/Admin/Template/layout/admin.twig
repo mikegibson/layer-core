@@ -1,0 +1,21 @@
+{% extends "layout/standard.twig" %}
+
+{% block stylesheets %}
+
+    {{ parent() }}
+
+    <link rel="stylesheet" type="text/css" href="/assets/css/admin/admin.css" />
+
+{% endblock %}
+
+{% block header %}
+	<h1>{{ app_name }} Admin</h1>
+{% endblock %}
+
+{% block javascripts %}
+
+	{{ parent() }}
+
+    <script src="/assets/js/admin/admin.js"></script>
+
+{% endblock %}

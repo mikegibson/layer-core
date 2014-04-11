@@ -1,0 +1,37 @@
+{
+    "name": "mikegibson/layer",
+    "description": "Layer CMS Framework",
+    "keywords": ["microframework"],
+    "homepage": "http://silex.sensiolabs.org",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Mike Gibson",
+            "homepage": "https://twitter.com/dev_mike"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.4",
+        "ext-mbstring": "*",
+        "silex/silex": "~1.1",
+        "symfony/config": "2.5.*@dev",
+        "symfony/debug": "2.5.*@dev",
+        "symfony/form": "2.5.*@dev",
+        "symfony/monolog-bridge": "2.5.*@dev",
+        "symfony/security": "2.5.*@dev",
+        "symfony/translation": "2.5.*@dev",
+        "symfony/twig-bridge": "2.5.*@dev",
+        "symfony/validator": "2.5.*@dev",
+        "symfony/yaml": "2.5.*@dev",
+        "twig/twig": ">=1.8,<2.0-dev",
+        "illuminate/database": "*",
+        "mrclay/minify": "*",
+        "knplabs/console-service-provider": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Layer\\": "./src"
+        }
+    }
+}

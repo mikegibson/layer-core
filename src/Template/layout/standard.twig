@@ -1,0 +1,50 @@
+{% extends "layout/html5.twig" %}
+
+{% block meta %}
+
+	{{ parent() }}
+
+	<meta name="viewport" content="{% block meta_viewport %}width=device-width, initial-scale=1{% endblock %}">
+	<meta http-equiv="X-UA-Compatible" content="{% block meta_x_ua_compatible %}IE=edge{% endblock %}">
+
+{% endblock %}
+
+{% block head %}
+
+	{{ parent() }}
+
+	<script src="/assets/js/modernizr.js"></script>
+
+{% endblock %}
+
+{% block body %}
+
+<div id="container">
+
+	{% block container %}
+
+		<header>
+
+			{% block header %}<h1>{{ app_name }}</h1>{% endblock %}
+
+		</header>
+
+		<section id="content">
+
+			{% block content %}{% endblock %}
+
+		</section>
+
+		{% if block('footer') is not empty %}
+		<footer>
+
+			{% block footer %}{% endblock %}
+
+		</footer>
+		{% endif %}
+
+	{% endblock %}
+
+</div>
+
+{% endblock %}
