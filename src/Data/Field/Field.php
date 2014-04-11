@@ -179,7 +179,7 @@ abstract class Field {
     /**
      * @param Blueprint $blueprint
      */
-    protected function prepareBlueprint(Blueprint $blueprint) {
+    public function prepareBlueprint(Blueprint $blueprint) {
         $blueprint->add($this->type, $this->name, $this->params());
     }
 
