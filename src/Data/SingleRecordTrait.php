@@ -6,27 +6,44 @@ use Symfony\Component\HttpFoundation\Request;
 
 trait SingleRecordTrait {
 
-    protected $requestParam = 'id';
-
+    /**
+     * @param DataType $dataType
+     * @param Request $request
+     * @param Model $model
+     * @param null $requestParam
+     * @param null $keyField
+     * @param int $abort
+     * @return bool
+     */
     protected function _getSingleRecord(
         DataType $dataType,
         Request $request,
         Model $model = null,
+        $requestParam = null,
+        $keyField = null,
         $abort = 404
     ) {
 
-        if(!$value = $request->get($this->requestParam)) {
+        if($model === null) {
+            $model = $dataType->model();
+        }
+
+        if($keyField === null) {
+            $keyField = $model->getKeyName();
+        }
+
+        if($requestParam === null) {
+            $requestParam = $keyField;
+        }
+
+        if(!$value = $request->get($requestParam)) {
             if($abort) {
                 $this->app->abort($abort);
             }
             return false;
         }
 
-        if($model === null) {
-            $model = $dataType->model();
-        }
-
-        return $model->where('id', $value)->firstOrFail();
+        return $model->where($keyField, $value)->firstOrFail();
 
     }
 
