@@ -45,19 +45,20 @@ class CmsController extends Controller {
         $dataType = $request->get('dataType');
         $record = $this->_getSingleRecord($dataType, $request);
 
-        $builder = $this->app->form($record);
+        $formBuilder = $this->app->form($record->toArray());
 
         foreach($dataType->fields() as $field) {
             if($field->editable) {
-                $builder->add($field->name, $field->inputType);
+                $formBuilder->add($field->name, $field->inputType);
             }
         }
 
-        $form = $builder->getForm();
+        $form = $formBuilder->getForm();
 
         if($request->isMethod('post')) {
             $form->handleRequest($request);
-            //var_dump($form->getData());
+            $record->setAttributes($form->getData());
+            $record->save();
         }
 
         return compact('dataType', 'form', 'record');

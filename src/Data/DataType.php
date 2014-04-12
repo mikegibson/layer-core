@@ -3,7 +3,7 @@
 namespace Layer\Data;
 
 use Illuminate\Database\Connection;
-use Layer\Data\Blueprint;
+use Illuminate\Database\Query\Processors\Processor;
 use Layer\Data\Field\Field;
 use Silex\Application;
 
@@ -251,11 +251,21 @@ abstract class DataType {
         return $fields;
     }
 
-    public function query($connection = null) {
+    /**
+     * @param array $attributes
+     * @return Model
+     */
+    public function model(array $attributes = []) {
+        return new Model($this->app, $this, $attributes);
+    }
+
+    public function query($connection = null, Processor $processor = null) {
 
         $connection = $this->getConnection($connection);
 
-        $processor = $connection->getPostProcessor();
+        if($processor === null) {
+            $processor = $connection->getPostProcessor();
+        }
 
         $query = new QueryBuilder($connection, $connection->getQueryGrammar(), $processor);
 

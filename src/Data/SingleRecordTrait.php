@@ -11,7 +11,7 @@ trait SingleRecordTrait {
     protected function _getSingleRecord(
         DataType $dataType,
         Request $request,
-        QueryBuilder $query = null,
+        Model $model = null,
         $abort = 404
     ) {
 
@@ -22,11 +22,11 @@ trait SingleRecordTrait {
             return false;
         }
 
-        if($query === null) {
-            $query = $dataType->query();
+        if($model === null) {
+            $model = $dataType->model();
         }
 
-        return $query->where('id', $value)->first();
+        return $model->where('id', $value)->first();
 
     }
 
