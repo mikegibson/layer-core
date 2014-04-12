@@ -5,7 +5,6 @@ namespace Layer\Asset;
 use Assetic\AssetManager;
 use Assetic\AssetWriter;
 use Assetic\Filter\CompassFilter;
-use Assetic\Filter\JSMinFilter;
 use Assetic\Filter\UglifyCssFilter;
 use Assetic\Filter\UglifyJs2Filter;
 use Assetic\FilterManager;
@@ -42,10 +41,6 @@ class AssetServiceProvider implements ServiceProviderInterface {
             return new AssetManager();
         });
 
-        $app['assetic.filters.jsmin'] = $app->share(function() {
-            return new JSMinFilter();
-        });
-
         $app['assetic.filters.uglifyjs2'] = $app->share(function() {
             return new UglifyJs2Filter();
         });
@@ -67,7 +62,6 @@ class AssetServiceProvider implements ServiceProviderInterface {
          */
         $app['assetic.filter_manager'] = $app->share(function () use ($app) {
             $manager = new FilterManager();
-            $manager->set('jsmin', $app['assetic.filters.jsmin']);
             $manager->set('uglifyjs', $app['assetic.filters.uglifyjs2']);
             $manager->set('uglifycss', $app['assetic.filters.uglifycss']);
             $manager->set('compass', $app['assetic.filters.compass']);
