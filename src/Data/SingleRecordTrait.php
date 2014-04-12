@@ -26,7 +26,7 @@ trait SingleRecordTrait {
             $model = $dataType->model();
         }
 
-        return $model->where('id', $value)->first();
+        return $model->where('id', $value)->firstOrFail();
 
     }
 
