@@ -33,7 +33,7 @@ trait PaginatorTrait {
         $paginatorRequest = $this->_getPaginatorRequest($request, $requestConfig);
         $paginatorResult = $this->_getPaginatorResult($dataType, $query, $resultConfig);
 
-        return $this->_getPaginator($this->app, $dataType, $paginatorRequest, $paginatorResult);
+        return $this->_getPaginator($dataType, $paginatorRequest, $paginatorResult);
     }
 
     /**
