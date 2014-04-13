@@ -6,19 +6,21 @@
 	{% set id = id ~ '_submit' %}
 	{% set type = type|default('submit') %}
 	{% set label = label|default('Save') %}
-	<button id="{{ id }}" type="{{ type }}">{{ label }}</button>
+	<div class="button {{ type }}">
+		<button id="{{ id }}" type="{{ type }}">{{ label }}</button>
+	</div>
 
 {% endspaceless %}
 {% endblock %}
 
-{% block form_rows %}
+{% block form_row %}
 {% spaceless %}
 
-	{{ parent() }}
-
-	{% if form.parent is empty %}
-	{{ form_row(form._token) }}
-	{% endif %}
+	<div class="input input_{{ name }}{% if required %} required{% endif %}">
+		{{ form_label(form) }}
+		{{ form_errors(form) }}
+		{{ form_widget(form) }}
+	</div>
 
 {% endspaceless %}
 {% endblock %}
