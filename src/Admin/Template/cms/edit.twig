@@ -1,10 +1,13 @@
 {% extends "@admin/layout/admin.twig" %}
+{% form_theme form "@admin/form/cms.twig" %}
 
-{% form_theme form "@admin/form/form_admin.twig" %}
-
-{% block content %}
+{% block content_header %}
 
 	<h1>Edit {{ dataType.singularHumanName }}</h1>
+
+{% endblock %}
+
+{% block content_inner %}
 
 	{{ form( form ) }}
 

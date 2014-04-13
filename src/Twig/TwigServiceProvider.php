@@ -21,6 +21,8 @@ class TwigServiceProvider extends \Silex\Provider\TwigServiceProvider {
 
 		parent::register($app);
 
+		$app['twig.form.templates'] = array('form/default.twig');
+
 		$app['twig.loader.filesystem'] = $app->share(function () {
 			return new TwigLoader();
 		});

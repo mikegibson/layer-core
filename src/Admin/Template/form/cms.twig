@@ -1,14 +1,19 @@
-{% use "form_div_layout.html.twig" %}
+{% use "form/default.twig" %}
 
 {% block form_label %}
+{% spaceless %}
+
 	{{ parent() }}
 
 	{% if required %}
 		<span class="required" title="This field is required">*</span>
 	{% endif %}
+
+{% endspaceless %}
 {% endblock %}
 
 {% block form_rows %}
+{% spaceless %}
 
 	{{ parent() }}
 
@@ -16,4 +21,5 @@
 	{{ block('submit_widget') }}
 	{% endif %}
 
+{% endspaceless %}
 {% endblock %}

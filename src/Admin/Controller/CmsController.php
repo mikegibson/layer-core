@@ -45,8 +45,12 @@ class CmsController extends Controller {
 
 		$dataType = $request->get('dataType');
 		$record = $this->_getSingleRecord($dataType, $request);
+		$array = $record->toArray();
 
-		$formBuilder = $this->app->form($record->toArray(), ['method' => 'PUT', 'action' => $request->getRequestUri()]);
+		$formBuilder = $this->app->form('form_edit', $array, [
+			'method' => 'PUT',
+			'action' => $request->getRequestUri()
+		]);
 
 		foreach ($dataType->fields() as $field) {
 			if ($field->editable) {
@@ -56,10 +60,12 @@ class CmsController extends Controller {
 
 		$form = $formBuilder->getForm();
 
-		if ($request->isMethod('post')) {
-			$form->handleRequest($request);
-			$record->setAttributes($form->getData());
-			$record->save();
+		$form->handleRequest($request);
+		if ($form->isSubmitted()) {
+			if($form->isValid()) {
+				$record->setAttributes($form->getData());
+				$record->save();
+			}
 		}
 
 		$data = compact('dataType', 'record');

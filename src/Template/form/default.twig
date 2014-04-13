@@ -1,0 +1,24 @@
+{% use "form_div_layout.html.twig" %}
+
+{% block submit_widget %}
+{% spaceless %}
+
+	{% set id = id ~ '_submit' %}
+	{% set type = type|default('submit') %}
+	{% set label = label|default('Save') %}
+	<button id="{{ id }}" type="{{ type }}">{{ label }}</button>
+
+{% endspaceless %}
+{% endblock %}
+
+{% block form_rows %}
+{% spaceless %}
+
+	{{ parent() }}
+
+	{% if form.parent is empty %}
+	{{ form_row(form._token) }}
+	{% endif %}
+
+{% endspaceless %}
+{% endblock %}

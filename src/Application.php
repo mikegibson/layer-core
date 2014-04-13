@@ -29,6 +29,8 @@ use Silex\Provider\SwiftmailerServiceProvider;
 use Silex\Provider\TranslationServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
 use Silex\Provider\ValidatorServiceProvider;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
  * Class Application
@@ -181,13 +183,26 @@ class Application extends \Silex\Application {
 	 * @param $name
 	 * @param null $data
 	 * @param array $options
-	 * @return mixed
+	 * @return \Symfony\Component\Form\FormBuilderInterface
 	 */
 	public function form($name, $data = null, array $options = array()) {
 		$options = array_merge(['type' => 'form'], $options);
 		$type = $options['type'];
 		unset($options['type']);
 		return $this['form.factory']->createNamedBuilder($name, $type, $data, $options);
+	}
+
+	/**
+	 * @param Request $request
+	 * @param int $type
+	 * @param bool $catch
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function handle(Request $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true) {
+		if($type === HttpKernelInterface::MASTER_REQUEST) {
+			$request->enableHttpMethodParameterOverride();
+		}
+		return parent::handle($request, $type, $catch);
 	}
 
 }
