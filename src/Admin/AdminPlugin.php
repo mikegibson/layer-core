@@ -2,11 +2,9 @@
 
 namespace Layer\Admin;
 
-use Assetic\AssetManager;
 use Layer\Admin\Controller\CmsController;
 use Layer\Admin\View\AdminHelper;
 use Layer\Admin\View\TwigAdminExtension;
-use Layer\Asset\AssetFactory;
 use Layer\Plugin\Plugin;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,8 +17,6 @@ use Symfony\Component\HttpFoundation\Request;
 class AdminPlugin extends Plugin {
 
     protected $name = 'admin';
-
-    protected $depends = ['data'];
 
     /**
      * @param Application $app
