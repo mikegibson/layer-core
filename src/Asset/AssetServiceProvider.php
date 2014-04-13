@@ -101,6 +101,7 @@ class AssetServiceProvider implements ServiceProviderInterface {
                 return new AssetResponse($app, $asset);
 
             })
+            ->bind('asset')
             ->assert('asset', '.+')
             ->convert('asset', function($file) use($app) {
 
@@ -132,6 +133,17 @@ class AssetServiceProvider implements ServiceProviderInterface {
             return $controllers;
 
         });
+
+        $app['asset_helper'] = $app->share(function() use($app) {
+            return new AssetHelper($app);
+        });
+
+        $app['twig'] = $app->share(
+            $app->extend('twig', function (\Twig_Environment $twig) use ($app) {
+                $twig->addExtension(new TwigAssetExtension($app['asset_helper']));
+                return $twig;
+            })
+        );
 
         $app->mount('/assets', $app['assets.controllers']);
 

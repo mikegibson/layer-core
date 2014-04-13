@@ -4,7 +4,7 @@
 
     {{ parent() }}
 
-    <link rel="stylesheet" type="text/css" href="/assets/css/admin/admin.css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset_url('css_admin') }}" />
 
 {% endblock %}
 
@@ -16,6 +16,6 @@
 
 	{{ parent() }}
 
-    <script src="/assets/js/admin/admin.js"></script>
+    <script src="{{ asset_url('js_admin') }}"></script>
 
 {% endblock %}
