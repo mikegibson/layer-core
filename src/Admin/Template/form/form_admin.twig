@@ -1,0 +1,19 @@
+{% use "form_div_layout.html.twig" %}
+
+{% block form_label %}
+	{{ parent() }}
+
+	{% if required %}
+		<span class="required" title="This field is required">*</span>
+	{% endif %}
+{% endblock %}
+
+{% block form_rows %}
+
+	{{ parent() }}
+
+	{% if form.parent is empty %}
+	{{ block('submit_widget') }}
+	{% endif %}
+
+{% endblock %}

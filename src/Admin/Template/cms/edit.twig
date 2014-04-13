@@ -1,15 +1,11 @@
 {% extends "@admin/layout/admin.twig" %}
 
+{% form_theme form "@admin/form/form_admin.twig" %}
+
 {% block content %}
 
 	<h1>Edit {{ dataType.singularHumanName }}</h1>
 
-	<form method="post" action="#">
-
-		{{ form_widget( form.createView() ) }}
-
-		<button type="submit">Save</button>
-
-	</form>
+	{{ form( form ) }}
 
 {% endblock %}
