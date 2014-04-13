@@ -12,14 +12,17 @@
 {% endspaceless %}
 {% endblock %}
 
-{% block form_rows %}
-{% spaceless %}
+{% block form_end %}
+	{% spaceless %}
 
-	{{ parent() }}
+		{% if not render_rest is defined or render_rest %}
+			{{ form_rest(form) }}
+		{% endif %}
 
-	{% if form.parent is empty %}
-	{{ block('submit_widget') }}
-	{% endif %}
+		{% if form.parent is empty %}
+			{{ block('submit_widget') }}
+		{% endif %}
 
-{% endspaceless %}
+		</form>
+	{% endspaceless %}
 {% endblock %}
