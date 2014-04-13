@@ -17,22 +17,22 @@ interface PaginatorInterface extends TableDataInterface {
      * @param null $sortKey
      * @param null $direction
      */
-    public function getData($page = 1, $limit = null, $sortKey = null, $direction = null);
+    public function getData();
 
     /**
      * @return int
      */
-    public function getCount();
+    public function getTotal();
 
     /**
      * @return int
      */
-    public function getPage();
+    public function getCurrentPage();
 
     /**
      * @return int
      */
-    public function getLimit();
+    public function getPerPage();
 
     /**
      * @return string|null

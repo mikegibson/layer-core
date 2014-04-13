@@ -2,7 +2,7 @@
 
 namespace Layer\Data;
 
-use Illuminate\Database\Connection;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Processors\Processor;
 use Layer\Data\Field\Field;
 use Silex\Application;
@@ -267,7 +267,7 @@ abstract class DataType {
             $processor = $connection->getPostProcessor();
         }
 
-        $query = new QueryBuilder($connection, $connection->getQueryGrammar(), $processor);
+        $query = new Builder($connection, $connection->getQueryGrammar(), $processor);
 
         return $query->from($this->table);
     }

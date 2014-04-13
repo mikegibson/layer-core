@@ -3,15 +3,14 @@
 namespace Layer\Data;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
-use Layer\Plugin\Plugin;
+use League\Fractal\Resource\Collection;
+use League\Fractal\Resource\Item;
+use Silex\Application;
+use Silex\ServiceProviderInterface;
 
-class DataPlugin extends Plugin {
+class DataProvider implements ServiceProviderInterface {
 
-    protected $name = 'data';
-
-    public function register() {
-
-        $app = $this->app;
+    public function register(Application $app) {
 
         $app['db'] = $app->share(function () use ($app) {
 
@@ -33,11 +32,21 @@ class DataPlugin extends Plugin {
 
         });
 
+        $app['fractal'] = $app->share(function() {
+            return new \League\Fractal\Manager();
+        });
+
+        $app['fractal.collection'] = function(array $data, $transformer) {
+            return new Collection($data, $transformer);
+        };
+
+        $app['fractal.item'] = function(array $data, $transformer) {
+            return new Item($data, $transformer);
+        };
+
     }
 
-    public function boot() {
-
-        $app = $this->app;
+    public function boot(Application $app) {
 
         foreach ($app['data']->loaded() as $namespace => $tables) {
             foreach ($tables as $table) {

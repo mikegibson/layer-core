@@ -2,8 +2,9 @@
 
 namespace Layer\Paginator;
 
+use Illuminate\Database\Query\Builder;
+use Layer\Application;
 use Layer\Data\DataType;
-use Layer\Data\QueryBuilder;
 use Layer\Utility\SetPropertiesTrait;
 
 /**
@@ -14,6 +15,11 @@ use Layer\Utility\SetPropertiesTrait;
 class PaginatorResult implements PaginatorResultInterface {
 
     use SetPropertiesTrait;
+
+    /**
+     * @var \Layer\Application
+     */
+    protected $app;
 
     /**
      * @var \Layer\Data\DataType
@@ -36,12 +42,15 @@ class PaginatorResult implements PaginatorResultInterface {
     public $maxLimit = 100;
 
     /**
+     * @param Application $app
      * @param DataType $dataType
-     * @param QueryBuilder $builder
+     * @param Builder $builder
+     * @param array $config
      */
-    public function __construct(DataType $dataType, QueryBuilder $builder = null, array $config = []) {
+    public function __construct(Application $app, DataType $dataType, Builder $builder = null, array $config = []) {
 
         $this->_setProperties($config);
+        $this->app = $app;
         $this->dataType = $dataType;
         if ($builder !== null) {
             $this->setQuery($builder);
@@ -49,15 +58,15 @@ class PaginatorResult implements PaginatorResultInterface {
     }
 
     /**
-     * @param QueryBuilder $builder
+     * @param Builder $builder
      */
-    public function setQuery(QueryBuilder $builder) {
+    public function setQuery(Builder $builder) {
 
         $this->query = $builder;
     }
 
     /**
-     * @return QueryBuilder
+     * @return Builder
      */
     public function getQuery() {
 
@@ -85,10 +94,11 @@ class PaginatorResult implements PaginatorResultInterface {
      * @param null $limit
      * @param null $sortKey
      * @param null $direction
-     * @param QueryBuilder $builder
-     * @return QueryBuilder
+     * @param array $columns
+     * @param Builder $builder
+     * @return mixed
      */
-    public function getData($page = 1, $limit = null, $sortKey = null, $direction = null, $columns = ['*'], QueryBuilder $builder = null) {
+    public function getData($page = 1, $limit = null, $sortKey = null, $direction = null, $columns = ['*'], Builder $builder = null) {
 
         return $this->paginateQuery($page, $limit, $sortKey, $direction, $builder)->get($columns);
     }
@@ -112,14 +122,14 @@ class PaginatorResult implements PaginatorResultInterface {
 
         $limit = min([$limit, $this->maxLimit]);
 
-        return $builder->forPage(1, $limit);
+        return $builder->forPage($page, $limit);
     }
 
-
     /**
+     * @param Builder $builder
      * @return int
      */
-    public function getCount(QueryBuilder $builder = null) {
+    public function getCount(Builder $builder = null) {
 
         $builder = $this->_getQuery($builder);
 
@@ -127,11 +137,11 @@ class PaginatorResult implements PaginatorResultInterface {
     }
 
     /**
-     * @param QueryBuilder $builder
-     * @return QueryBuilder
+     * @param Builder $builder
+     * @return Builder
      * @throws \Exception
      */
-    protected function _getQuery(QueryBuilder $builder = null) {
+    protected function _getQuery(Builder $builder = null) {
 
         if ($builder === null) {
             if ($this->query === null) {

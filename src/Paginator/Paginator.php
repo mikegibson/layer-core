@@ -2,25 +2,12 @@
 
 namespace Layer\Paginator;
 
-use Layer\Application;
-use Layer\Data\DataType;
-
 /**
  * Class Paginator
  *
  * @package Controller\Paginator
  */
 class Paginator implements PaginatorInterface {
-
-    /**
-     * @var \Layer\Application
-     */
-    protected $app;
-
-    /**
-     * @var \Layer\Data\DataType
-     */
-    protected $dataType;
 
     /**
      * @var \Layer\Paginator\PaginatorRequestInterface
@@ -44,13 +31,9 @@ class Paginator implements PaginatorInterface {
      * @param PaginatorResultInterface $result
      */
     public function __construct(
-        Application $app,
-        DataType $dataType,
         PaginatorRequestInterface $request,
         PaginatorResultInterface $result
     ) {
-        $this->app = $app;
-        $this->dataType = $dataType;
         $this->request = $request;
         $this->result = $result;
     }
@@ -69,27 +52,15 @@ class Paginator implements PaginatorInterface {
      * @param null $sortKey
      * @param null $direction
      */
-    public function getData($page = 1, $limit = null, $sortKey = null, $direction = null) {
+    public function getData() {
 
-        return $this->result->getData($page, $limit, $sortKey, $direction);
+        return $this->result->getData($this->getCurrentPage(), $this->getPerPage(), $this->getSortKey(), $this->getDirection());
     }
 
     /**
      * @return int
      */
-    public function getCount() {
-
-        if (!isset($this->_vars['count'])) {
-            $this->_vars['count'] = $this->result->getCount();
-        }
-
-        return $this->_vars['count'];
-    }
-
-    /**
-     * @return int
-     */
-    public function getPage() {
+    public function getCurrentPage() {
 
         if (!isset($this->_vars['page'])) {
             $this->_vars['page'] = $this->request->getPage();
@@ -101,36 +72,7 @@ class Paginator implements PaginatorInterface {
     /**
      * @return int
      */
-    public function getPageCount() {
-        return (int) ceil($this->getCount() / $this->getLimit());
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasNext() {
-        return ($this->getCount() > $this->getPage());
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasPrev() {
-        return ($this->getPage() > 1);
-    }
-
-    /**
-     * @param $page
-     * @return bool
-     */
-    public function hasPage($page) {
-        return ($this->getPageCount() >= (int) $page);
-    }
-
-    /**
-     * @return int
-     */
-    public function getLimit() {
+    public function getPerPage() {
 
         if (!isset($this->_vars['limit'])) {
             $this->_vars['limit'] = $this->request->getLimit();
@@ -161,6 +103,47 @@ class Paginator implements PaginatorInterface {
         }
 
         return $this->_vars['direction'];
+    }
+
+    /**
+     * @return int
+     */
+    public function getTotal() {
+
+        if (!isset($this->_vars['count'])) {
+            $this->_vars['count'] = $this->result->getCount();
+        }
+
+        return $this->_vars['count'];
+    }
+
+    /**
+     * @return int
+     */
+    public function getPageCount() {
+        return (int) ceil($this->getTotal() / $this->getPerPage());
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasNext() {
+        return ($this->getPageCount() > $this->getCurrentPage());
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasPrev() {
+        return ($this->getCurrentPage() > 1);
+    }
+
+    /**
+     * @param $page
+     * @return bool
+     */
+    public function hasPage($page) {
+        return ($this->getPageCount() >= (int) $page);
     }
 
 }

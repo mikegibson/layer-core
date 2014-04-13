@@ -2,8 +2,8 @@
 
 namespace Layer\Paginator;
 
+use Illuminate\Database\Query\Builder;
 use Layer\Data\DataType;
-use Layer\Data\QueryBuilder;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -23,17 +23,18 @@ trait PaginatorTrait {
      * @return Paginator
      */
     protected function _buildPaginator(
+        Application $app,
         DataType $dataType,
         Request $request,
-        QueryBuilder $query = null,
+        Builder $query = null,
         array $requestConfig = [],
         array $resultConfig = []
     ) {
 
         $paginatorRequest = $this->_getPaginatorRequest($request, $requestConfig);
-        $paginatorResult = $this->_getPaginatorResult($dataType, $query, $resultConfig);
+        $paginatorResult = $this->_getPaginatorResult($app, $dataType, $query, $resultConfig);
 
-        return $this->_getPaginator($dataType, $paginatorRequest, $paginatorResult);
+        return $this->_getPaginator($paginatorRequest, $paginatorResult);
     }
 
     /**
@@ -42,8 +43,8 @@ trait PaginatorTrait {
      * @param PaginatorResult $result
      * @return Paginator
      */
-    protected function _getPaginator(DataType $dataType, PaginatorRequest $request, PaginatorResult $result) {
-        return new Paginator($this->app, $dataType, $request, $result);
+    protected function _getPaginator(PaginatorRequest $request, PaginatorResult $result) {
+        return new Paginator($request, $result);
     }
 
     /**
@@ -61,9 +62,9 @@ trait PaginatorTrait {
      * @param array $config
      * @return PaginatorResult
      */
-    protected function _getPaginatorResult(DataType $dataType, QueryBuilder $query = null, array $config = []) {
+    protected function _getPaginatorResult(Application $app, DataType $dataType, Builder $query = null, array $config = []) {
         $query = $this->_getPaginatorQuery($dataType, $query);
-        return new PaginatorResult($dataType, $query, $config);
+        return new PaginatorResult($app, $dataType, $query, $config);
     }
 
     /**
@@ -71,7 +72,7 @@ trait PaginatorTrait {
      * @param QueryBuilder $query
      * @return Builder
      */
-    protected function _getPaginatorQuery(DataType $dataType, QueryBuilder $query = null) {
+    protected function _getPaginatorQuery(DataType $dataType, Builder $query = null) {
         return ($query === null) ? $dataType->query() : $query;
     }
 

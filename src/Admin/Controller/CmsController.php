@@ -2,16 +2,13 @@
 
 namespace Layer\Admin\Controller;
 
-use Layer\Admin\Paginator\CmsPaginator;
+use Illuminate\Database\Query\Builder;
+use Layer\Admin\Data\AdminPaginatorResult;
 use Layer\Application;
 use Layer\Controller\Controller;
 use Layer\Data\DataType;
 use Layer\Data\SingleRecordTrait;
-use Layer\Paginator\PaginatorRequestInterface;
-use Layer\Paginator\PaginatorResultInterface;
 use Layer\Paginator\PaginatorTrait;
-use Symfony\Component\Form\FormRenderer;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -35,11 +32,15 @@ class CmsController extends Controller {
     public function indexAction(Request $request) {
 
         $dataType = $request->get('dataType');
-        $paginator = $this->_buildPaginator($dataType, $request);
+        $paginator = $this->_buildPaginator($this->app, $dataType, $request);
 
         return compact('dataType', 'paginator');
     }
 
+    /**
+     * @param Request $request
+     * @return array
+     */
     public function editAction(Request $request) {
 
         $dataType = $request->get('dataType');
@@ -67,17 +68,13 @@ class CmsController extends Controller {
 
     /**
      * @param DataType $dataType
-     * @param PaginatorRequestInterface $request
-     * @param PaginatorResultInterface $result
-     * @return CmsPaginator
+     * @param QueryBuilder $query
+     * @param array $config
+     * @return PaginatorResult
      */
-    protected function _getPaginator(
-		Application $app,
-        DataType $dataType,
-        PaginatorRequestInterface $request,
-        PaginatorResultInterface $result
-    ) {
-        return new CmsPaginator($app, $dataType, $request, $result);
+    protected function _getPaginatorResult(Application $app, DataType $dataType, Builder $query = null, array $config = []) {
+        $query = $this->_getPaginatorQuery($dataType, $query);
+        return new AdminPaginatorResult($app, $dataType, $query, $config);
     }
 
 }

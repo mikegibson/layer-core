@@ -6,6 +6,7 @@ use Knp\Provider\ConsoleServiceProvider;
 use Layer\Asset\AssetServiceProvider;
 use Layer\Config\ConfigPlugin;
 use Layer\Config\ConfigServiceProvider;
+use Layer\Data\DataProvider;
 use Layer\Plugin\PluginServiceProvider;
 use Layer\Twig\TwigServiceProvider;
 use Layer\Utility\ArrayHelper;
@@ -120,6 +121,7 @@ class Application extends \Silex\Application {
         $app->register(new MonologServiceProvider(), array(
             'monolog.logfile' => $app['path_log'] . '/development.log',
         ));
+        $app->register(new DataProvider());
 
         $app['assets.js.modernizr'] = $app->share(function() use($app) {
             $asset = $app['assetic.factory']->createAsset([
