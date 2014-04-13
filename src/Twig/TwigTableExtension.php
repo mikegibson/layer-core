@@ -19,7 +19,7 @@ class TwigTableExtension extends TwigExtension {
     /**
      * @var array
      */
-    protected $methods = [
+    protected $functions = [
         'render', 'wrap', 'thead', 'headerRow', 'headerColumns', 'tbody', 'bodyRows', 'row', 'headerCell', 'cell'
     ];
 
@@ -28,26 +28,6 @@ class TwigTableExtension extends TwigExtension {
      */
     public function __construct(TableHelperInterface $view) {
         $this->helper = $view;
-    }
-
-    /**
-     * Returns a list of functions to add to the existing list.
-     *
-     * @return array An array of functions
-     * @todo Use inflector?
-     */
-    function getFunctions() {
-
-        $functions = [];
-        foreach ($this->methods as $method) {
-            $name = $this->getName() . '_' . strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $method));
-            $functions[] = new \Twig_SimpleFunction($name, [$this->helper, $method], [
-                'is_safe' => ['html']
-            ]);
-            $functions[] = [$this->helper, $method];
-        }
-
-        return $functions;
     }
 
 }

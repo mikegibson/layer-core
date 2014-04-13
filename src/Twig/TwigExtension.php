@@ -19,6 +19,8 @@ abstract class TwigExtension extends \Twig_Extension {
      */
     protected $_name;
 
+    protected $functions = [];
+
     /**
      * Initializes the runtime environment.
      *
@@ -48,6 +50,26 @@ abstract class TwigExtension extends \Twig_Extension {
             $this->_name = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $name));
         }
         return $this->_name;
+    }
+
+    /**
+     * Returns a list of functions to add to the existing list.
+     *
+     * @return array An array of functions
+     * @todo Use inflector?
+     */
+    function getFunctions() {
+
+        $functions = [];
+        foreach ($this->functions as $method) {
+            $name = $this->getName() . '_' . strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $method));
+            $functions[] = new \Twig_SimpleFunction($name, [$this->helper, $method], [
+                'is_safe' => ['html']
+            ]);
+            $functions[] = [$this->helper, $method];
+        }
+
+        return $functions;
     }
 
 }
