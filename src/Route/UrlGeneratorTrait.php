@@ -34,9 +34,4 @@ trait UrlGeneratorTrait {
         return call_user_func_array([$app['url_generator'], 'generate'], $args);
     }
 
-    public function generateAssetUrl($url) {
-
-        return 'http://asset/' . $url;
-    }
-
 }
