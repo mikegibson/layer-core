@@ -6,6 +6,8 @@ use Layer\Data\Blueprint;
 use Layer\Data\DataType;
 use Layer\Utility\SetPropertiesTrait;
 use Silex\Application;
+use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Class Field
@@ -201,17 +203,36 @@ abstract class Field {
 	}
 
 	/**
-	 * @param $value
-	 * @param null $data
-	 * @return mixed
+	 * @param FormBuilder $builder
+	 * @param array $options
+	 * @return FormBuilder
 	 */
-	public function filterInput($value, $data = null) {
-
-		if ($value === null && $this->default !== null && !$this->null) {
-			$value = $this->default;
+	public function addFormField(FormBuilder $builder, array $options = []) {
+		$options = array_merge([
+			'required' => !$this->null
+		], $options);
+		if(!isset($options['constraints'])) {
+			$options['constraints'] = $this->getConstraints();
 		}
+		if(isset($options['type'])) {
+			$type = $options['type'];
+			unset($options['type']);
+		} else {
+			$type = $this->inputType;
+		}
+		$builder->add($this->name, $type, $options);
+		return $builder;
+	}
 
-		return $value;
+	/**
+	 * @return array
+	 */
+	public function getConstraints() {
+		$constraints = [];
+		if(!$this->allowEmpty) {
+			$constraints[] = new NotBlank();
+		}
+		return $constraints;
 	}
 
 }

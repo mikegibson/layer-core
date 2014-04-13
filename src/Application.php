@@ -185,7 +185,7 @@ class Application extends \Silex\Application {
 	 * @param array $options
 	 * @return \Symfony\Component\Form\FormBuilderInterface
 	 */
-	public function form($name, $data = null, array $options = array()) {
+	public function form($name, $data = null, array $options = []) {
 		$options = array_merge(['type' => 'form'], $options);
 		$type = $options['type'];
 		unset($options['type']);

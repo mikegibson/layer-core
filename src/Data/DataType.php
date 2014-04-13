@@ -169,7 +169,8 @@ abstract class DataType {
 	/**
 	 * @param $name
 	 * @param array $config
-	 * @return bool|mixed
+	 * @return Field
+	 * @throws \Exception
 	 */
 	public function addField($name, $config = []) {
 
@@ -282,6 +283,64 @@ abstract class DataType {
 
 	public function getConnection($connection = null) {
 		return $this->app['data']->getConnection($connection);
+	}
+
+	/**
+	 * @param null $name
+	 * @param null $data
+	 * @param array $options
+	 * @return \Symfony\Component\Form\FormBuilderInterface
+	 */
+	public function getFormBuilder($name = null, $data = null, array $options = []) {
+
+		$options = array_merge([
+			'method' => ($data === null) ? 'POST' : 'PUT'
+		], $options);
+
+		if($name === null) {
+			$name = 'form_' . $this->slug;
+		}
+
+		if(!isset($options['fields'])) {
+			$options['fields'] = [];
+			foreach($this->fields() as $field) {
+				if($field->editable) {
+					$options['fields'][] = $field->name;
+				}
+			}
+		}
+
+		$fields = $options['fields'];
+		unset($options['fields']);
+
+		$formBuilder = $this->app->form($name, $data, $options);
+
+		unset($options);
+
+		foreach($fields as $k => $field) {
+			if(is_string($k)) {
+				if(is_array($field)) {
+					$options = $field;
+				} else {
+					$options = ['type' => $field];
+				}
+				$field = $k;
+			} else {
+				$options = [];
+			}
+			if($this->hasField($field)) {
+				$formBuilder = $this->field($field)->addFormField($formBuilder, $options);
+			} else {
+				if(!isset($options['type'])) {
+					$options['type'] = 'text';
+				}
+				$type = $options['type'];
+				unset($options['type']);
+				$formBuilder->add($field, $type, $options);
+			}
+		}
+
+		return $formBuilder;
 	}
 
 }

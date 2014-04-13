@@ -3,6 +3,7 @@
 namespace Layer\Data\Field;
 
 	//use Cake\Validation\ValidationSet;
+use Symfony\Component\Validator\Constraints\Email;
 
 /**
  * Class EmailField
@@ -11,17 +12,10 @@ namespace Layer\Data\Field;
  */
 class EmailField extends StringField {
 
-	/**
-	 * @param ValidationSet $set
-	 * @return ValidationSet
-	 * /
-	 * public function validation(ValidationSet $set) {
-	 * $set = parent::validation($set);
-	 * $set->add('validFormat', [
-	 * 'rule' => 'email',
-	 * 'message' => 'Email must be valid'
-	 * ]);
-	 * return $set;
-	 * }*/
+	public function getConstraints() {
+		$constraints = parent::getConstraints();
+		$constraints[] = new Email();
+		return $constraints;
+	}
 
 }

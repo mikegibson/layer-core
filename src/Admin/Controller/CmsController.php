@@ -47,16 +47,8 @@ class CmsController extends Controller {
 		$record = $this->_getSingleRecord($dataType, $request);
 		$array = $record->toArray();
 
-		$formBuilder = $this->app->form('form_edit', $array, [
-			'method' => 'PUT',
-			'action' => $request->getRequestUri()
-		]);
-
-		foreach ($dataType->fields() as $field) {
-			if ($field->editable) {
-				$formBuilder->add($field->name, $field->inputType);
-			}
-		}
+		$formBuilder = $dataType->getFormBuilder('admin_edit', $array);
+		$formBuilder->setAction($request->getRequestUri());
 
 		$form = $formBuilder->getForm();
 
@@ -75,10 +67,11 @@ class CmsController extends Controller {
 	}
 
 	/**
+	 * @param Application $app
 	 * @param DataType $dataType
-	 * @param QueryBuilder $query
+	 * @param Builder $query
 	 * @param array $config
-	 * @return PaginatorResult
+	 * @return AdminPaginatorResult
 	 */
 	protected function _getPaginatorResult(Application $app, DataType $dataType, Builder $query = null, array $config = []) {
 		$query = $this->_getPaginatorQuery($dataType, $query);

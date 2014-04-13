@@ -22,6 +22,9 @@ class DataProvider implements ServiceProviderInterface {
 				$capsule->addConnection($connection, $name);
 			}
 
+			$capsule->setAsGlobal();
+			$capsule->bootEloquent();
+
 			return $capsule;
 
 		});
