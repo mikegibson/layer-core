@@ -14,7 +14,6 @@ use Layer\Utility\Inflector;
 use Layer\Utility\StringHelper;
 use Layer\View\Html\HtmlHelper;
 use Layer\View\Table\TableHelper;
-use Silex\Application\FormTrait;
 use Silex\Application\MonologTrait;
 use Silex\Application\SecurityTrait;
 use Silex\Application\SwiftmailerTrait;
@@ -38,7 +37,7 @@ use Silex\Provider\ValidatorServiceProvider;
  */
 class Application extends \Silex\Application {
 
-	use FormTrait, MonologTrait, SecurityTrait, SwiftmailerTrait, TranslationTrait, TwigTrait, UrlGeneratorTrait;
+	use MonologTrait, SecurityTrait, SwiftmailerTrait, TranslationTrait, TwigTrait, UrlGeneratorTrait;
 
 	/**
 	 * Constructor
@@ -176,6 +175,19 @@ class Application extends \Silex\Application {
 	 */
 	public function config($key) {
 		return $this['config']->read($key);
+	}
+
+	/**
+	 * @param $name
+	 * @param null $data
+	 * @param array $options
+	 * @return mixed
+	 */
+	public function form($name, $data = null, array $options = array()) {
+		$options = array_merge(['type' => 'form'], $options);
+		$type = $options['type'];
+		unset($options['type']);
+		return $this['form.factory']->createNamedBuilder($name, $type, $data, $options);
 	}
 
 }
