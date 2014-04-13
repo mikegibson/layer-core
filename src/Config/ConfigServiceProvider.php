@@ -16,36 +16,36 @@ use Symfony\Component\Config\FileLocator;
  */
 class ConfigServiceProvider implements ServiceProviderInterface {
 
-    /**
-     * @param Application $app
-     */
-    public function register(Application $app) {
+	/**
+	 * @param Application $app
+	 */
+	public function register(Application $app) {
 
-        $app['config'] = $app->share(function () use ($app) {
+		$app['config'] = $app->share(function () use ($app) {
 
-            $config = new Configuration($app);
+			$config = new Configuration($app);
 
-            $config->loadLocator(new FileLocator($app['path_config']));
+			$config->loadLocator(new FileLocator($app['path_config']));
 
-            $drivers = [
-                new YamlConfigDriver(),
-                new PhpConfigDriver(),
-                new JsonConfigDriver()
-            ];
+			$drivers = [
+				new YamlConfigDriver(),
+				new PhpConfigDriver(),
+				new JsonConfigDriver()
+			];
 
-            array_walk($drivers, [$config, 'loadDriver']);
+			array_walk($drivers, [$config, 'loadDriver']);
 
-            return $config;
+			return $config;
 
-        });
+		});
 
-    }
+	}
 
-    /**
-     * @param Application $app
-     */
-    public function boot(Application $app) {
+	/**
+	 * @param Application $app
+	 */
+	public function boot(Application $app) {
 
-    }
+	}
 
 }

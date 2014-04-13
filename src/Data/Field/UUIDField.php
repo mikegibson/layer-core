@@ -9,14 +9,14 @@ namespace Layer\Data\Field;
  */
 class UUIDField extends PrimaryKeyField {
 
-    /**
-     * @var string
-     */
-    public $type = 'uuid';
+	/**
+	 * @var string
+	 */
+	public $type = 'uuid';
 
-    /**
-     * @var string
-     */
-    public $name = 'uuid';
+	/**
+	 * @var string
+	 */
+	public $name = 'uuid';
 
 }

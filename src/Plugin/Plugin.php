@@ -7,55 +7,55 @@ use Symfony\Component\Debug\Exception\FatalErrorException;
 
 abstract class Plugin {
 
-    protected $app;
+	protected $app;
 
-    protected $name;
+	protected $name;
 
-    protected $depends = [];
+	protected $depends = [];
 
-    private $__path;
+	private $__path;
 
-    public function __construct(Application $app) {
+	public function __construct(Application $app) {
 
-        $this->app = $app;
-        if (empty($this->name)) {
-            throw new FatalErrorException('No plugin name was specified!');
-        }
-    }
+		$this->app = $app;
+		if (empty($this->name)) {
+			throw new FatalErrorException('No plugin name was specified!');
+		}
+	}
 
-    public function register() {
+	public function register() {
 
-    }
+	}
 
-    public function boot() {
+	public function boot() {
 
-    }
+	}
 
-    public function getName() {
+	public function getName() {
 
-        return $this->name;
-    }
+		return $this->name;
+	}
 
-    public function getPath() {
+	public function getPath() {
 
-        if ($this->__path === null) {
-            $reflection = new \ReflectionClass($this);
-            $this->__path = dirname($reflection->getFileName());
-        }
+		if ($this->__path === null) {
+			$reflection = new \ReflectionClass($this);
+			$this->__path = dirname($reflection->getFileName());
+		}
 
-        return $this->__path;
-    }
+		return $this->__path;
+	}
 
-    public function getDependencies() {
+	public function getDependencies() {
 
-        return $this->depends;
-    }
+		return $this->depends;
+	}
 
-    public function __get($name) {
+	public function __get($name) {
 
-        if ($name === 'name') {
-            return $this->getName();
-        }
-    }
+		if ($name === 'name') {
+			return $this->getName();
+		}
+	}
 
 }

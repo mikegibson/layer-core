@@ -9,26 +9,26 @@ namespace Layer\Data\Field;
  */
 class IntegerField extends Field {
 
-    /**
-     * @var string
-     */
-    public $type = 'integer';
+	/**
+	 * @var string
+	 */
+	public $type = 'integer';
 
-    public $htmlSafe = true;
+	public $htmlSafe = true;
 
-    /**
-     * @param ValidationSet $set
-     * @return ValidationSet
-     */
-    public function validation(ValidationSet $set) {
+	/**
+	 * @param ValidationSet $set
+	 * @return ValidationSet
+	 */
+	public function validation(ValidationSet $set) {
 
-        $set = parent::validation($set);
-        $set->add('validFormat', [
-            'rule' => 'numeric',
-            'message' => 'The number must be valid'
-        ]);
+		$set = parent::validation($set);
+		$set->add('validFormat', [
+			'rule' => 'numeric',
+			'message' => 'The number must be valid'
+		]);
 
-        return $set;
-    }
+		return $set;
+	}
 
 }

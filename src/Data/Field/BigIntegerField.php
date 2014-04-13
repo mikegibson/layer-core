@@ -9,9 +9,9 @@ namespace Layer\Data\Field;
  */
 class BigIntegerField extends IntegerField {
 
-    /**
-     * @var string
-     */
-    public $type = 'biginteger';
+	/**
+	 * @var string
+	 */
+	public $type = 'biginteger';
 
 }

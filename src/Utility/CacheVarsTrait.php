@@ -11,25 +11,25 @@ namespace Layer\Utility;
  */
 trait CacheVarsTrait {
 
-    /**
-     * @var array
-     */
-    private $cachedVars = [];
+	/**
+	 * @var array
+	 */
+	private $cachedVars = [];
 
-    /**
-     * @param $name
-     * @return mixed
-     */
-    public function __get($name) {
+	/**
+	 * @param $name
+	 * @return mixed
+	 */
+	public function __get($name) {
 
-        $method = '_get' . ucfirst($name);
-        if (method_exists($this, $method)) {
-            if (!isset($this->cachedVars[$name])) {
-                $this->cachedVars[$name] = call_user_func(array($this, $method));
-            }
+		$method = '_get' . ucfirst($name);
+		if (method_exists($this, $method)) {
+			if (!isset($this->cachedVars[$name])) {
+				$this->cachedVars[$name] = call_user_func(array($this, $method));
+			}
 
-            return $this->cachedVars[$name];
-        }
-    }
+			return $this->cachedVars[$name];
+		}
+	}
 
 }

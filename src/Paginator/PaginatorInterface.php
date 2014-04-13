@@ -11,37 +11,37 @@ use Layer\View\Table\TableDataInterface;
  */
 interface PaginatorInterface extends TableDataInterface {
 
-    /**
-     * @param int $page
-     * @param null $limit
-     * @param null $sortKey
-     * @param null $direction
-     */
-    public function getData();
+	/**
+	 * @param int $page
+	 * @param null $limit
+	 * @param null $sortKey
+	 * @param null $direction
+	 */
+	public function getData();
 
-    /**
-     * @return int
-     */
-    public function getTotal();
+	/**
+	 * @return int
+	 */
+	public function getTotal();
 
-    /**
-     * @return int
-     */
-    public function getCurrentPage();
+	/**
+	 * @return int
+	 */
+	public function getCurrentPage();
 
-    /**
-     * @return int
-     */
-    public function getPerPage();
+	/**
+	 * @return int
+	 */
+	public function getPerPage();
 
-    /**
-     * @return string|null
-     */
-    public function getSortKey();
+	/**
+	 * @return string|null
+	 */
+	public function getSortKey();
 
-    /**
-     * @return string|null
-     */
-    public function getDirection();
+	/**
+	 * @return string|null
+	 */
+	public function getDirection();
 
 }

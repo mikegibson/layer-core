@@ -9,14 +9,14 @@ namespace Layer\Data\Field;
  */
 class TitleField extends StringField {
 
-    /**
-     * @var bool
-     */
-    public $index = true;
+	/**
+	 * @var bool
+	 */
+	public $index = true;
 
-    /**
-     * @var bool
-     */
-    public $null = false;
+	/**
+	 * @var bool
+	 */
+	public $null = false;
 
 }

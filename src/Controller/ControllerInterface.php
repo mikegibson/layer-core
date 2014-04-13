@@ -12,15 +12,15 @@ use Symfony\Component\HttpFoundation\Request;
  */
 interface ControllerInterface {
 
-    /**
-     * @param Application $app
-     */
-    public function __construct(Application $app);
+	/**
+	 * @param Application $app
+	 */
+	public function __construct(Application $app);
 
-    /**
-     * @param Request $request
-     * @return string
-     */
-    public function dispatch(Request $request);
+	/**
+	 * @param Request $request
+	 * @return string
+	 */
+	public function dispatch(Request $request);
 
 }

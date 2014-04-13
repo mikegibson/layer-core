@@ -6,12 +6,12 @@ use Layer\Twig\TwigExtension;
 
 class TwigAssetExtension extends TwigExtension {
 
-    protected $helper;
+	protected $helper;
 
-    protected $functions = ['url'];
+	protected $functions = ['url'];
 
-    public function __construct(AssetHelper $helper) {
-        $this->helper = $helper;
-    }
+	public function __construct(AssetHelper $helper) {
+		$this->helper = $helper;
+	}
 
 }

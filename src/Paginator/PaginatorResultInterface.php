@@ -11,23 +11,23 @@ use Layer\View\Table\TableDataInterface;
  */
 interface PaginatorResultInterface extends TableDataInterface {
 
-    /**
-     * @return array
-     */
-    public function getColumns();
+	/**
+	 * @return array
+	 */
+	public function getColumns();
 
-    /**
-     * @param int $page
-     * @param null $limit
-     * @param null $sortKey
-     * @param null $direction
-     * @return mixed
-     */
-    public function getData($page = 1, $limit = null, $sortKey = null, $direction = null);
+	/**
+	 * @param int $page
+	 * @param null $limit
+	 * @param null $sortKey
+	 * @param null $direction
+	 * @return mixed
+	 */
+	public function getData($page = 1, $limit = null, $sortKey = null, $direction = null);
 
-    /**
-     * @return int
-     */
-    public function getCount();
+	/**
+	 * @return int
+	 */
+	public function getCount();
 
 }

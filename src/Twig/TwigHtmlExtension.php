@@ -11,30 +11,30 @@ use Layer\View\Html\HtmlHelper;
  */
 class TwigHtmlExtension extends TwigExtension {
 
-    /**
-     * @var \Layer\View\Html\HtmlHelper
-     */
-    protected $helper;
+	/**
+	 * @var \Layer\View\Html\HtmlHelper
+	 */
+	protected $helper;
 
-    /**
-     * @param HtmlHelper $helper
-     */
-    public function __construct(HtmlHelper $helper) {
+	/**
+	 * @param HtmlHelper $helper
+	 */
+	public function __construct(HtmlHelper $helper) {
 
-        $this->helper = $helper;
-    }
+		$this->helper = $helper;
+	}
 
-    /**
-     * @return array
-     */
-    public function getFunctions() {
+	/**
+	 * @return array
+	 */
+	public function getFunctions() {
 
-        $functions = [];
-        $functions[] = new \Twig_SimpleFunction('link', [$this->helper, 'link'], [
-            'is_safe' => ['html']
-        ]);
+		$functions = [];
+		$functions[] = new \Twig_SimpleFunction('link', [$this->helper, 'link'], [
+			'is_safe' => ['html']
+		]);
 
-        return $functions;
-    }
+		return $functions;
+	}
 
 }

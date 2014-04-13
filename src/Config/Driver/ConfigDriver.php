@@ -4,8 +4,8 @@ namespace Layer\Config\Driver;
 
 interface ConfigDriver {
 
-    function load($filename);
+	function load($filename);
 
-    function supports($filename);
+	function supports($filename);
 
 }

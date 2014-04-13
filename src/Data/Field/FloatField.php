@@ -9,26 +9,26 @@ namespace Layer\Data\Field;
  */
 class FloatField extends Field {
 
-    /**
-     * @var string
-     */
-    public $type = 'float';
+	/**
+	 * @var string
+	 */
+	public $type = 'float';
 
-    public $htmlSafe = true;
+	public $htmlSafe = true;
 
-    /**
-     * @param ValidationSet $set
-     * @return ValidationSet
-     * /
-    public function validation(ValidationSet $set) {
-
-        $set = parent::validation($set);
-        $set->add('validFormat', [
-            'rule' => 'decimal',
-            'message' => 'The number must be valid'
-        ]);
-
-        return $set;
-    }*/
+	/**
+	 * @param ValidationSet $set
+	 * @return ValidationSet
+	 * /
+	 * public function validation(ValidationSet $set) {
+	 *
+	 * $set = parent::validation($set);
+	 * $set->add('validFormat', [
+	 * 'rule' => 'decimal',
+	 * 'message' => 'The number must be valid'
+	 * ]);
+	 *
+	 * return $set;
+	 * }*/
 
 }

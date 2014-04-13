@@ -11,23 +11,23 @@ use Layer\View\Table\TableHelperInterface;
  */
 class TwigTableExtension extends TwigExtension {
 
-    /**
-     * @var TableHelperInterface
-     */
-    protected $helper;
+	/**
+	 * @var TableHelperInterface
+	 */
+	protected $helper;
 
-    /**
-     * @var array
-     */
-    protected $functions = [
-        'render', 'wrap', 'thead', 'headerRow', 'headerColumns', 'tbody', 'bodyRows', 'row', 'headerCell', 'cell'
-    ];
+	/**
+	 * @var array
+	 */
+	protected $functions = [
+		'render', 'wrap', 'thead', 'headerRow', 'headerColumns', 'tbody', 'bodyRows', 'row', 'headerCell', 'cell'
+	];
 
-    /**
-     * @param TableHelperInterface $view
-     */
-    public function __construct(TableHelperInterface $view) {
-        $this->helper = $view;
-    }
+	/**
+	 * @param TableHelperInterface $view
+	 */
+	public function __construct(TableHelperInterface $view) {
+		$this->helper = $view;
+	}
 
 }

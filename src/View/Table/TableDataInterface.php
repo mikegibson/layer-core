@@ -4,8 +4,8 @@ namespace Layer\View\Table;
 
 interface TableDataInterface {
 
-    public function getColumns();
+	public function getColumns();
 
-    public function getData();
+	public function getData();
 
 }

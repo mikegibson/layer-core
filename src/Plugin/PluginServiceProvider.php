@@ -12,26 +12,26 @@ use Silex\ServiceProviderInterface;
  */
 class PluginServiceProvider implements ServiceProviderInterface {
 
-    /**
-     * @param Application $app
-     */
-    public function register(Application $app) {
+	/**
+	 * @param Application $app
+	 */
+	public function register(Application $app) {
 
-        $app['plugins'] = $app->share(function () use ($app) {
+		$app['plugins'] = $app->share(function () use ($app) {
 
-            return new PluginCollection($app);
+			return new PluginCollection($app);
 
-        });
+		});
 
-    }
+	}
 
-    /**
-     * @param Application $app
-     */
-    public function boot(Application $app) {
+	/**
+	 * @param Application $app
+	 */
+	public function boot(Application $app) {
 
-        $app['plugins']->boot();
+		$app['plugins']->boot();
 
-    }
+	}
 
 }

@@ -2,7 +2,7 @@
 
 namespace Layer\Data\Field;
 
-//use Cake\Validation\ValidationSet;
+	//use Cake\Validation\ValidationSet;
 
 /**
  * Class EmailField
@@ -11,17 +11,17 @@ namespace Layer\Data\Field;
  */
 class EmailField extends StringField {
 
-    /**
-     * @param ValidationSet $set
-     * @return ValidationSet
-     * /
-     * public function validation(ValidationSet $set) {
-     * $set = parent::validation($set);
-     * $set->add('validFormat', [
-     * 'rule' => 'email',
-     * 'message' => 'Email must be valid'
-     * ]);
-     * return $set;
-     * }*/
+	/**
+	 * @param ValidationSet $set
+	 * @return ValidationSet
+	 * /
+	 * public function validation(ValidationSet $set) {
+	 * $set = parent::validation($set);
+	 * $set->add('validFormat', [
+	 * 'rule' => 'email',
+	 * 'message' => 'Email must be valid'
+	 * ]);
+	 * return $set;
+	 * }*/
 
 }

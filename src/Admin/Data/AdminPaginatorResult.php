@@ -12,46 +12,46 @@ use League\Fractal\Resource\Collection;
  */
 class AdminPaginatorResult extends PaginatorResult {
 
-    /**
-     * @param int $page
-     * @param null $limit
-     * @param null $sortKey
-     * @param null $direction
-     * @param array $columns
-     * @param Builder $builder
-     * @return mixed
-     */
-    public function getData($page = 1, $limit = null, $sortKey = null, $direction = null, $columns = ['*'], Builder $builder = null) {
+	/**
+	 * @param int $page
+	 * @param null $limit
+	 * @param null $sortKey
+	 * @param null $direction
+	 * @param array $columns
+	 * @param Builder $builder
+	 * @return mixed
+	 */
+	public function getData($page = 1, $limit = null, $sortKey = null, $direction = null, $columns = ['*'], Builder $builder = null) {
 
-        $collection = $this->getCollection($page, $limit, $sortKey, $direction, $columns, $builder);
+		$collection = $this->getCollection($page, $limit, $sortKey, $direction, $columns, $builder);
 
-        $array = $this->app['fractal']->createData($collection)->toArray();
+		$array = $this->app['fractal']->createData($collection)->toArray();
 
-        return $array['data'];
-    }
+		return $array['data'];
+	}
 
-    /**
-     * @param int $page
-     * @param null $limit
-     * @param null $sortKey
-     * @param null $direction
-     * @param array $columns
-     * @param Builder $builder
-     * @return Collection
-     */
-    public function getCollection($page = 1, $limit = null, $sortKey = null, $direction = null, $columns = ['*'], Builder $builder = null) {
+	/**
+	 * @param int $page
+	 * @param null $limit
+	 * @param null $sortKey
+	 * @param null $direction
+	 * @param array $columns
+	 * @param Builder $builder
+	 * @return Collection
+	 */
+	public function getCollection($page = 1, $limit = null, $sortKey = null, $direction = null, $columns = ['*'], Builder $builder = null) {
 
-        $result = parent::getData($page, $limit, $sortKey, $direction, $columns, $builder);
+		$result = parent::getData($page, $limit, $sortKey, $direction, $columns, $builder);
 
-        return new Collection($result, $this->_getTransformer());
-    }
+		return new Collection($result, $this->_getTransformer());
+	}
 
 
-    /**
-     * @return Transformer
-     */
-    protected function _getTransformer() {
-        return new AdminIndexTransformer($this->app, $this->dataType);
-    }
+	/**
+	 * @return Transformer
+	 */
+	protected function _getTransformer() {
+		return new AdminIndexTransformer($this->app, $this->dataType);
+	}
 
 }

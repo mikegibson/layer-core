@@ -10,11 +10,11 @@ namespace Layer\Data\Field;
  */
 class DecimalField extends Field {
 
-    /**
-     * @var string
-     */
-    public $type = 'decimal';
+	/**
+	 * @var string
+	 */
+	public $type = 'decimal';
 
-    public $htmlSafe = true;
+	public $htmlSafe = true;
 
 }

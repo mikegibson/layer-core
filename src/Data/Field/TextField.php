@@ -9,11 +9,11 @@ namespace Layer\Data\Field;
  */
 class TextField extends Field {
 
-    /**
-     * @var string
-     */
-    public $type = 'text';
+	/**
+	 * @var string
+	 */
+	public $type = 'text';
 
-    public $inputType = 'textarea';
+	public $inputType = 'textarea';
 
 }

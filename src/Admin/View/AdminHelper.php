@@ -7,67 +7,67 @@ use Silex\Application;
 
 class AdminHelper {
 
-    protected $app;
+	protected $app;
 
-    public function __construct(Application $app) {
+	public function __construct(Application $app) {
 
-        $this->app = $app;
+		$this->app = $app;
 
-    }
+	}
 
-    public function link($dataType, $action = 'index', $label = 'List', array $urlParams = [], array $linkOptions = []) {
+	public function link($dataType, $action = 'index', $label = 'List', array $urlParams = [], array $linkOptions = []) {
 
-        if (!$dataType = $this->_getDataType($dataType)) {
-            trigger_error('You must pass a data type!');
+		if (!$dataType = $this->_getDataType($dataType)) {
+			trigger_error('You must pass a data type!');
 
-            return false;
-        }
+			return false;
+		}
 
-        $url = $this->url($dataType, $action, $urlParams);
+		$url = $this->url($dataType, $action, $urlParams);
 
-        return $this->app['html_helper']->link($label, $url, $linkOptions);
+		return $this->app['html_helper']->link($label, $url, $linkOptions);
 
-    }
+	}
 
-    public function url($dataType, $action = 'index', array $params = [], $generate = false) {
+	public function url($dataType, $action = 'index', array $params = [], $generate = false) {
 
-        if (!$dataType = $this->_getDataType($dataType)) {
-            trigger_error('You must pass a data type!');
+		if (!$dataType = $this->_getDataType($dataType)) {
+			trigger_error('You must pass a data type!');
 
-            return false;
-        }
+			return false;
+		}
 
-        if (is_array($action)) {
-            $params = $action;
-        } else {
-            $params['action'] = $action;
-        }
+		if (is_array($action)) {
+			$params = $action;
+		} else {
+			$params['action'] = $action;
+		}
 
-        $params['namespace'] = $dataType->namespace;
-        $params['type'] = $dataType->slug;
+		$params['namespace'] = $dataType->namespace;
+		$params['type'] = $dataType->slug;
 
-        $params['name'] = 'admin_scaffold';
+		$params['name'] = 'admin_scaffold';
 
-        if (!$generate) {
-            return $params;
-        }
+		if (!$generate) {
+			return $params;
+		}
 
-        return $this->app['url_generator']->generateUrl('admin_scaffold', $params);
+		return $this->app['url_generator']->generateUrl('admin_scaffold', $params);
 
-    }
+	}
 
-    protected function _getDataType($dataType) {
+	protected function _getDataType($dataType) {
 
-        if (is_string($dataType)) {
-            $dataType = $this->app['data']->get($dataType);
-        }
+		if (is_string($dataType)) {
+			$dataType = $this->app['data']->get($dataType);
+		}
 
-        if (!$dataType instanceof DataType) {
-            return false;
-        }
+		if (!$dataType instanceof DataType) {
+			return false;
+		}
 
-        return $dataType;
+		return $dataType;
 
-    }
+	}
 
 }

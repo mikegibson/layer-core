@@ -9,41 +9,41 @@ namespace Layer\Data\Field;
  */
 class SlugField extends StringField {
 
-    /**
-     * @var string
-     */
-    public $type = 'string';
+	/**
+	 * @var string
+	 */
+	public $type = 'string';
 
-    /**
-     * @var int
-     */
-    public $length = 200;
+	/**
+	 * @var int
+	 */
+	public $length = 200;
 
-    /**
-     * @var bool
-     */
-    public $fixed = false;
+	/**
+	 * @var bool
+	 */
+	public $fixed = false;
 
-    /**
-     * @var bool
-     */
-    public $null = false;
+	/**
+	 * @var bool
+	 */
+	public $null = false;
 
-    /**
-     * @var bool
-     */
-    public $allowEmpty = false;
+	/**
+	 * @var bool
+	 */
+	public $allowEmpty = false;
 
-    /**
-     * @var string
-     */
-    public $pattern = '/^[a-z0-9]([a-z0-9\-]*[a-z0-9])?$$/';
+	/**
+	 * @var string
+	 */
+	public $pattern = '/^[a-z0-9]([a-z0-9\-]*[a-z0-9])?$$/';
 
-    /**
-     * @var bool
-     */
-    public $important = false;
+	/**
+	 * @var bool
+	 */
+	public $important = false;
 
-    public $htmlSafe = true;
+	public $htmlSafe = true;
 
 }

@@ -9,11 +9,11 @@ namespace Layer\Data\Field;
  */
 class TimestampField extends DatetimeField {
 
-    /**
-     * @var string
-     */
-    public $type = 'timestamp';
+	/**
+	 * @var string
+	 */
+	public $type = 'timestamp';
 
-    public $htmlSafe = true;
+	public $htmlSafe = true;
 
 }

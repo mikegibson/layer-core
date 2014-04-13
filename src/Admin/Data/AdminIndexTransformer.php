@@ -10,14 +10,14 @@ use Layer\Data\Transformer;
  */
 class AdminIndexTransformer extends Transformer {
 
-    /**
-     * @var int
-     */
-    public $truncate = 100;
+	/**
+	 * @var int
+	 */
+	public $truncate = 100;
 
-    /**
-     * @var bool
-     */
-    public $stripTags = true;
+	/**
+	 * @var bool
+	 */
+	public $stripTags = true;
 
 }

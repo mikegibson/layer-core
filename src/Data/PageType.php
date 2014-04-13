@@ -9,23 +9,23 @@ namespace Layer\Data;
  */
 class PageType extends DataType {
 
-    /**
-     * @var string
-     */
-    public $plugin = 'Pages';
+	/**
+	 * @var string
+	 */
+	public $plugin = 'Pages';
 
-    /**
-     * @var string
-     */
-    public $namespace = 'content';
+	/**
+	 * @var string
+	 */
+	public $namespace = 'content';
 
-    /**
-     * @var array
-     */
-    protected $_fields = [
-        'id',
-        'title',
-        'slug',
-        'content',
-    ];
+	/**
+	 * @var array
+	 */
+	protected $_fields = [
+		'id',
+		'title',
+		'slug',
+		'content',
+	];
 }

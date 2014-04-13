@@ -6,41 +6,41 @@ use Layer\Application;
 
 class Model extends \Illuminate\Database\Eloquent\Model {
 
-    protected $app;
+	protected $app;
 
-    protected $dataType;
+	protected $dataType;
 
-    public $timestamps = false;
+	public $timestamps = false;
 
-    public function __construct(Application $app, DataType $dataType, array $attributes = []) {
+	public function __construct(Application $app, DataType $dataType, array $attributes = []) {
 
-        parent::__construct();
+		parent::__construct();
 
-        $this->app = $app;
-        $this->dataType = $dataType;
+		$this->app = $app;
+		$this->dataType = $dataType;
 
-        $this->fillable(array_keys($dataType->fields()));
-        $this->setTable($dataType->table);
-        $this->setConnectionResolver($this->app['db']->getDatabaseManager());
-        $this->setRawAttributes($this->fillableFromArray($attributes));
+		$this->fillable(array_keys($dataType->fields()));
+		$this->setTable($dataType->table);
+		$this->setConnectionResolver($this->app['db']->getDatabaseManager());
+		$this->setRawAttributes($this->fillableFromArray($attributes));
 
-    }
+	}
 
-    public function setAttributes(array $attributes) {
+	public function setAttributes(array $attributes) {
 
-        foreach($this->fillableFromArray($attributes) as $k => $v) {
-            $this->setAttribute($k, $v);
-        }
+		foreach ($this->fillableFromArray($attributes) as $k => $v) {
+			$this->setAttribute($k, $v);
+		}
 
-    }
+	}
 
-    public function newInstance($attributes = array(), $exists = false) {
+	public function newInstance($attributes = array(), $exists = false) {
 
-        $model = new static($this->app, $this->dataType, (array) $attributes);
+		$model = new static($this->app, $this->dataType, (array)$attributes);
 
-        $model->exists = $exists;
+		$model->exists = $exists;
 
-        return $model;
-    }
+		return $model;
+	}
 
 }

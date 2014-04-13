@@ -11,42 +11,42 @@ use Layer\Twig\TwigExtension;
  */
 class TwigAdminExtension extends TwigExtension {
 
-    /**
-     * @var AdminHelper
-     */
-    protected $helper;
+	/**
+	 * @var AdminHelper
+	 */
+	protected $helper;
 
-    /**
-     * @var array
-     */
-    protected $methods = ['link', 'url'];
+	/**
+	 * @var array
+	 */
+	protected $methods = ['link', 'url'];
 
-    /**
-     * @param AdminHelper $helper
-     */
-    public function __construct(AdminHelper $helper) {
+	/**
+	 * @param AdminHelper $helper
+	 */
+	public function __construct(AdminHelper $helper) {
 
-        $this->helper = $helper;
-    }
+		$this->helper = $helper;
+	}
 
-    /**
-     * @return array
-     */
-    public function getFunctions() {
+	/**
+	 * @return array
+	 */
+	public function getFunctions() {
 
-        $functions = [];
-        foreach ($this->methods as $method) {
-            $functions[] = new \Twig_SimpleFunction(
-                'admin_' . $method,
-                [$this->helper, $method],
-                [
-                    'is_safe' => ($method === 'url') ? false : ['html']
-                ]
-            );
+		$functions = [];
+		foreach ($this->methods as $method) {
+			$functions[] = new \Twig_SimpleFunction(
+				'admin_' . $method,
+				[$this->helper, $method],
+				[
+					'is_safe' => ($method === 'url') ? false : ['html']
+				]
+			);
 
-        }
+		}
 
-        return $functions;
-    }
+		return $functions;
+	}
 
 }

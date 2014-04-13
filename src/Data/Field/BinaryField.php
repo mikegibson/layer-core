@@ -9,9 +9,9 @@ namespace Layer\Data\Field;
  */
 class BinaryField extends Field {
 
-    /**
-     * @var string
-     */
-    public $type = 'binary';
+	/**
+	 * @var string
+	 */
+	public $type = 'binary';
 
 }
