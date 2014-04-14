@@ -1,0 +1,57 @@
+{% block table %}
+	<table>
+		{{ table_thead( table ) }}
+		{{ table_tbody( table ) }}
+		{{ table_tfoot( table ) }}
+	</table>
+{% endblock %}
+
+{% block table_thead %}
+	<thead>
+		{{ table_thead_rows( table ) }}
+	</thead>
+{% endblock %}
+
+{% block table_thead_rows %}
+	<tr>{{ table_column_headers( table ) }}</tr>
+{% endblock %}
+
+{% block table_column_headers %}
+	{% for key, label in table.columns %}
+	<th class="th-{{ key }}">{{ table_column_label( table, label, key ) }}</th>
+	{% endfor %}
+{% endblock %}
+
+{% block table_column_label %}
+	{{ label }}
+{% endblock %}
+
+{% block table_tbody %}
+	<tbody>
+		{{ table_body_rows( table ) }}
+	</tbody>
+{% endblock %}
+
+{% block table_body_rows %}
+	{% for rowKey, row in table.data %}
+		{{ table_body_row( table, row, rowKey) }}
+	{% endfor %}
+{% endblock %}
+
+{% block table_body_row %}
+	<tr class="tr-{{ rowKey }}">
+		{% for columnKey in table.columns|keys %}
+		{{ table_body_cell( table, row[columnKey], columnKey , rowKey) }}
+		{% endfor %}
+	</tr>
+{% endblock %}
+
+{% block table_body_cell %}
+	<td class="td-{{ columnKey }} td-{{ columnKey }}-{{ rowKey }}">{{ table_value(table, value, columnKey, rowKey) }}</td>
+{% endblock %}
+
+{% block table_value %}
+	{{ value }}
+{% endblock %}
+
+{% block table_tfoot %}{% endblock %}

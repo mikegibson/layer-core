@@ -1,4 +1,5 @@
 {% extends "@admin/layout/admin.twig" %}
+{% table_theme '@admin/table/index.twig' %}
 
 {% block content %}
 
@@ -8,7 +9,7 @@
 
 	{{ link( 'List link', 'admin_scaffold', {'namespace': dataType.namespace, 'type': dataType.slug, 'action': 'index'}) }}
 
-	{{ table_render( paginator ) }}
+	{{ table( paginator ) }}
 
 	{{ paginator.total }}
 

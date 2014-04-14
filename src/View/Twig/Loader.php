@@ -1,13 +1,13 @@
 <?php
 
-namespace Layer\Twig;
+namespace Layer\View\Twig;
 
 /**
  * Class TwigLoader
  *
- * @package Layer\Twig
+ * @package Layer\View\Twig
  */
-class TwigLoader extends \Twig_Loader_Filesystem {
+class Loader extends \Twig_Loader_Filesystem {
 
 	/**
 	 * @var string

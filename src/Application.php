@@ -8,7 +8,7 @@ use Layer\Config\ConfigPlugin;
 use Layer\Config\ConfigServiceProvider;
 use Layer\Data\DataProvider;
 use Layer\Plugin\PluginServiceProvider;
-use Layer\Twig\TwigServiceProvider;
+use Layer\View\Twig\TwigServiceProvider;
 use Layer\Utility\ArrayHelper;
 use Layer\Utility\Inflector;
 use Layer\Utility\StringHelper;

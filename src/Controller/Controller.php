@@ -3,7 +3,7 @@
 namespace Layer\Controller;
 
 use Layer\Application;
-use Layer\Twig\TwigView;
+use Layer\View\Twig\View;
 use Layer\View\ViewInterface;
 use Silex\ControllerCollection;
 use Symfony\Component\HttpFoundation\Request;
@@ -112,13 +112,13 @@ class Controller extends ControllerCollection implements ControllerInterface {
 
 	/**
 	 * @param Request $request
-	 * @return TwigView
+	 * @return View
 	 */
 	public function getView(Request $request) {
 
 		$template = $this->getTemplate($request);
 
-		return new TwigView($this->app, $template);
+		return new View($this->app, $template);
 	}
 
 	/**

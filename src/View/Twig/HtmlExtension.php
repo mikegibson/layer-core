@@ -1,15 +1,15 @@
 <?php
 
-namespace Layer\Twig;
+namespace Layer\View\Twig;
 
 use Layer\View\Html\HtmlHelper;
 
 /**
  * Class TwigHtmlExtension
  *
- * @package Layer\Twig
+ * @package Layer\View\Twig
  */
-class TwigHtmlExtension extends TwigExtension {
+class HtmlExtension extends Extension {
 
 	/**
 	 * @var \Layer\View\Html\HtmlHelper

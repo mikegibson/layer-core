@@ -2,9 +2,9 @@
 
 namespace Layer\Asset;
 
-use Layer\Twig\TwigExtension;
+use Layer\View\Twig\Extension;
 
-class TwigAssetExtension extends TwigExtension {
+class TwigAssetExtension extends Extension {
 
 	protected $helper;
 

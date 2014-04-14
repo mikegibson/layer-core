@@ -1,15 +1,14 @@
 <?php
 
 namespace Layer\Admin\View;
-
-use Layer\Twig\TwigExtension;
+use Layer\View\Twig\Extension;
 
 /**
  * Class TwigAdminExtension
  *
  * @package Layer\Admin\View
  */
-class TwigAdminExtension extends TwigExtension {
+class TwigAdminExtension extends Extension {
 
 	/**
 	 * @var AdminHelper

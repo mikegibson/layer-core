@@ -1,13 +1,13 @@
 <?php
 
-namespace Layer\Twig;
+namespace Layer\View\Twig;
 
 /**
  * Class TwigExtension
  *
  * @package Layer\View
  */
-abstract class TwigExtension extends \Twig_Extension {
+abstract class Extension extends \Twig_Extension {
 
 	/**
 	 * @var \Twig_Environment

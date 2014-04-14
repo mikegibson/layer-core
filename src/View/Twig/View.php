@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Twig;
+namespace Layer\View\Twig;
 
 use Layer\Application;
 use Layer\View\ViewInterface;
@@ -10,7 +10,7 @@ use Layer\View\ViewInterface;
  *
  * @package Layer\View
  */
-class TwigView implements ViewInterface {
+class View implements ViewInterface {
 
 	/**
 	 * @var \Layer\Application

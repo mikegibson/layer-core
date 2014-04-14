@@ -1,16 +1,14 @@
 <?php
 
-namespace Layer\Twig;
+namespace Layer\View\Twig;
 
-use Layer\Twig\TwigLoader;
-use Layer\Twig\TwigHtmlExtension;
-use Layer\Twig\TwigTableExtension;
+use Layer\View\Table\TwigTableExtension;
 use Silex\Application;
 
 /**
  * Class TwigServiceProvider
  *
- * @package Layer\Twig
+ * @package Layer\View\Twig
  */
 class TwigServiceProvider extends \Silex\Provider\TwigServiceProvider {
 
@@ -21,11 +19,22 @@ class TwigServiceProvider extends \Silex\Provider\TwigServiceProvider {
 
 		parent::register($app);
 
-		$app['twig.form.templates'] = array('form/default.twig');
-
 		$app['twig.loader.filesystem'] = $app->share(function () {
-			return new TwigLoader();
+			return new Loader();
 		});
+
+		$app['twig.form.templates'] = ['form/default.twig'];
+
+		$app['twig.table.template'] = 'table/default.twig';
+		$app['twig.table.extension'] = $app->share(function() use($app) {
+			return new TwigTableExtension();
+		});
+
+		$app['twig'] = $app->share($app->extend('twig', function(\Twig_Environment $twig) use($app) {
+			$twig->addExtension($app['twig.table.extension']);
+			return $twig;
+		}));
+
 
 	}
 
@@ -40,8 +49,8 @@ class TwigServiceProvider extends \Silex\Provider\TwigServiceProvider {
 			$app->extend('twig', function (\Twig_Environment $twig) use ($app) {
 				$twig->addGlobal('app_name', $app['config']->read('name'));
 				$twig->addGlobal('app_charset', strtolower($app['charset']));
-				$twig->addExtension(new TwigHtmlExtension($app['html_helper']));
-				$twig->addExtension(new TwigTableExtension($app['table_helper']));
+				$twig->addExtension(new HtmlExtension($app['html_helper']));
+				$twig->addExtension($app['twig.table.extension']);
 				return $twig;
 			})
 		);
