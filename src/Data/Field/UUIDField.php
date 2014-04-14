@@ -4,8 +4,7 @@ namespace Layer\Data\Field;
 
 /**
  * Class UUIDField
- *
- * @package Layer\DataScaffold\DataType\Field
+ * @package Layer\Data\Field
  */
 class UUIDField extends PrimaryKeyField {
 

@@ -4,8 +4,7 @@ namespace Layer\Data\Field;
 
 /**
  * Class SlugField
- *
- * @package Layer\DataScaffold\DataType\Field
+ * @package Layer\Data\Field
  */
 class SlugField extends StringField {
 

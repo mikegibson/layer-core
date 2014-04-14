@@ -4,9 +4,7 @@ namespace Layer\Data\Field;
 
 /**
  * Class DecimalField
- *
- * @package Layer\DataScaffold\DataType\Field
- * @todo Add validation
+ * @package Layer\Data\Field
  */
 class DecimalField extends Field {
 

@@ -4,8 +4,7 @@ namespace Layer\Data\Field;
 
 /**
  * Class TimestampField
- *
- * @package Layer\DataScaffold\DataType\Field
+ * @package Layer\Data\Field
  */
 class TimestampField extends DatetimeField {
 

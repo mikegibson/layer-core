@@ -4,8 +4,7 @@ namespace Layer\Data\Field;
 
 /**
  * Class BigIntegerField
- *
- * @package Layer\DataScaffold\DataType\Field
+ * @package Layer\Data\Field
  */
 class BigIntegerField extends IntegerField {
 

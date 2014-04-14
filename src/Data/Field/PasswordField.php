@@ -2,14 +2,9 @@
 
 namespace Layer\Data\Field;
 
-	//use Cake\Event\Event;
-	//use Cake\Utility\Security;
-	//use Layer\DataScaffold\ORM\Entity;
-
 /**
  * Class PasswordField
- *
- * @package Layer\Users\DataType\Field
+ * @package Layer\Data\Field
  */
 class PasswordField extends StringField {
 

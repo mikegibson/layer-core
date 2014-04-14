@@ -146,6 +146,11 @@ abstract class Field {
 	/**
 	 * @var bool
 	 */
+	public $titleField = false;
+
+	/**
+	 * @var bool
+	 */
 	public $htmlContent = false;
 
 	/**

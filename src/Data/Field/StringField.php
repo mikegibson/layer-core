@@ -4,8 +4,7 @@ namespace Layer\Data\Field;
 
 /**
  * Class StringField
- *
- * @package Layer\DataScaffold\DataType\Field
+ * @package Layer\Data\Field
  */
 class StringField extends Field {
 

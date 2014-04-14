@@ -4,8 +4,7 @@ namespace Layer\Data\Field;
 
 /**
  * Class PrimaryKeyField
- *
- * @package Layer\DataScaffold\DataType\Field
+ * @package Layer\Data\Field
  */
 class PrimaryKeyField extends Field {
 

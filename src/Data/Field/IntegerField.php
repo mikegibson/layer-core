@@ -4,8 +4,7 @@ namespace Layer\Data\Field;
 
 /**
  * Class IntegerField
- *
- * @package Layer\DataScaffold\DataType\Field
+ * @package Layer\Data\Field
  */
 class IntegerField extends Field {
 

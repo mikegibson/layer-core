@@ -2,12 +2,9 @@
 
 namespace Layer\Data\Field;
 
-	//use Cake\Validation\ValidationSet;
-
 /**
  * Class DateField
- *
- * @package Layer\DataScaffold\DataType\Field
+ * @package Layer\Data\Field
  */
 class DateField extends Field {
 
@@ -17,18 +14,5 @@ class DateField extends Field {
 	public $type = 'date';
 
 	public $htmlSafe = true;
-
-	/**
-	 * @param ValidationSet $set
-	 * @return ValidationSet
-	 * /
-	 * public function validation(ValidationSet $set) {
-	 * $set = parent::validation($set);
-	 * $set->add('validFormat', [
-	 * 'rule' => 'date',
-	 * 'message' => 'The date must be valid'
-	 * ]);
-	 * return $set;
-	 * }*/
 
 }

@@ -2,13 +2,11 @@
 
 namespace Layer\Data\Field;
 
-	//use Cake\Validation\ValidationSet;
 use Symfony\Component\Validator\Constraints\Email;
 
 /**
  * Class EmailField
- *
- * @package Layer\DataScaffold\DataType\Field
+ * @package Layer\Data\Field
  */
 class EmailField extends StringField {
 

@@ -4,8 +4,7 @@ namespace Layer\Data\Field;
 
 /**
  * Class BinaryField
- *
- * @package Layer\DataScaffold\DataType\Field
+ * @package Layer\Data\Field
  */
 class BinaryField extends Field {
 
