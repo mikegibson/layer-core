@@ -48,4 +48,11 @@ class TwigTableExtension extends TemplateBlockFunctionExtension {
 		return 'table';
 	}
 
+	public function beforeRender($block, array $context) {
+		if(!isset($context['table']) || !($context['table'] instanceof TableDataInterface)) {
+			throw new \InvalidArgumentException('Tables must implement TableDataInterface');
+		}
+		return parent::beforeRender($block, $context);
+	}
+
 }
