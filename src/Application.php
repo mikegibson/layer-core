@@ -114,6 +114,7 @@ class Application extends \Silex\Application {
 			'locale_fallbacks' => array('en'),
 		]);
 		$app->register(new FormServiceProvider());
+		// @todo set $app['form.secret'] to something better
 		$app->register(new MonologServiceProvider(), array(
 			'monolog.logfile' => $app['path_log'] . '/development.log',
 		));
