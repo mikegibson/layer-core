@@ -66,7 +66,7 @@ abstract class TemplateBlockFunctionExtension extends \Twig_Extension {
 		return ob_get_clean();
 	}
 
-	public function beforeRender($block, $context) {
+	public function beforeRender($block, array $context) {
 		return $context;
 	}
 
