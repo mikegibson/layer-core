@@ -3,9 +3,8 @@
 namespace Layer\View\Twig;
 
 /**
- * Class TwigTableExtension
- *
- * @package Layer\View\Table
+ * Class TemplateBlockFunctionExtension
+ * @package Layer\View\Twig
  */
 abstract class TemplateBlockFunctionExtension extends \Twig_Extension {
 
