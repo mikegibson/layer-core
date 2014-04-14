@@ -68,6 +68,8 @@ abstract class DataType {
 	 */
 	public $pluralVar;
 
+	public $titleField;
+
 	/**
 	 * @var array
 	 */
@@ -201,6 +203,10 @@ abstract class DataType {
 	 * @return Field
 	 */
 	protected function _addField(Field $field) {
+
+		if($field->titleField && $this->titleField === null) {
+			$this->titleField = $field->name;
+		}
 
 		return $this->_fields[$field->name] = $field;
 	}
