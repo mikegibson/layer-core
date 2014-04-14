@@ -4,7 +4,6 @@ namespace Layer;
 
 use Knp\Provider\ConsoleServiceProvider;
 use Layer\Asset\AssetServiceProvider;
-use Layer\Config\ConfigPlugin;
 use Layer\Config\ConfigServiceProvider;
 use Layer\Data\DataProvider;
 use Layer\Plugin\PluginServiceProvider;
@@ -13,7 +12,6 @@ use Layer\Utility\ArrayHelper;
 use Layer\Utility\Inflector;
 use Layer\Utility\StringHelper;
 use Layer\View\Html\HtmlHelper;
-use Layer\View\Table\TableHelper;
 use Silex\Application\MonologTrait;
 use Silex\Application\SecurityTrait;
 use Silex\Application\SwiftmailerTrait;
@@ -83,9 +81,6 @@ class Application extends \Silex\Application {
 		});
 		$app['html_helper'] = $app->share(function () use ($app) {
 			return new HtmlHelper($app);
-		});
-		$app['table_helper'] = $app->share(function () use ($app) {
-			return new TableHelper($app);
 		});
 
 		/**
