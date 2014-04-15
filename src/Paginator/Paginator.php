@@ -146,4 +146,18 @@ class Paginator implements PaginatorInterface {
 		return ($this->getPageCount() >= (int)$page);
 	}
 
+	/**
+	 * @return PaginatorRequestInterface
+	 */
+	public function getRequest() {
+		return $this->request;
+	}
+
+	/**
+	 * @return PaginatorResultInterface
+	 */
+	public function getResult() {
+		return $this->result;
+	}
+
 }

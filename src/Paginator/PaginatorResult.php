@@ -137,6 +137,13 @@ class PaginatorResult implements PaginatorResultInterface {
 	}
 
 	/**
+	 * @return DataType
+	 */
+	public function getDataType() {
+		return $this->dataType;
+	}
+
+	/**
 	 * @param Builder $builder
 	 * @return Builder
 	 * @throws \Exception
