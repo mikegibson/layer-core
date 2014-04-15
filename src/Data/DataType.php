@@ -68,6 +68,8 @@ abstract class DataType {
 	 */
 	public $pluralVar;
 
+	public $primaryKey;
+
 	public $titleField;
 
 	/**
@@ -203,6 +205,13 @@ abstract class DataType {
 	 * @return Field
 	 */
 	protected function _addField(Field $field) {
+
+		if($field->primaryKey) {
+			if($this->primaryKey !== null && $this->primaryKey !== $field->name) {
+				throw new \LogicException('The primary key is already defined!');
+			}
+			$this->primaryKey = $field->name;
+		}
 
 		if($field->titleField && $this->titleField === null) {
 			$this->titleField = $field->name;
