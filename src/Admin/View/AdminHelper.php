@@ -15,21 +15,7 @@ class AdminHelper {
 
 	}
 
-	public function link($dataType, $action = 'index', $label = 'List', array $urlParams = [], array $linkOptions = []) {
-
-		if (!$dataType = $this->_getDataType($dataType)) {
-			trigger_error('You must pass a data type!');
-
-			return false;
-		}
-
-		$url = $this->url($dataType, $action, $urlParams);
-
-		return $this->app['html_helper']->link($label, $url, $linkOptions);
-
-	}
-
-	public function url($dataType, $action = 'index', array $params = [], $generate = false) {
+	public function url($dataType, $action = 'index', array $params = []) {
 
 		if (!$dataType = $this->_getDataType($dataType)) {
 			trigger_error('You must pass a data type!');
@@ -46,13 +32,7 @@ class AdminHelper {
 		$params['namespace'] = $dataType->namespace;
 		$params['type'] = $dataType->slug;
 
-		$params['name'] = 'admin_scaffold';
-
-		if (!$generate) {
-			return $params;
-		}
-
-		return $this->app['url_generator']->generateUrl('admin_scaffold', $params);
+		return $this->app['url_generator']->generate('admin_scaffold', $params);
 
 	}
 

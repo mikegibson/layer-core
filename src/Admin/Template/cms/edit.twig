@@ -1,9 +1,15 @@
 {% extends "@admin/layout/admin.twig" %}
 {% form_theme form "@admin/form/cms.twig" %}
 
+{% block title %}Edit {{ dataType.singularHumanName }} | {{ parent() }}{% endblock %}
+
 {% block content_header %}
 
 	<h1>Edit {{ dataType.singularHumanName }}</h1>
+
+	<a href="{{ admin_url( dataType, 'index' ) }}">List {{ dataType.pluralHumanName }}</a>
+
+	<a href="{{ admin_url( dataType, 'add' ) }}">Add new {{ dataType.singularHumanName }}</a>
 
 {% endblock %}
 

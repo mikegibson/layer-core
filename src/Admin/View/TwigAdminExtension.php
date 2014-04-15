@@ -18,7 +18,7 @@ class TwigAdminExtension extends Extension {
 	/**
 	 * @var array
 	 */
-	protected $methods = ['link', 'url'];
+	protected $methods = ['url'];
 
 	/**
 	 * @param AdminHelper $helper
@@ -37,10 +37,7 @@ class TwigAdminExtension extends Extension {
 		foreach ($this->methods as $method) {
 			$functions[] = new \Twig_SimpleFunction(
 				'admin_' . $method,
-				[$this->helper, $method],
-				[
-					'is_safe' => ($method === 'url') ? false : ['html']
-				]
+				[$this->helper, $method]
 			);
 
 		}

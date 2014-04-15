@@ -1,13 +1,13 @@
 {% extends "@admin/layout/admin.twig" %}
-{% table_theme '@admin/table/index.twig' %}
+{% table_theme '@admin/block/table.twig' %}
+
+{% block title %}List {{ dataType.pluralHumanName }} | {{ parent() }}{% endblock %}
 
 {% block content %}
 
 	<h1>{{ dataType.pluralHumanName }}</h1>
 
-	{{ admin_link( dataType ) }}
-
-	{{ link( 'List link', 'admin_scaffold', {'namespace': dataType.namespace, 'type': dataType.slug, 'action': 'index'}) }}
+	<a href="{{ admin_url( dataType, 'add' ) }}">Add new {{ dataType.singularHumanName }}</a>
 
 	{{ table( paginator ) }}
 
