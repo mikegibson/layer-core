@@ -15,9 +15,10 @@ use Symfony\Component\HttpFoundation\Request;
 trait PaginatorTrait {
 
 	/**
+	 * @param Application $app
 	 * @param DataType $dataType
 	 * @param Request $request
-	 * @param QueryBuilder $query
+	 * @param Builder $query
 	 * @param array $requestConfig
 	 * @param array $resultConfig
 	 * @return Paginator
@@ -38,7 +39,6 @@ trait PaginatorTrait {
 	}
 
 	/**
-	 * @param DataType $dataType
 	 * @param PaginatorRequest $request
 	 * @param PaginatorResult $result
 	 * @return Paginator
@@ -57,8 +57,9 @@ trait PaginatorTrait {
 	}
 
 	/**
+	 * @param Application $app
 	 * @param DataType $dataType
-	 * @param QueryBuilder $query
+	 * @param Builder $query
 	 * @param array $config
 	 * @return PaginatorResult
 	 */
@@ -69,8 +70,8 @@ trait PaginatorTrait {
 
 	/**
 	 * @param DataType $dataType
-	 * @param QueryBuilder $query
-	 * @return Builder
+	 * @param Builder $query
+	 * @return Builder|static
 	 */
 	protected function _getPaginatorQuery(DataType $dataType, Builder $query = null) {
 		return ($query === null) ? $dataType->query() : $query;
