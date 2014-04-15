@@ -36,8 +36,10 @@ class PluginCollection {
 	}
 
 	/**
-	 * @param Plugin $plugin
-	 * @throws \Exception
+	 * @param $plugin
+	 * @return array|Plugin
+	 * @throws \RuntimeException
+	 * @throws \InvalidArgumentException
 	 */
 	public function load($plugin) {
 
