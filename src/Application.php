@@ -188,6 +188,10 @@ class Application extends \Silex\Application {
 		return $this['form.factory']->createNamedBuilder($name, $type, $data, $options);
 	}
 
+	public function addFlash($key, $message) {
+		return $this['session']->getFlashBag()->add($key, $message);
+	}
+
 	/**
 	 * @param Request $request
 	 * @param int $type

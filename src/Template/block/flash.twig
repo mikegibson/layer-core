@@ -1,0 +1,57 @@
+{% block flash %}
+	{% spaceless %}
+	{% if key is defined %}
+		{% set messages = flash_messages(key) %}
+	{% else %}
+		{% set messages = flash_messages() %}
+	{% endif %}
+	{% if messages is not empty %}
+		{% if key is defined %}
+			{% set container = flash_container(messages, key) %}
+		{% else %}
+			{% set container = flash_container(messages) %}
+		{% endif %}
+		{{ container|raw }}
+	{% endif %}
+	{% endspaceless %}
+{% endblock %}
+
+{% block flash_container %}
+	{% spaceless %}
+	{% if id is not defined %}
+		{% if key is defined %}
+			{% set id = 'flash-' ~ key %}
+		{% else %}
+			{% set id = 'flash' %}
+		{% endif %}
+	{% endif %}
+	<div class="flash-container" id="{{ id }}">
+
+		{{ messages|raw }}
+
+	</div>
+	{% endspaceless %}
+{% endblock %}
+
+{% block flash_messages %}
+	{% spaceless %}
+	{% if key is defined %}
+		{% set keys = [key] %}
+	{% else %}
+		{% set keys = app.session.flashBag.keys %}
+	{% endif %}
+	{% for key in keys %}
+		{% for message in app.session.flashBag.get(key) %}
+			{{ flash_message(key, message) }}
+		{% endfor %}
+	{% endfor %}
+	{% endspaceless %}
+{% endblock %}
+
+{% block flash_message %}
+<div class="flash flash-{{ key }}">
+
+	{{ message }}
+
+</div>
+{% endblock %}

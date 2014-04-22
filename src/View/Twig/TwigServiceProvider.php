@@ -50,6 +50,7 @@ class TwigServiceProvider extends \Silex\Provider\TwigServiceProvider {
 				$twig->addGlobal('app_name', $app['config']->read('name'));
 				$twig->addGlobal('app_charset', strtolower($app['charset']));
 				$twig->addExtension(new HtmlExtension($app['html_helper']));
+				$twig->addExtension(new FlashExtension());
 				$twig->addExtension($app['twig.table.extension']);
 				return $twig;
 			})
