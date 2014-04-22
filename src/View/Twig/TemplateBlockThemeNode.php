@@ -28,7 +28,7 @@ class TemplateBlockThemeNode extends \Twig_Node {
 	public function compile(\Twig_Compiler $compiler) {
 		$compiler
 			->addDebugInfo($this)
-			->write("\$this->env->getExtension('{$this->extensionName}')->setTheme(")
+			->write("\$this->env->getExtension('{$this->extensionName}')->getRenderer()->setTheme(")
 			->subcompile($this->getNode('theme'))
 			->raw(");\n");
 		;
