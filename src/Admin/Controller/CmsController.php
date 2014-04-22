@@ -37,6 +37,37 @@ class CmsController extends Controller {
 		return compact('dataType', 'paginator');
 	}
 
+	public function addAction(Request $request) {
+
+		$dataType = $request->get('dataType');
+		$formBuilder = $dataType->getFormBuilder('admin_add');
+		$formBuilder->setAction($request->getRequestUri());
+
+		$form = $formBuilder->getForm();
+
+		$form->handleRequest($request);
+		if($form->isSubmitted()) {
+			if($form->isValid()) {
+				$model = $dataType->model();
+				$model->setAttributes($form->getData());
+				if(!$model->save()) {
+					throw new \Exception(sprintf('The %s could not be saved!', $dataType->singularHumanName));
+				}
+				$this->app->addFlash('message', sprintf('The %s was added', $dataType->singularHumanName));
+				return $this->app->redirect($this->app['admin.helper']->url($dataType, 'edit', ['id' => $model->id]));
+			} else {
+				$this->app->addFlash('error',
+					sprintf('The %s could not be saved, please check for errors', $dataType->singularHumanName)
+				);
+			}
+		}
+
+		$data = compact('dataType');
+		$data['form'] = $form->createView();
+
+		return $data;
+	}
+
 	/**
 	 * @param Request $request
 	 * @return array
@@ -56,7 +87,13 @@ class CmsController extends Controller {
 		if ($form->isSubmitted()) {
 			if($form->isValid()) {
 				$record->setAttributes($form->getData());
-				$record->save();
+				if(!$record->save()) {
+					throw new \Exception(sprintf('The %s could not be saved!', $dataType->singularHumanName));
+				}
+			} else {
+				$this->app->addFlash('error',
+					sprintf('The %s could not be saved, please check for errors', $dataType->singularHumanName)
+				);
 			}
 		}
 
