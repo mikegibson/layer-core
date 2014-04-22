@@ -90,6 +90,8 @@ class CmsController extends Controller {
 				if(!$record->save()) {
 					throw new \Exception(sprintf('The %s could not be saved!', $dataType->singularHumanName));
 				}
+				$this->app->addFlash('message', sprintf('The %s was saved', $dataType->singularHumanName));
+				return $this->app->redirect($request->getRequestUri());
 			} else {
 				$this->app->addFlash('error',
 					sprintf('The %s could not be saved, please check for errors', $dataType->singularHumanName)
