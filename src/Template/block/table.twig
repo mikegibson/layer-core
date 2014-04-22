@@ -17,14 +17,12 @@
 {% endblock %}
 
 {% block table_column_headers %}
-	{% for key, label in table.columns %}
-	<th class="th-{{ key }}">{{ table_column_label( table, label, key ) }}</th>
+	{% for columnKey, label in table.columns %}
+	<th class="th-{{ columnKey }}">{{ table_column_label( table, label, columnKey ) }}</th>
 	{% endfor %}
 {% endblock %}
 
-{% block table_column_label %}
-	{{ label }}
-{% endblock %}
+{% block table_column_label %}{{ label }}{% endblock %}
 
 {% block table_tbody %}
 	<tbody>
@@ -41,17 +39,15 @@
 {% block table_body_row %}
 	<tr class="tr-{{ rowKey }}">
 		{% for columnKey in table.columns|keys %}
-		{{ table_body_cell( table, row[columnKey], columnKey , rowKey) }}
+		{{ table_body_cell( table, row[columnKey], columnKey , rowKey, row) }}
 		{% endfor %}
 	</tr>
 {% endblock %}
 
 {% block table_body_cell %}
-	<td class="td-{{ columnKey }} td-{{ columnKey }}-{{ rowKey }}">{{ table_value(table, value, columnKey, rowKey) }}</td>
+	<td class="td-{{ columnKey }} td-{{ columnKey }}-{{ rowKey }}">{{ table_value(table, value, columnKey, rowKey, row) }}</td>
 {% endblock %}
 
-{% block table_value %}
-	{{ value }}
-{% endblock %}
+{% block table_value %}{{ value }}{% endblock %}
 
 {% block table_tfoot %}{% endblock %}

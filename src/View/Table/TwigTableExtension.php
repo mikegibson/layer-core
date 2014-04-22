@@ -2,11 +2,13 @@
 
 namespace Layer\View\Table;
 
+use Layer\Paginator\Paginator;
+use Layer\Paginator\PaginatorResult;
 use Layer\View\Twig\TemplateBlockFunctionExtension;
 
 class TwigTableExtension extends TemplateBlockFunctionExtension {
 
-	protected $template = 'table/default';
+	protected $template = 'block/table';
 
 	protected $functionBlocks = [
 		'table' => [
@@ -22,7 +24,7 @@ class TwigTableExtension extends TemplateBlockFunctionExtension {
 			'args' => ['table']
 		],
 		'table_column_label' => [
-			'args' => ['table', 'label', 'key']
+			'args' => ['table', 'label', 'columnKey']
 		],
 		'table_tbody' => [
 			'args' => ['table']
@@ -34,10 +36,10 @@ class TwigTableExtension extends TemplateBlockFunctionExtension {
 			'args' => ['table', 'row', 'rowKey']
 		],
 		'table_body_cell' => [
-			'args' => ['table', 'value', 'columnKey', 'rowKey']
+			'args' => ['table', 'value', 'columnKey', 'rowKey', 'row']
 		],
 		'table_value' => [
-			'args' => ['table', 'value', 'columnKey', 'rowKey']
+			'args' => ['table', 'value', 'columnKey', 'rowKey', 'row']
 		],
 		'table_tfoot' => [
 			'args' => ['table']
@@ -51,6 +53,15 @@ class TwigTableExtension extends TemplateBlockFunctionExtension {
 	public function beforeRender($block, array $context) {
 		if(!isset($context['table']) || !($context['table'] instanceof TableDataInterface)) {
 			throw new \InvalidArgumentException('Tables must implement TableDataInterface');
+		}
+		if($context['table'] instanceof Paginator) {
+			$result = $context['table']->getResult();
+			if($result instanceof PaginatorResult) {
+				$context['dataType'] = $dataType = $result->getDataType();
+				if(isset($context['columnKey']) && $dataType->hasField($context['columnKey'])) {
+					$context['field'] = $dataType->field($context['columnKey']);
+				}
+			}
 		}
 		return parent::beforeRender($block, $context);
 	}
