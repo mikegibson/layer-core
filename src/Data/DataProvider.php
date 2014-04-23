@@ -2,16 +2,19 @@
 
 namespace Layer\Data;
 
-use Illuminate\Database\Capsule\Manager as Capsule;
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 use Silex\Application;
+use Silex\Provider\DoctrineServiceProvider;
 use Silex\ServiceProviderInterface;
 
 class DataProvider implements ServiceProviderInterface {
 
 	public function register(Application $app) {
 
+		$app->register(new DoctrineServiceProvider());
+
+		/*
 		$app['db'] = $app->share(function () use ($app) {
 
 			$capsule = new Capsule;
@@ -27,13 +30,14 @@ class DataProvider implements ServiceProviderInterface {
 
 			return $capsule;
 
-		});
+		});*/
 
+		/*
 		$app['data'] = $app->share(function () use ($app) {
 
 			return new DataTypeRegistry($app);
 
-		});
+		});*/
 
 		$app['fractal'] = $app->share(function () {
 			return new \League\Fractal\Manager();
@@ -51,12 +55,18 @@ class DataProvider implements ServiceProviderInterface {
 
 	public function boot(Application $app) {
 
+
+
+
+
+		die('here');
+/*
 		foreach ($app['data']->loaded() as $namespace => $tables) {
 			foreach ($tables as $table) {
 				$name = "{$namespace}/{$table}";
 				$app['data.' . $name] = $app['data']->get($name);
 			}
-		}
+		}*/
 
 	}
 

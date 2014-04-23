@@ -5,6 +5,7 @@ namespace Layer\Admin;
 use Layer\Admin\Controller\Action\AddAction;
 use Layer\Admin\Controller\Action\EditAction;
 use Layer\Admin\Controller\Action\IndexAction;
+use Layer\Admin\Controller\Action\TestAction;
 use Layer\Admin\View\AdminHelper;
 use Layer\Admin\View\TwigAdminExtension;
 use Layer\Plugin\Plugin;
@@ -54,6 +55,7 @@ class AdminPlugin extends Plugin {
 			$scaffold->addAction(new IndexAction());
 			$scaffold->addAction(new AddAction());
 			$scaffold->addAction(new EditAction());
+			$scaffold->addAction(new TestAction());
 			return $scaffold;
 
 		});

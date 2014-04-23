@@ -23,7 +23,6 @@
 		"symfony/validator": "2.5.*@dev",
 		"symfony/yaml": "2.5.*@dev",
 		"twig/twig": ">=1.8,<2.0-dev",
-		"illuminate/database": "*",
 		"league/fractal": "0.7.*",
 		"kriswallsmith/assetic": "1.2.*@dev",
 		"knplabs/console-service-provider": "dev-master"
