@@ -1,5 +1,5 @@
 {% block flash %}
-	{% spaceless %}
+{% spaceless %}
 	{% if key is defined %}
 		{% set messages = flash_messages(key) %}
 	{% else %}
@@ -13,11 +13,11 @@
 		{% endif %}
 		{{ container|raw }}
 	{% endif %}
-	{% endspaceless %}
+{% endspaceless %}
 {% endblock %}
 
 {% block flash_container %}
-	{% spaceless %}
+{% spaceless %}
 	{% if id is not defined %}
 		{% if key is defined %}
 			{% set id = 'flash-' ~ key %}
@@ -30,11 +30,11 @@
 		{{ messages|raw }}
 
 	</div>
-	{% endspaceless %}
+{% endspaceless %}
 {% endblock %}
 
 {% block flash_messages %}
-	{% spaceless %}
+{% spaceless %}
 	{% if key is defined %}
 		{% set keys = [key] %}
 	{% else %}
@@ -45,7 +45,7 @@
 			{{ flash_message(key, message) }}
 		{% endfor %}
 	{% endfor %}
-	{% endspaceless %}
+{% endspaceless %}
 {% endblock %}
 
 {% block flash_message %}
