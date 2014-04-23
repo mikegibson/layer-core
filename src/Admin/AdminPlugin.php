@@ -2,7 +2,9 @@
 
 namespace Layer\Admin;
 
-use Layer\Admin\Controller\CmsController;
+use Layer\Admin\Controller\Action\AddAction;
+use Layer\Admin\Controller\Action\EditAction;
+use Layer\Admin\Controller\Action\IndexAction;
 use Layer\Admin\View\AdminHelper;
 use Layer\Admin\View\TwigAdminExtension;
 use Layer\Plugin\Plugin;
@@ -47,8 +49,12 @@ class AdminPlugin extends Plugin {
 		});
 
 		$app['admin.controllers.cms_controller'] = $app->share(function () use ($app) {
-
-			return new CmsController($app);
+			$scaffold = $app['scaffold_factory'];
+			$scaffold->setName('cms');
+			$scaffold->addAction(new IndexAction());
+			$scaffold->addAction(new AddAction());
+			$scaffold->addAction(new EditAction());
+			return $scaffold;
 
 		});
 

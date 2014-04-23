@@ -2,6 +2,7 @@
 
 namespace Layer\Data;
 
+use Layer\Application;
 use Symfony\Component\HttpFoundation\Request;
 
 trait SingleRecordTrait {
@@ -16,6 +17,7 @@ trait SingleRecordTrait {
 	 * @return bool
 	 */
 	protected function _getSingleRecord(
+		Application $app,
 		DataType $dataType,
 		Request $request,
 		Model $model = null,
@@ -38,7 +40,7 @@ trait SingleRecordTrait {
 
 		if (!$value = $request->get($requestParam)) {
 			if ($abort) {
-				$this->app->abort($abort);
+				$app->abort($abort);
 			}
 			return false;
 		}

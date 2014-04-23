@@ -17,6 +17,8 @@ interface ControllerInterface {
 	 */
 	public function __construct(Application $app);
 
+	public function getName();
+
 	/**
 	 * @param Request $request
 	 * @return string

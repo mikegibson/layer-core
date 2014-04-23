@@ -5,6 +5,7 @@ namespace Layer;
 use Knp\Provider\ConsoleServiceProvider;
 use Layer\Asset\AssetServiceProvider;
 use Layer\Config\ConfigServiceProvider;
+use Layer\Controller\ScaffoldController;
 use Layer\Data\DataProvider;
 use Layer\Plugin\PluginServiceProvider;
 use Layer\View\Twig\TwigServiceProvider;
@@ -82,6 +83,9 @@ class Application extends \Silex\Application {
 		$app['html_helper'] = $app->share(function () use ($app) {
 			return new HtmlHelper($app);
 		});
+		$app['scaffold_factory'] = function() use($app) {
+			return new ScaffoldController($app);
+		};
 
 		/**
 		 * Register service providers

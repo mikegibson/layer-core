@@ -3,10 +3,12 @@
 namespace Layer\Controller;
 
 use Layer\Application;
+use Layer\Controller\Action\ActionInterface;
 use Layer\View\Twig\View;
 use Layer\View\ViewInterface;
 use Silex\ControllerCollection;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
@@ -29,7 +31,7 @@ class Controller extends ControllerCollection implements ControllerInterface {
 	/**
 	 * @var string
 	 */
-	protected $name;
+	protected $_name;
 
 	/**
 	 * Request parameter to use for template
@@ -44,14 +46,22 @@ class Controller extends ControllerCollection implements ControllerInterface {
 	public function __construct(Application $app) {
 
 		$this->app = $app;
-		if (!$this->name) {
+	}
+
+	public function setName($name) {
+		$this->_name = $name;
+	}
+
+	public function getName() {
+		if ($this->_name === null) {
 			$class = get_class($this);
 			$pos = strrpos($class, '\\');
 			if ($pos !== false) {
 				$class = substr($class, $pos + 1);
 			}
-			$this->name = $app['inflector']->underscore(preg_replace('/(Controller)$/', '', $class));
+			$this->_name = $this->app['inflector']->underscore(preg_replace('/(Controller)$/', '', $class));
 		}
+		return $this->_name;
 	}
 
 	/**
@@ -60,8 +70,13 @@ class Controller extends ControllerCollection implements ControllerInterface {
 	 */
 	public function dispatch(Request $request) {
 
-		$data = $this->invoke($request);
-		$view = $this->getView($request);
+		$data = $this->invoke($request) ?: [];
+
+		if($data instanceof Response) {
+			return $data;
+		}
+
+		$view = $this->getView($request->get($this->_templateParam));
 
 		return $this->_render($view, $data);
 	}
@@ -84,11 +99,12 @@ class Controller extends ControllerCollection implements ControllerInterface {
 	public function invoke(Request $request) {
 
 		$callable = $this->getCallable($request);
+
 		if (!is_callable($callable)) {
 			throw new BadRequestHttpException;
 		}
 
-		return call_user_func($callable, $request);
+		return call_user_func_array($callable, [$this->app, $request]);
 	}
 
 	/**
@@ -98,12 +114,8 @@ class Controller extends ControllerCollection implements ControllerInterface {
 	public function getCallable(Request $request) {
 
 		if ($action = $request->get('action')) {
+
 			$method = $this->app['inflector']->camelize($action) . 'Action';
-
-			if (!method_exists($this, $method)) {
-				return false;
-			}
-
 			return [$this, $method];
 		}
 
@@ -114,9 +126,9 @@ class Controller extends ControllerCollection implements ControllerInterface {
 	 * @param Request $request
 	 * @return View
 	 */
-	public function getView(Request $request) {
+	public function getView($name) {
 
-		$template = $this->getTemplate($request);
+		$template = $this->getTemplate($name);
 
 		return new View($this->app, $template);
 	}
@@ -125,22 +137,15 @@ class Controller extends ControllerCollection implements ControllerInterface {
 	 * @param Request $request
 	 * @return mixed
 	 */
-	public function getTemplate(Request $request) {
+	public function getTemplate($name) {
 
-		$template = $this->name . '/' . $request->get($this->_templateParam);
+		$template = $this->name . '/' . $name;
 
 		if ($this->plugin) {
 			$template = '@' . $this->plugin . '/' . $template;
 		}
 
 		return $template;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getName() {
-		return $this->name;
 	}
 
 	/**
