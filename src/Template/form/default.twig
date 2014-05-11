@@ -1,18 +1,5 @@
 {% use "form_div_layout.html.twig" %}
 
-{% block submit_widget %}
-{% spaceless %}
-
-	{% set id = id ~ '_submit' %}
-	{% set type = type|default('submit') %}
-	{% set label = label|default('Save') %}
-	<div class="button {{ type }}">
-		<button id="{{ id }}" type="{{ type }}">{{ label }}</button>
-	</div>
-
-{% endspaceless %}
-{% endblock %}
-
 {% block form_row %}
 {% spaceless %}
 

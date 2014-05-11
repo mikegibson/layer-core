@@ -2,7 +2,7 @@
 
 namespace Layer\Paginator;
 
-use Illuminate\Database\Query\Builder;
+use Doctrine\ORM\QueryBuilder;
 use Layer\Application;
 use Layer\Data\DataType;
 use Layer\Utility\SetPropertiesTrait;
@@ -21,15 +21,12 @@ class PaginatorResult implements PaginatorResultInterface {
 	 */
 	protected $app;
 
-	/**
-	 * @var \Layer\Data\DataType
-	 */
 	protected $dataType;
 
 	/**
-	 * @var \Layer\Data\QueryBuilder
+	 * @var \Doctrine\ORM\QueryBuilder
 	 */
-	protected $builder;
+	protected $queryBuilder;
 
 	/**
 	 * @var int
@@ -43,34 +40,22 @@ class PaginatorResult implements PaginatorResultInterface {
 
 	/**
 	 * @param Application $app
-	 * @param DataType $dataType
-	 * @param Builder $builder
+	 * @param QueryBuilder $queryBuilder
 	 * @param array $config
 	 */
-	public function __construct(Application $app, DataType $dataType, Builder $builder = null, array $config = []) {
+	public function __construct(Application $app, DataType $dataType, QueryBuilder $queryBuilder = null, array $config = []) {
 
 		$this->_setProperties($config);
 		$this->app = $app;
 		$this->dataType = $dataType;
-		if ($builder !== null) {
-			$this->setQuery($builder);
+		if($queryBuilder === null) {
+			$queryBuilder = $dataType->createQueryBuilder();
 		}
+		$this->setQueryBuilder($queryBuilder);
 	}
 
-	/**
-	 * @param Builder $builder
-	 */
-	public function setQuery(Builder $builder) {
-
-		$this->query = $builder;
-	}
-
-	/**
-	 * @return Builder
-	 */
-	public function getQuery() {
-
-		return $this->query;
+	public function setQueryBuilder(QueryBuilder $queryBuilder) {
+		$this->queryBuilder = $queryBuilder;
 	}
 
 	/**
@@ -78,6 +63,11 @@ class PaginatorResult implements PaginatorResultInterface {
 	 */
 	public function getColumns() {
 
+		return [
+			'title' => 'Title',
+			'content' => 'Content'
+		];
+/*
 		$columns = [];
 		foreach ($this->dataType->fields() as $name => $field) {
 			if (!$field->visible || !$field->important) {
@@ -86,7 +76,7 @@ class PaginatorResult implements PaginatorResultInterface {
 			$columns[$name] = $field->label;
 		}
 
-		return $columns;
+		return $columns;*/
 	}
 
 	/**
@@ -95,12 +85,19 @@ class PaginatorResult implements PaginatorResultInterface {
 	 * @param null $sortKey
 	 * @param null $direction
 	 * @param array $columns
-	 * @param Builder $builder
+	 * @param QueryBuilder $queryBuilder
 	 * @return mixed
 	 */
-	public function getData($page = 1, $limit = null, $sortKey = null, $direction = null, $columns = ['*'], Builder $builder = null) {
+	public function getData(
+		$page = 1,
+		$limit = null,
+		$sortKey = null,
+		$direction = null,
+		$columns = ['*'],
+		QueryBuilder $builder = null
+	) {
 
-		return $this->paginateQuery($page, $limit, $sortKey, $direction, $builder)->get($columns);
+		return $this->getQuery($page, $limit, $sortKey, $direction)->getResult();
 	}
 
 	/**
@@ -108,56 +105,53 @@ class PaginatorResult implements PaginatorResultInterface {
 	 * @param null $limit
 	 * @param null $sortKey
 	 * @param null $direction
-	 * @param QueryBuilder $builder
+	 * @param QueryBuilder $queryBuilder
 	 * @return QueryBuilder
 	 */
-	public function paginateQuery($page = 1, $limit = null, $sortKey = null, $direction = null, QueryBuilder $builder = null) {
-
-		$builder = $this->_getQuery($builder);
+	public function getQuery(
+		$page = 1,
+		$limit = null,
+		$sortKey = null,
+		$direction = null,
+		QueryBuilder $queryBuilder = null
+	) {
 
 		$limit = (int)$limit;
 		if ($limit < 1) {
 			$limit = $this->limit;
 		}
 
-		$limit = min([$limit, $this->maxLimit]);
+		$query = $this->_getQueryBuilder($queryBuilder)->getQuery();
+		$query->setFirstResult(($page - 1) * $limit)->setMaxResults($limit);
 
-		return $builder->forPage($page, $limit);
+		return $query;
 	}
 
 	/**
-	 * @param Builder $builder
+	 * @param Builder $queryBuilder
 	 * @return int
 	 */
-	public function getCount(Builder $builder = null) {
+	public function getCount(QueryBuilder $queryBuilder = null) {
 
-		$builder = $this->_getQuery($builder);
-
-		return $builder->count();
+		return $this->_getQueryBuilder($queryBuilder)
+			->select("COUNT({$this->dataType->name})")
+			->getQuery()
+			->getSingleScalarResult();
 	}
 
-	/**
-	 * @return DataType
-	 */
 	public function getDataType() {
 		return $this->dataType;
 	}
 
 	/**
-	 * @param Builder $builder
+	 * @param Builder $queryBuilder
 	 * @return Builder
 	 * @throws \Exception
 	 */
-	protected function _getQuery(Builder $builder = null) {
+	protected function _getQueryBuilder(QueryBuilder $queryBuilder = null) {
 
-		if ($builder === null) {
-			if ($this->query === null) {
-				throw new \Exception('No query object specified!');
-			}
-			$builder = $this->query;
-		}
+		return ($queryBuilder === null) ? $this->queryBuilder : $queryBuilder;
 
-		return $builder;
 	}
 
 }

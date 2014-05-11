@@ -31,8 +31,8 @@ class Paginator implements PaginatorInterface {
 	 * @param PaginatorResultInterface $result
 	 */
 	public function __construct(
-		PaginatorRequestInterface $request,
-		PaginatorResultInterface $result
+		PaginatorResultInterface $result,
+		PaginatorRequestInterface $request
 	) {
 		$this->request = $request;
 		$this->result = $result;

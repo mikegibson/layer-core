@@ -101,11 +101,6 @@ class DataTypeRegistry {
 		return $this->_loaded[$namespace][$slug];
 	}
 
-	public function getConnection($connection = null) {
-
-		return $this->app['db']->getConnection($connection);
-	}
-
 	/**
 	 * Try to resolve a namespace and slug to a data type, allowing for namespace/slug style
 	 *

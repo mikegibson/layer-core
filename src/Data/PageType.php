@@ -12,20 +12,10 @@ class PageType extends DataType {
 	/**
 	 * @var string
 	 */
-	public $plugin = 'Pages';
-
-	/**
-	 * @var string
-	 */
 	public $namespace = 'content';
 
-	/**
-	 * @var array
-	 */
-	protected $_fields = [
-		'id',
-		'title',
-		'slug',
-		'content',
-	];
+	public $entityClass = 'Layer\Entity\Content\Page';
+
+	public $titleField = 'title';
+
 }

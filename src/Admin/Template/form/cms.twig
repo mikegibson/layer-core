@@ -5,24 +5,9 @@
 
 	{{ parent() }}
 
-	{% if required %}
+	{% if required and label is not sameas(false) %}
 		<span class="required" title="This field is required">*</span>
 	{% endif %}
 
 {% endspaceless %}
-{% endblock %}
-
-{% block form_end %}
-	{% spaceless %}
-
-		{% if not render_rest is defined or render_rest %}
-			{{ form_rest(form) }}
-		{% endif %}
-
-		{% if form.parent is empty %}
-			{{ block('submit_widget') }}
-		{% endif %}
-
-		</form>
-	{% endspaceless %}
 {% endblock %}

@@ -28,6 +28,7 @@ use Silex\Provider\SwiftmailerServiceProvider;
 use Silex\Provider\TranslationServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
 use Silex\Provider\ValidatorServiceProvider;
+use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -187,7 +188,12 @@ class Application extends \Silex\Application {
 	 */
 	public function form($name, $data = null, array $options = []) {
 		$options = array_merge(['type' => 'form'], $options);
-		$type = $options['type'];
+		if($name instanceof FormTypeInterface) {
+			$type = $name;
+			$name = $type->getName();
+		} else {
+			$type = $options['type'];
+		}
 		unset($options['type']);
 		return $this['form.factory']->createNamedBuilder($name, $type, $data, $options);
 	}

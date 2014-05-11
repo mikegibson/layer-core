@@ -58,9 +58,6 @@ class TwigTableExtension extends TemplateBlockFunctionExtension {
 			$result = $context['table']->getResult();
 			if($result instanceof PaginatorResult) {
 				$context['dataType'] = $dataType = $result->getDataType();
-				if(isset($context['columnKey']) && $dataType->hasField($context['columnKey'])) {
-					$context['field'] = $dataType->field($context['columnKey']);
-				}
 			}
 		}
 		return parent::beforeRender($block, $context);

@@ -15,6 +15,7 @@
 		"silex/silex": "~1.1",
 		"symfony/config": "2.5.*@dev",
 		"symfony/debug": "2.5.*@dev",
+		"symfony/doctrine-bridge": "2.5.*@dev",
 		"symfony/form": "2.5.*@dev",
 		"symfony/monolog-bridge": "2.5.*@dev",
 		"symfony/security": "2.5.*@dev",
@@ -23,8 +24,11 @@
 		"symfony/validator": "2.5.*@dev",
 		"symfony/yaml": "2.5.*@dev",
 		"twig/twig": ">=1.8,<2.0-dev",
+		"doctrine/dbal": "2.5.*@dev",
+		"doctrine/orm": "2.5.*@dev",
 		"league/fractal": "0.7.*",
 		"kriswallsmith/assetic": "1.2.*@dev",
+		"dflydev/doctrine-orm-service-provider": "1.0.*@dev",
 		"knplabs/console-service-provider": "dev-master"
 	},
 	"autoload": {

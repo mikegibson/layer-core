@@ -2,7 +2,7 @@
 
 namespace Layer\Paginator;
 
-use Illuminate\Database\Query\Builder;
+use Doctrine\ORM\QueryBuilder;
 use Layer\Data\DataType;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,25 +17,25 @@ trait PaginatorTrait {
 	/**
 	 * @param Application $app
 	 * @param DataType $dataType
+	 * @param QueryBuilder $queryBuilder
 	 * @param Request $request
-	 * @param Builder $query
-	 * @param array $requestConfig
 	 * @param array $resultConfig
+	 * @param array $requestConfig
 	 * @return Paginator
 	 */
 	protected function _buildPaginator(
 		Application $app,
 		DataType $dataType,
 		Request $request,
-		Builder $query = null,
-		array $requestConfig = [],
-		array $resultConfig = []
+		QueryBuilder $queryBuilder = null,
+		array $resultConfig = [],
+		array $requestConfig = []
 	) {
 
+		$paginatorResult = $this->_getPaginatorResult($app, $dataType, $queryBuilder, $resultConfig);
 		$paginatorRequest = $this->_getPaginatorRequest($request, $requestConfig);
-		$paginatorResult = $this->_getPaginatorResult($app, $dataType, $query, $resultConfig);
 
-		return $this->_getPaginator($paginatorRequest, $paginatorResult);
+		return $this->_getPaginator($paginatorResult, $paginatorRequest);
 	}
 
 	/**
@@ -43,8 +43,11 @@ trait PaginatorTrait {
 	 * @param PaginatorResult $result
 	 * @return Paginator
 	 */
-	protected function _getPaginator(PaginatorRequest $request, PaginatorResult $result) {
-		return new Paginator($request, $result);
+	protected function _getPaginator(
+		PaginatorResult $result,
+		PaginatorRequest $request
+	) {
+		return new Paginator($result, $request);
 	}
 
 	/**
@@ -52,29 +55,27 @@ trait PaginatorTrait {
 	 * @param array $config
 	 * @return PaginatorRequest
 	 */
-	protected function _getPaginatorRequest(Request $request, array $config = []) {
+	protected function _getPaginatorRequest(
+		Request $request,
+		array $config = []
+	) {
 		return new PaginatorRequest($request, $config);
 	}
 
 	/**
 	 * @param Application $app
 	 * @param DataType $dataType
-	 * @param Builder $query
+	 * @param QueryBuilder $queryBuilder
 	 * @param array $config
 	 * @return PaginatorResult
 	 */
-	protected function _getPaginatorResult(Application $app, DataType $dataType, Builder $query = null, array $config = []) {
-		$query = $this->_getPaginatorQuery($dataType, $query);
-		return new PaginatorResult($app, $dataType, $query, $config);
-	}
-
-	/**
-	 * @param DataType $dataType
-	 * @param Builder $query
-	 * @return Builder|static
-	 */
-	protected function _getPaginatorQuery(DataType $dataType, Builder $query = null) {
-		return ($query === null) ? $dataType->query() : $query;
+	protected function _getPaginatorResult(
+		Application $app,
+		DataType $dataType,
+		QueryBuilder $queryBuilder = null,
+		array $config = []
+	) {
+		return new PaginatorResult($app, $dataType, $queryBuilder, $config);
 	}
 
 }

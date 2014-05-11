@@ -6,17 +6,15 @@
 	{% set escape = true %}
 	{% set link = false %}
 
-	{% if field is defined %}
-		{% if(field.titleField) %}
-			{% set link = true %}
-		{% endif %}
+	{% if(columnKey == dataType.titleField) %}
+		{% set link = true %}
 	{% endif %}
 
 	{% if(escape) %}
 		{% set value = value|escape %}
 	{% endif %}
 
-	{% if link %}<a href="{{ admin_url(dataType, 'edit', {'id': row[dataType.primaryKey]}) }}">{% endif %}{{ value|raw }}{% if link %}</a>{% endif %}
+	{% if link %}<a href="{{ admin_url(dataType, 'edit', {'id': row.id}) }}">{% endif %}{{ value|raw }}{% if link %}</a>{% endif %}
 
 {% endspaceless %}
 {% endblock %}

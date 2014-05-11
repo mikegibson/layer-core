@@ -2,11 +2,8 @@
 
 namespace Layer\Admin\Controller\Action;
 
-use Illuminate\Database\Query\Builder;
-use Layer\Admin\Data\AdminPaginatorResult;
 use Layer\Application;
 use Layer\Controller\Action\ActionInterface;
-use Layer\Data\DataType;
 use Layer\Paginator\PaginatorTrait;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -34,18 +31,6 @@ class IndexAction implements ActionInterface {
 
 		return compact('dataType', 'paginator');
 
-	}
-
-	/**
-	 * @param Application $app
-	 * @param DataType $dataType
-	 * @param Builder $query
-	 * @param array $config
-	 * @return AdminPaginatorResult
-	 */
-	protected function _getPaginatorResult(Application $app, DataType $dataType, Builder $query = null, array $config = []) {
-		$query = $this->_getPaginatorQuery($dataType, $query);
-		return new AdminPaginatorResult($app, $dataType, $query, $config);
 	}
 
 }
