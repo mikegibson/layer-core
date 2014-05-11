@@ -29,7 +29,8 @@
 		"league/fractal": "0.7.*",
 		"kriswallsmith/assetic": "1.2.*@dev",
 		"dflydev/doctrine-orm-service-provider": "1.0.*@dev",
-		"knplabs/console-service-provider": "dev-master"
+		"knplabs/console-service-provider": "dev-master",
+		"knplabs/doctrine-behaviors": "1.0.*@dev"
 	},
 	"autoload": {
 		"psr-4": {
