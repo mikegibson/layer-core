@@ -33,4 +33,5 @@ class TemplateBlockThemeNode extends \Twig_Node {
 			->raw(");\n");
 		;
 	}
+
 }
