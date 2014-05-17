@@ -2,40 +2,37 @@
 
 namespace Layer\Pages;
 
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\Table;
-use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping as ORM;
+use Knp\DoctrineBehaviors\Model\Sluggable\Sluggable;
 
 /**
  * Layer\Page\Page
  *
- * @Entity
- * @Table(name="content_pages")
+ * @ORM\Entity
+ * @ORM\Table(name="content_pages")
  */
 class Page {
 
 	/**
 	 * @var int $id
 	 *
-	 * @Id
-	 * @Column(type="integer")
-	 * @GeneratedValue
+	 * @ORM\Id
+	 * @ORM\Column(type="integer")
+	 * @ORM\GeneratedValue
 	 */
 	protected $id;
 
 	/**
 	 * @var string $title
 	 *
-	 * @Column(type="string")
+	 * @ORM\Column(type="string")
 	 */
 	protected $title;
 
 	/**
 	 * @var text $content
 	 *
-	 * @Column(type="text")
+	 * @ORM\Column(type="text")
 	 */
 	protected $content;
 
