@@ -33,6 +33,8 @@ class RepositoryManager {
 	}
 
 	/**
+	 * Register a repository
+	 *
 	 * @param ManagedRepositoryInterface $repository
 	 */
 	public function addRepository(ManagedRepositoryInterface $repository) {
@@ -40,22 +42,24 @@ class RepositoryManager {
 	}
 
 	/**
-	 * Gets the repository for the given entity name
+	 * Gets the repository class for the given name
 	 *
-	 * @param $entityName
+	 * @param $name
 	 * @return mixed
 	 * @throws \InvalidArgumentException if repository not found
 	 */
-	public function getRepository($entityName) {
+	public function getRepository($name) {
 
-		if (!isset($this->repositories[$entityName])) {
-			throw new \InvalidArgumentException(sprintf('Repository %s was not found!', $entityName));
+		if (!$this->hasRepository($name)) {
+			throw new \InvalidArgumentException(sprintf('Repository %s was not found!', $name));
 		}
 
-		return $this->repositories[$entityName];
+		return $this->repositories[$name];
 	}
 
 	/**
+	 * Get an array of registered repositories
+	 *
 	 * @return array
 	 */
 	public function getRepositoryList() {
@@ -63,6 +67,18 @@ class RepositoryManager {
 	}
 
 	/**
+	 * Check if a repository is registered
+	 *
+	 * @param string $name
+	 * @return bool
+	 */
+	public function hasRepository($name) {
+		return isset($this->repositories[$name]);
+	}
+
+	/**
+	 * Set the repository factory of a Doctrine ORM configuration
+	 *
 	 * @param Configuration $config
 	 */
 	public function initializeConfiguration(Configuration $config) {
