@@ -2,6 +2,7 @@
 
 namespace Layer\Console\Command;
 
+use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -17,22 +18,19 @@ class SchemaCommand extends Command {
 	protected function execute(InputInterface $input, OutputInterface $output) {
 
 		$app = $this->getSilexApplication();
-/*
-		$connection = $app['db']->getConnection();
-		$grammar = new MySqlGrammar();
-		foreach ($app['data']->loaded() as $namespace => $types) {
-			foreach ($types as $type) {
-				$dataType = $app['data']->get("{$namespace}/{$type}");
-				$blueprint = $dataType->getBlueprint();
-				$blueprint->create();
-				$blueprint->build($connection, $grammar);
-				$output->write(sprintf(
-					'Table %s created for data type %s',
-					$dataType->table,
-					$dataType->singularHumanName
-				), true);
-			}
-		}*/
+
+		$names = $app['orm.rm']->getRepositoryList();
+
+		$output->writeln(sprintf('Updating schema for entities: %s', implode(', ', $names)));
+
+		$classes = [];
+		foreach($names as $name) {
+			$classes[] = $app['orm.rm']->getRepository($app['orm.em'], $name)->getEntityMetadata();
+		}
+
+		$tool = new SchemaTool($app['orm.em']);
+		$tool->updateSchema($classes);
+
 	}
 
 }

@@ -115,7 +115,7 @@ class DataProvider implements ServiceProviderInterface {
 			return $ems;
 		});
 
-		$app['orm.repository_manager'] = $app->share(function() use($app) {
+		$app['orm.rm'] = $app->share(function() use($app) {
 			return new RepositoryManager($app);
 		});
 
@@ -173,8 +173,7 @@ class DataProvider implements ServiceProviderInterface {
 					}
 				}
 				$config->setMetadataDriverImpl($chain);
-				$config->setRepositoryFactory($app['orm.repository_manager']);
-				$config->setDefaultRepositoryClassName('Layer\\Data\\EntityRepository');
+				$app['orm.rm']->initializeConfiguration($config);
 
 				foreach ((array) $options['types'] as $typeName => $typeClass) {
 					if (Type::hasType($typeName)) {

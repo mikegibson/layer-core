@@ -2,41 +2,50 @@
 
 namespace Layer\Data;
 
-use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Configuration;
 use Layer\Application;
 
-class RepositoryManager implements \Doctrine\ORM\Repository\RepositoryFactory {
+class RepositoryManager {
 
 	private $app;
 
-	/**
-	 * The list of ManagedRepository instances.
-	 *
-	 * @var array<ManagedRepositoryInterface>
-	 */
-	private $repositories = [];
+	private $factory;
 
+	/**
+	 * @param Application $app
+	 */
 	public function __construct(Application $app) {
 		$this->app = $app;
+		$this->factory = new RepositoryFactory();
 	}
 
 	/**
 	 * @param ManagedRepositoryInterface $repository
 	 */
 	public function addRepository(ManagedRepositoryInterface $repository) {
-		$this->repositories[$repository->getName()] = $repository;
+		$this->factory->addRepository($repository);
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * @param $entityName
+	 * @return \Doctrine\Common\Persistence\ObjectRepository
 	 */
-	public function getRepository(EntityManagerInterface $entityManager, $entityName) {
+	public function getRepository($entityName) {
+		return $this->factory->getRepository($this->app['orm.em'], $entityName);
+	}
 
-		if (!isset($this->repositories[$entityName])) {
-			throw new \InvalidArgumentException(sprintf('Repository %s was not found!', $entityName));
-		}
+	/**
+	 * @return array
+	 */
+	public function getRepositoryList() {
+		return $this->factory->getRepositoryList();
+	}
 
-		return $this->repositories[$entityName];
+	/**
+	 * @param Configuration $config
+	 */
+	public function initializeConfiguration(Configuration $config) {
+		$config->setRepositoryFactory($this->factory);
 	}
 
 }
