@@ -3,7 +3,6 @@
 namespace Layer\Plugin;
 
 use Layer\Application;
-use Symfony\Component\Debug\Exception\FatalErrorException;
 
 abstract class Plugin {
 
@@ -19,7 +18,7 @@ abstract class Plugin {
 
 		$this->app = $app;
 		if (empty($this->name)) {
-			throw new FatalErrorException('No plugin name was specified!');
+			$app->abort(500, 'No plugin name was specified!');
 		}
 	}
 
