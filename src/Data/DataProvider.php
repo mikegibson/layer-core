@@ -25,6 +25,8 @@ use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\XmlDriver;
 use Doctrine\ORM\Mapping\Driver\YamlDriver;
+use Gedmo\Sluggable\SluggableListener;
+use Gedmo\Timestampable\TimestampableListener;
 use Silex\Application;
 use Silex\Provider\DoctrineServiceProvider;
 use Silex\ServiceProviderInterface;
@@ -52,6 +54,14 @@ class DataProvider implements ServiceProviderInterface {
 			'mappings' => [],
 			'types' => []
 		];
+
+		$app['orm.em.listeners.sluggable'] = $app->share(function() {
+			return new SluggableListener();
+		});
+
+		$app['orm.em.listeners.timestampable'] = $app->share(function() {
+			return new TimestampableListener();
+		});
 
 		$app['orm.ems.options.initializer'] = $app->protect(function () use ($app) {
 			static $initialized = false;
@@ -355,7 +365,13 @@ class DataProvider implements ServiceProviderInterface {
 		$app['orm.em'] = $app->share(function($app) {
 			$ems = $app['orm.ems'];
 
-			return $ems[$app['orm.ems.default']];
+			$em = $ems[$app['orm.ems.default']];
+
+			foreach($app['orm.em.listeners'] as $listener) {
+				$em->getEventManager()->addEventSubscriber($app['orm.em.listeners.' . $listener]);
+			}
+
+			return $em;
 		});
 
 		$app['orm.em.config'] = $app->share(function($app) {
@@ -387,7 +403,8 @@ class DataProvider implements ServiceProviderInterface {
 						'namespace' => 'Layer'
 					]
 				]
-			]
+			],
+			'orm.em.listeners' => ['sluggable', 'timestampable']
 		];
 	}
 
