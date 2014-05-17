@@ -115,8 +115,8 @@ class DataProvider implements ServiceProviderInterface {
 			return $ems;
 		});
 
-		$app['orm.rm'] = $app->share(function() use($app) {
-			return new RepositoryManager($app);
+		$app['orm.rm'] = $app->share(function() {
+			return new RepositoryManager();
 		});
 
 		$app['orm.ems.config'] = $app->share(function($app) {

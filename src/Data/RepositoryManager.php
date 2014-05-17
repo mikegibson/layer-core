@@ -3,14 +3,8 @@
 namespace Layer\Data;
 
 use Doctrine\ORM\Configuration;
-use Layer\Application;
 
 class RepositoryManager {
-
-	/**
-	 * @var \Layer\Application
-	 */
-	private $app;
 
 	/**
 	 * @var DummyRepositoryFactory
@@ -25,10 +19,10 @@ class RepositoryManager {
 	private $repositories = [];
 
 	/**
-	 * @param Application $app
+	 * Constructor
+	 * Create the repository factory
 	 */
-	public function __construct(Application $app) {
-		$this->app = $app;
+	public function __construct() {
 		$this->factory = new DummyRepositoryFactory($this);
 	}
 
