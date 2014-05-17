@@ -4,7 +4,6 @@ namespace Layer\Data;
 
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Selectable;
-use Doctrine\ORM\Mapping\ClassMetadata;
 use Layer\Application;
 
 abstract class EntityRepository implements ManagedRepositoryInterface, Selectable {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Data\Entity\Content;
+namespace Layer\Pages;
 
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Table;

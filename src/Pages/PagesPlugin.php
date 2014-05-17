@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Plugin\Pages;
+namespace Layer\Pages;
 
-use Layer\Controller\PagesController;
 use Layer\Plugin\Plugin;
 use Silex\Application;
 
@@ -47,6 +46,14 @@ class PagesPlugin extends Plugin {
 
 		});
 
+		$this->app['orm.repositories.content:pages'] = $app->share(function() use($app) {
+			return new PageRepository($this->app);
+		});
+
+	}
+
+	public function boot() {
+		$this->app['orm.rm']->addRepository($this->app['orm.repositories.content:pages']);
 	}
 
 }

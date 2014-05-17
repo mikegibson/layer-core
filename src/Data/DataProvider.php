@@ -366,15 +366,6 @@ class DataProvider implements ServiceProviderInterface {
 
 		$app['orm.proxies_dir'] = $app['path_cache'] . '/doctrine/proxies';
 		$app['orm.auto_generate_proxies'] = true;
-		$app['orm.em.options'] = [
-			'mappings' => [
-				[
-					'type' => 'annotation',
-					'namespace' => 'Layer\Data\Entity',
-					'path' => __DIR__ . '/Entity'
-				]
-			]
-		];
 
 	}
 
@@ -393,8 +384,7 @@ class DataProvider implements ServiceProviderInterface {
 				'mappings' => [
 					[
 						'type' => 'annotation',
-						'namespace' => 'Layer\Data\Entity',
-						'path' => __DIR__ . '/Entity'
+						'namespace' => 'Layer'
 					]
 				]
 			]
