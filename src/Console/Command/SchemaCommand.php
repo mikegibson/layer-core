@@ -25,7 +25,7 @@ class SchemaCommand extends Command {
 
 		$classes = [];
 		foreach($names as $name) {
-			$classes[] = $app['orm.rm']->getRepository($app['orm.em'], $name)->getEntityMetadata();
+			$classes[] = $app['orm.rm']->getRepository($name)->getEntityMetadata();
 		}
 
 		$tool = new SchemaTool($app['orm.em']);
