@@ -4,7 +4,7 @@ namespace Layer\Data;
 
 use Doctrine\ORM\EntityManagerInterface;
 
-class RepositoryFactory implements \Doctrine\ORM\Repository\RepositoryFactory {
+class DummyRepositoryFactory implements \Doctrine\ORM\Repository\RepositoryFactory {
 
 	/**
 	 * The list of ManagedRepository instances.

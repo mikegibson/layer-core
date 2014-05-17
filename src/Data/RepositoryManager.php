@@ -16,7 +16,7 @@ class RepositoryManager {
 	 */
 	public function __construct(Application $app) {
 		$this->app = $app;
-		$this->factory = new RepositoryFactory();
+		$this->factory = new DummyRepositoryFactory();
 	}
 
 	/**
