@@ -7,23 +7,36 @@ use Layer\Application;
 
 class RepositoryManager {
 
+	/**
+	 * @var \Layer\Application
+	 */
 	private $app;
 
+	/**
+	 * @var DummyRepositoryFactory
+	 */
 	private $factory;
+
+	/**
+	 * The list of ManagedRepository instances.
+	 *
+	 * @var array<ManagedRepositoryInterface>
+	 */
+	private $repositories = [];
 
 	/**
 	 * @param Application $app
 	 */
 	public function __construct(Application $app) {
 		$this->app = $app;
-		$this->factory = new DummyRepositoryFactory();
+		$this->factory = new DummyRepositoryFactory($this);
 	}
 
 	/**
 	 * @param ManagedRepositoryInterface $repository
 	 */
 	public function addRepository(ManagedRepositoryInterface $repository) {
-		$this->factory->addRepository($repository);
+		$this->repositories[$repository->getName()] = $repository;
 	}
 
 	/**
@@ -31,14 +44,19 @@ class RepositoryManager {
 	 * @return \Doctrine\Common\Persistence\ObjectRepository
 	 */
 	public function getRepository($entityName) {
-		return $this->factory->getRepository($this->app['orm.em'], $entityName);
+
+		if (!isset($this->repositories[$entityName])) {
+			throw new \InvalidArgumentException(sprintf('Repository %s was not found!', $entityName));
+		}
+
+		return $this->repositories[$entityName];
 	}
 
 	/**
 	 * @return array
 	 */
 	public function getRepositoryList() {
-		return $this->factory->getRepositoryList();
+		return array_keys($this->repositories);
 	}
 
 	/**
