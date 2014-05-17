@@ -32,7 +32,11 @@ class RepositoryManager {
 	 * @param ManagedRepositoryInterface $repository
 	 */
 	public function addRepository(ManagedRepositoryInterface $repository) {
-		$this->repositories[$repository->getName()] = $repository;
+		$name = $repository->getName();
+		if($this->hasRepository($name)) {
+			throw new \LogicException(sprintf('Repository %s is already registered!'));
+		}
+		$this->repositories[$name] = $repository;
 	}
 
 	/**
