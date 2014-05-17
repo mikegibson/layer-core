@@ -1,29 +1,22 @@
 <?php
 
-namespace Layer\Paginator;
-
-use Layer\View\Table\TableDataInterface;
+namespace Layer\Data\Paginator;
 
 /**
  * Interface PaginatorQueryInterface
  *
- * @package Layer\Paginator
+ * @package Layer\Data\Paginator
  */
 interface PaginatorResultInterface extends TableDataInterface {
 
 	/**
-	 * @return array
-	 */
-	public function getColumns();
-
-	/**
 	 * @param int $page
-	 * @param null $limit
+	 * @param null $perPage
 	 * @param null $sortKey
 	 * @param null $direction
 	 * @return mixed
 	 */
-	public function getData($page = 1, $limit = null, $sortKey = null, $direction = null);
+	public function getData($page = 1, $perPage = null, $sortKey = null, $direction = null);
 
 	/**
 	 * @return int

@@ -1,16 +1,15 @@
-{% extends "@admin/layout/admin.twig" %}
-{% table_theme '@admin/block/table.twig' %}
+{% extends '@admin/layout/admin.twig' %}
 
-{% block title %}List {{ dataType.pluralHumanName }} | {{ parent() }}{% endblock %}
+{% block title %}List {{ repository.pluralHumanName }} | {{ parent() }}{% endblock %}
 
 {% block content %}
 
-	<h1>{{ dataType.pluralHumanName }}</h1>
+	<h1>{{ repository.pluralHumanName }}</h1>
 
-	<a href="{{ admin_url( dataType, 'add' ) }}">Add new {{ dataType.singularHumanName }}</a>
+	<a href="{{ admin_url( repository, 'add' ) }}">Add new {{ repository.singularHumanName }}</a>
 
 	{{ table( paginator ) }}
 
-	{{ paginator.total }}
+	{{ paginator_links( paginator ) }}
 
 {% endblock %}

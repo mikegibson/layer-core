@@ -6,29 +6,29 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class DataTypeFormType extends AbstractType {
+class EntityFormType extends AbstractType {
 
-	private $dataType;
+	private $repository;
 
 	protected $typeMap = [
 		'text' => 'textarea'
 	];
 
-	public function __construct(DataType $dataType) {
-		$this->dataType = $dataType;
+	public function __construct(ManagedRepositoryInterface $repository) {
+		$this->repository = $repository;
 	}
 
 	public function getName() {
-		return $this->dataType->name;
+		return $this->repository->getBasename();
 	}
 
-	public function getDataType() {
-		return $this->dataType;
+	public function getRepository() {
+		return $this->repository;
 	}
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		$metadata = $this->dataType->getMetadata();
-		foreach($this->dataType->getEditableFields() as $field) {
+		$metadata = $this->repository->getEntityMetadata();
+		foreach($this->repository->getEditableFields() as $field) {
 			$type = null;
 			if(isset($metadata->fieldMappings[$field])) {
 				$mapping = $metadata->fieldMappings[$field];
@@ -42,7 +42,7 @@ class DataTypeFormType extends AbstractType {
 
 	public function setDefaultOptions(OptionsResolverInterface $resolver) {
 		$resolver->setDefaults(array(
-			'data_class' => $this->dataType->entityClass
+			'data_class' => $this->repository->getClassName()
 		));
 	}
 

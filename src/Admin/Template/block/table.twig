@@ -1,4 +1,4 @@
-{% use 'block/table.twig' %}
+{% extends 'block/table.twig' %}
 
 {% block table_value %}
 {% spaceless %}
@@ -6,15 +6,17 @@
 	{% set escape = true %}
 	{% set link = false %}
 
+	{#
 	{% if(columnKey == dataType.titleField) %}
 		{% set link = true %}
 	{% endif %}
+	#}
 
 	{% if(escape) %}
 		{% set value = value|escape %}
 	{% endif %}
 
-	{% if link %}<a href="{{ admin_url(dataType, 'edit', {'id': row.id}) }}">{% endif %}{{ value|raw }}{% if link %}</a>{% endif %}
+	{% if link %}<a href="{{ admin_url(repository, 'edit', {'id': row.id}) }}">{% endif %}{{ value|raw }}{% if link %}</a>{% endif %}
 
 {% endspaceless %}
 {% endblock %}

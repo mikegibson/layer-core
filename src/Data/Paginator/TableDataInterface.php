@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\View\Table;
+namespace Layer\Data\Paginator;
 
 interface TableDataInterface {
 

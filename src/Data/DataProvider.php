@@ -1,10 +1,30 @@
 <?php
+/**
+ * DataProvider
+ *
+ * ORM integration based on Doctrine ORM Service Provider by Dragonfly Development Inc
+ * with some modifications, which is licensed under a MIT license:
+ * https://github.com/dflydev/dflydev-doctrine-orm-service-provider
+ */
 
 namespace Layer\Data;
 
-use Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
-use League\Fractal\Resource\Collection;
-use League\Fractal\Resource\Item;
+use Doctrine\Common\Cache\ApcCache;
+use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\Cache\CacheProvider;
+use Doctrine\Common\Cache\FilesystemCache;
+use Doctrine\Common\Cache\MemcacheCache;
+use Doctrine\Common\Cache\MemcachedCache;
+use Doctrine\Common\Cache\XcacheCache;
+use Doctrine\Common\Cache\RedisCache;
+use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
+use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
+use Doctrine\Common\Persistence\Mapping\Driver\StaticPHPDriver;
+use Doctrine\DBAL\Types\Type;
+use Doctrine\ORM\Configuration;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\Driver\XmlDriver;
+use Doctrine\ORM\Mapping\Driver\YamlDriver;
 use Silex\Application;
 use Silex\Provider\DoctrineServiceProvider;
 use Silex\ServiceProviderInterface;
@@ -21,95 +41,368 @@ class DataProvider implements ServiceProviderInterface {
 			$initializer();
 		});
 
-		$app->register(new DoctrineOrmServiceProvider(), $o = [
+		foreach ($this->_getOrmDefaults($app) as $key => $value) {
+			if (!isset($app[$key])) {
+				$app[$key] = $value;
+			}
+		}
+
+		$app['orm.em.default_options'] = [
+			'connection' => 'default',
+			'mappings' => [],
+			'types' => []
+		];
+
+		$app['orm.ems.options.initializer'] = $app->protect(function () use ($app) {
+			static $initialized = false;
+
+			if ($initialized) {
+				return;
+			}
+
+			$initialized = true;
+
+			if($app['orm.register_class_loader']) {
+				\Doctrine\Common\Annotations\AnnotationRegistry::registerLoader([$app['class_loader'], 'loadClass']);
+			}
+
+			if (!isset($app['orm.ems.options'])) {
+				$app['orm.ems.options'] = ['default' => isset($app['orm.em.options']) ? $app['orm.em.options'] : []];
+			}
+
+			$tmp = $app['orm.ems.options'];
+			foreach ($tmp as $name => &$options) {
+				$options = array_replace($app['orm.em.default_options'], $options);
+
+				if (!isset($app['orm.ems.default'])) {
+					$app['orm.ems.default'] = $name;
+				}
+			}
+			$app['orm.ems.options'] = $tmp;
+		});
+
+		$app['orm.em_name_from_param_key'] = $app->protect(function ($paramKey) use ($app) {
+			$app['orm.ems.options.initializer']();
+
+			if (isset($app[$paramKey])) {
+				return $app[$paramKey];
+			}
+
+			return $app['orm.ems.default'];
+		});
+
+		$app['orm.ems'] = $app->share(function($app) {
+			$app['orm.ems.options.initializer']();
+
+			$ems = new \Pimple();
+			foreach ($app['orm.ems.options'] as $name => $options) {
+				if ($app['orm.ems.default'] === $name) {
+					// we use shortcuts here in case the default has been overridden
+					$config = $app['orm.em.config'];
+				} else {
+					$config = $app['orm.ems.config'][$name];
+				}
+
+				$ems[$name] = $app->share(function ($ems) use ($app, $options, $config) {
+					return EntityManager::create(
+						$app['dbs'][$options['connection']],
+						$config,
+						$app['dbs.event_manager'][$options['connection']]
+					);
+				});
+			}
+
+			return $ems;
+		});
+
+		$app['orm.repository_manager'] = $app->share(function() use($app) {
+			return new RepositoryManager($app);
+		});
+
+		$app['orm.ems.config'] = $app->share(function($app) {
+			$app['orm.ems.options.initializer']();
+
+			$configs = new \Pimple();
+			foreach ($app['orm.ems.options'] as $name => $options) {
+				$config = new Configuration;
+
+				$app['orm.cache.configurer']($name, $config, $options);
+
+				$config->setProxyDir($app['orm.proxies_dir']);
+				$config->setProxyNamespace($app['orm.proxies_namespace']);
+				$config->setAutoGenerateProxyClasses($app['orm.auto_generate_proxies']);
+
+
+
+				$chain = $app['orm.mapping_driver_chain.locator']($name);
+				foreach ((array) $options['mappings'] as $entity) {
+					if (!is_array($entity)) {
+						throw new \InvalidArgumentException(
+							"The 'orm.em.options' option 'mappings' should be an array of arrays."
+						);
+					}
+
+					if (isset($entity['alias'])) {
+						$config->addEntityNamespace($entity['alias'], $entity['namespace']);
+					}
+
+					switch ($entity['type']) {
+						case 'annotation':
+							$useSimpleAnnotationReader =
+								isset($entity['use_simple_annotation_reader'])
+									? $entity['use_simple_annotation_reader']
+									: false;
+							$driver = $config->newDefaultAnnotationDriver([], $useSimpleAnnotationReader);
+							$chain->addDriver($driver, $entity['namespace']);
+							break;
+						case 'yml':
+							$driver = new YamlDriver($entity['path']);
+							$chain->addDriver($driver, $entity['namespace']);
+							break;
+						case 'xml':
+							$driver = new XmlDriver($entity['path']);
+							$chain->addDriver($driver, $entity['namespace']);
+							break;
+						case 'php':
+							$driver = new StaticPHPDriver($entity['path']);
+							$chain->addDriver($driver, $entity['namespace']);
+							break;
+						default:
+							throw new \InvalidArgumentException(sprintf('"%s" is not a recognized driver', $entity['type']));
+							break;
+					}
+				}
+				$config->setMetadataDriverImpl($chain);
+				$config->setRepositoryFactory($app['orm.repository_manager']);
+				$config->setDefaultRepositoryClassName('Layer\\Data\\EntityRepository');
+
+				foreach ((array) $options['types'] as $typeName => $typeClass) {
+					if (Type::hasType($typeName)) {
+						Type::overrideType($typeName, $typeClass);
+					} else {
+						Type::addType($typeName, $typeClass);
+					}
+				}
+
+				$configs[$name] = $config;
+			}
+
+			return $configs;
+		});
+
+		$app['orm.cache.configurer'] = $app->protect(function($name, Configuration $config, $options) use ($app) {
+			$config->setMetadataCacheImpl($app['orm.cache.locator']($name, 'metadata', $options));
+			$config->setQueryCacheImpl($app['orm.cache.locator']($name, 'query', $options));
+			$config->setResultCacheImpl($app['orm.cache.locator']($name, 'result', $options));
+		});
+
+		$app['orm.cache.locator'] = $app->protect(function($name, $cacheName, $options) use ($app) {
+			$cacheNameKey = $cacheName . '_cache';
+
+			if (!isset($options[$cacheNameKey])) {
+				$options[$cacheNameKey] = $app['orm.default_cache'];
+			}
+
+			if (isset($options[$cacheNameKey]) && !is_array($options[$cacheNameKey])) {
+				$options[$cacheNameKey] = [
+					'driver' => $options[$cacheNameKey],
+				];
+			}
+
+			if (!isset($options[$cacheNameKey]['driver'])) {
+				throw new \RuntimeException("No driver specified for '$cacheName'");
+			}
+
+			$driver = $options[$cacheNameKey]['driver'];
+
+			$cacheInstanceKey = 'orm.cache.instances.'.$name.'.'.$cacheName;
+			if (isset($app[$cacheInstanceKey])) {
+				return $app[$cacheInstanceKey];
+			}
+
+			$cache = $app['orm.cache.factory']($driver, $options[$cacheNameKey]);
+
+			if(isset($options['cache_namespace']) && $cache instanceof CacheProvider) {
+				$cache->setNamespace($options['cache_namespace']);
+			}
+
+			return $app[$cacheInstanceKey] = $cache;
+		});
+
+		$app['orm.cache.factory.backing_memcache'] = $app->protect(function() {
+			return new \Memcache;
+		});
+
+		$app['orm.cache.factory.memcache'] = $app->protect(function($cacheOptions) use ($app) {
+			if (empty($cacheOptions['host']) || empty($cacheOptions['port'])) {
+				throw new \RuntimeException('Host and port options need to be specified for memcache cache');
+			}
+
+			$memcache = $app['orm.cache.factory.backing_memcache']();
+			$memcache->connect($cacheOptions['host'], $cacheOptions['port']);
+
+			$cache = new MemcacheCache;
+			$cache->setMemcache($memcache);
+
+			return $cache;
+		});
+
+		$app['orm.cache.factory.backing_memcached'] = $app->protect(function() {
+			return new \Memcached;
+		});
+
+		$app['orm.cache.factory.memcached'] = $app->protect(function($cacheOptions) use ($app) {
+			if (empty($cacheOptions['host']) || empty($cacheOptions['port'])) {
+				throw new \RuntimeException('Host and port options need to be specified for memcached cache');
+			}
+
+			$memcached = $app['orm.cache.factory.backing_memcached']();
+			$memcached->addServer($cacheOptions['host'], $cacheOptions['port']);
+
+			$cache = new MemcachedCache;
+			$cache->setMemcached($memcached);
+
+			return $cache;
+		});
+
+		$app['orm.cache.factory.backing_redis'] = $app->protect(function() {
+			return new \Redis;
+		});
+
+		$app['orm.cache.factory.redis'] = $app->protect(function($cacheOptions) use ($app) {
+			if (empty($cacheOptions['host']) || empty($cacheOptions['port'])) {
+				throw new \RuntimeException('Host and port options need to be specified for redis cache');
+			}
+
+			$redis = $app['orm.cache.factory.backing_redis']();
+			$redis->connect($cacheOptions['host'], $cacheOptions['port']);
+
+			$cache = new RedisCache;
+			$cache->setRedis($redis);
+
+			return $cache;
+		});
+
+		$app['orm.cache.factory.array'] = $app->protect(function() {
+			return new ArrayCache;
+		});
+
+		$app['orm.cache.factory.apc'] = $app->protect(function() {
+			return new ApcCache;
+		});
+
+		$app['orm.cache.factory.xcache'] = $app->protect(function() {
+			return new XcacheCache;
+		});
+
+		$app['orm.cache.factory.filesystem'] = $app->protect(function($cacheOptions) {
+			if (empty($cacheOptions['path'])) {
+				throw new \RuntimeException('FilesystemCache path not defined');
+			}
+			return new FilesystemCache($cacheOptions['path']);
+		});
+
+		$app['orm.cache.factory'] = $app->protect(function($driver, $cacheOptions) use ($app) {
+			switch ($driver) {
+				case 'array':
+					return $app['orm.cache.factory.array']();
+				case 'apc':
+					return $app['orm.cache.factory.apc']();
+				case 'xcache':
+					return $app['orm.cache.factory.xcache']();
+				case 'memcache':
+					return $app['orm.cache.factory.memcache']($cacheOptions);
+				case 'memcached':
+					return $app['orm.cache.factory.memcached']($cacheOptions);
+				case 'filesystem':
+					return $app['orm.cache.factory.filesystem']($cacheOptions);
+				case 'redis':
+					return $app['orm.cache.factory.redis']($cacheOptions);
+				default:
+					throw new \RuntimeException("Unsupported cache type '$driver' specified");
+			}
+		});
+
+		$app['orm.mapping_driver_chain.locator'] = $app->protect(function($name = null) use ($app) {
+			$app['orm.ems.options.initializer']();
+
+			if (null === $name) {
+				$name = $app['orm.ems.default'];
+			}
+
+			$cacheInstanceKey = 'orm.mapping_driver_chain.instances.'.$name;
+			if (isset($app[$cacheInstanceKey])) {
+				return $app[$cacheInstanceKey];
+			}
+
+			return $app[$cacheInstanceKey] = $app['orm.mapping_driver_chain.factory']($name);
+		});
+
+		$app['orm.mapping_driver_chain.factory'] = $app->protect(function($name) use ($app) {
+			return new MappingDriverChain;
+		});
+
+		$app['orm.add_mapping_driver'] = $app->protect(function(MappingDriver $mappingDriver, $namespace, $name = null) use ($app) {
+			$app['orm.ems.options.initializer']();
+
+			if (null === $name) {
+				$name = $app['orm.ems.default'];
+			}
+
+			$driverChain = $app['orm.mapping_driver_chain.locator']($name);
+			$driverChain->addDriver($mappingDriver, $namespace);
+		});
+
+		$app['orm.em'] = $app->share(function($app) {
+			$ems = $app['orm.ems'];
+
+			return $ems[$app['orm.ems.default']];
+		});
+
+		$app['orm.em.config'] = $app->share(function($app) {
+			$configs = $app['orm.ems.config'];
+
+			return $configs[$app['orm.ems.default']];
+		});
+
+		$app['orm.proxies_dir'] = $app['path_cache'] . '/doctrine/proxies';
+		$app['orm.auto_generate_proxies'] = true;
+		$app['orm.em.options'] = [
+			'mappings' => [
+				[
+					'type' => 'annotation',
+					'namespace' => 'Layer\Data\Entity',
+					'path' => __DIR__ . '/Entity'
+				]
+			]
+		];
+
+	}
+
+	/**
+	 * @param \Pimple $app
+	 * @return array
+	 */
+	protected function _getOrmDefaults(Application $app) {
+		return [
 			'orm.proxies_dir' => $app['path_cache'] . '/doctrine/proxies',
 			'orm.auto_generate_proxies' => true,
+			'orm.register_class_loader' => true,
+			'orm.proxies_namespace' => 'DoctrineProxy',
+			'orm.default_cache' => 'array',
 			'orm.em.options' => [
 				'mappings' => [
 					[
 						'type' => 'annotation',
-						'namespace' => 'Layer\Entity',
-						'path' => dirname(__DIR__) . '/Entity'
+						'namespace' => 'Layer\Data\Entity',
+						'path' => __DIR__ . '/Entity'
 					]
 				]
 			]
-		]);
-/*
-		$app['orm.ems.config'] = $app->extend('orm.ems.config', function(\Pimple $configs) use($app) {
-
-			$chain = $app['orm.mapping_driver_chain.locator']('default');
-			//die('here');
-			$driver = new SimplifiedYamlDriver([
-				dirname(__DIR__) . '/Entity' => 'Content'
-			]);
-			$chain->addDriver($driver, 'Content');
-
-			$configs['default']->setMetadataDriverImpl($chain);
-
-			return $configs;
-		});*/
-//var_dump($o);
-		/*
-		$app['db'] = $app->share(function () use ($app) {
-
-			$capsule = new Capsule;
-
-			$connections = $app->config('database.connections') ? : [];
-
-			foreach ($connections as $name => $connection) {
-				$capsule->addConnection($connection, $name);
-			}
-
-			$capsule->setAsGlobal();
-			$capsule->bootEloquent();
-
-			return $capsule;
-
-		});*/
-
-
-		$app['data.pages'] = $app->share(function() use($app) {
-			return new PageType($app);
-		});
-
-		$app['data'] = $app->share(function () use ($app) {
-
-			$registry = new DataTypeRegistry($app);
-			$registry->load($app['data.pages']);
-			return $registry;
-		});
-
-		$app['fractal'] = $app->share(function () {
-			return new \League\Fractal\Manager();
-		});
-
-		$app['fractal.collection'] = function (array $data, $transformer) {
-			return new Collection($data, $transformer);
-		};
-
-		$app['fractal.item'] = function (array $data, $transformer) {
-			return new Item($data, $transformer);
-		};
-
+		];
 	}
 
 	public function boot(Application $app) {
-/*
-		//$repo = $app['orm.em']->getRepository('Layer\Page\Page');
-var_dump($app['orm.em']->find('Layer\Entity\Content\Page', 1));
-
-		$result = $app['db']->fetchAll('SELECT * FROM content_pages');
-
-var_dump($result);
-
-		die('here');
-/*
-		foreach ($app['data']->loaded() as $namespace => $tables) {
-			foreach ($tables as $table) {
-				$name = "{$namespace}/{$table}";
-				$app['data.' . $name] = $app['data']->get($name);
-			}
-		}*/
 
 	}
 

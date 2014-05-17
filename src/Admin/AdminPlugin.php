@@ -31,16 +31,18 @@ class AdminPlugin extends Plugin {
 			$admin->match('/{namespace}/{type}/{action}', 'admin.controllers.cms_controller:dispatch')
 				->before(function (Request $request) use ($app) {
 
-					// @todo Find a way to reject a URL match by closure
-					if (
-						!($namespace = $request->get('namespace')) ||
-						!($type = $request->get('type')) ||
-						!($dataType = $app['data']->get($namespace . '/' . $type))
-					) {
+					$namespace = $request->get('namespace');
+					$type = $request->get('type');
+
+					$name = $namespace . ':' . $type;
+
+					try {
+						$repository = $app['orm.em']->getRepository($name);
+					} catch(\InvalidArgumentException $e) {
 						$app->abort(404);
 					}
 
-					$request->attributes->add(compact('dataType'));
+					$request->attributes->add(compact('repository'));
 
 				})->bind('admin_scaffold');
 

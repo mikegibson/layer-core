@@ -26,9 +26,7 @@
 		"twig/twig": ">=1.8,<2.0-dev",
 		"doctrine/dbal": "2.5.*@dev",
 		"doctrine/orm": "2.5.*@dev",
-		"league/fractal": "0.7.*",
 		"kriswallsmith/assetic": "1.2.*@dev",
-		"dflydev/doctrine-orm-service-provider": "1.0.*@dev",
 		"knplabs/console-service-provider": "dev-master",
 		"knplabs/doctrine-behaviors": "1.0.*@dev"
 	},

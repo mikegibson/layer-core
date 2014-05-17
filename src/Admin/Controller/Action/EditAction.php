@@ -2,7 +2,7 @@
 
 namespace Layer\Admin\Controller\Action;
 
-use Layer\Data\DataType;
+use Layer\Data\ManagedRepositoryInterface;
 use Layer\Data\SingleRecordTrait;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -16,9 +16,9 @@ class EditAction extends SaveAction {
 		return 'edit';
 	}
 
-	protected function _getFormData(DataType $dataType, Request $request) {
+	protected function _getFormData(ManagedRepositoryInterface $repository, Request $request) {
 		$formData = new \stdClass();
-		$formData->record = $dataType->find($request->get('id'));
+		$formData->record = $repository->find($request->get('id'));
 		return $formData;
 	}
 

@@ -5,19 +5,22 @@ namespace Layer\Admin\Controller\Action;
 use Layer\Admin\Data\AdminFormType;
 use Layer\Application;
 use Layer\Controller\Action\ActionInterface;
-use Layer\Data\DataType;
-use Layer\Data\SingleRecordTrait;
+use Layer\Data\ManagedRepositoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 abstract class SaveAction implements ActionInterface {
 
 	public function invoke(Application $app, Request $request) {
 
-		$dataType = $request->get('dataType');
+		$repository = $request->get('repository');
+		
+		if(!$repository instanceof ManagedRepositoryInterface) {
+			return $app->abort(500);
+		}
 
-		$formData = $this->_getFormData($dataType, $request);
+		$formData = $this->_getFormData($repository, $request);
 
-		$formBuilder = $app->form(new AdminFormType($dataType, 'edit'), $formData, [
+		$formBuilder = $app->form(new AdminFormType($repository, 'edit'), $formData, [
 			'action' => $request->getRequestUri()
 		]);
 
@@ -30,22 +33,22 @@ abstract class SaveAction implements ActionInterface {
 				$record = $postData->record;
 				$app['orm.em']->persist($record);
 				$app['orm.em']->flush();
-				$app->addFlash('message', sprintf('The %s was saved', $dataType->singularHumanName));
+				$app->addFlash('message', sprintf('The %s was saved', $repository->getSingularHumanName()));
 				if($form->get('save_and_add')->isClicked()) {
-					$redirect = $app['admin.helper']->url($dataType, 'add');
+					$redirect = $app['admin.helper']->url($repository, 'add');
 				} else {
-					$redirect = $app['admin.helper']->url($dataType, 'edit', ['id' => $record->getId()]);
+					$redirect = $app['admin.helper']->url($repository, 'edit', ['id' => $record->getId()]);
 				}
 				return $app->redirect($redirect);
 			} else {
 				$app->addFlash('error',
-					sprintf('The %s could not be saved, please check for errors', $dataType->singularHumanName)
+					sprintf('The %s could not be saved, please check for errors', $repository->getSingularHumanName())
 				);
 			}
 		}
 
 		$data = [
-			'dataType' => $dataType,
+			'repository' => $repository,
 			'form' => $form->createView()
 		];
 
@@ -53,6 +56,6 @@ abstract class SaveAction implements ActionInterface {
 
 	}
 
-	abstract protected function _getFormData(DataType $dataType, Request $request);
+	abstract protected function _getFormData(ManagedRepositoryInterface $repository, Request $request);
 
 }

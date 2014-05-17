@@ -1,13 +1,13 @@
 {% extends "@admin/layout/admin.twig" %}
 {% form_theme form "@admin/form/cms.twig" %}
 
-{% block title %}Add {{ dataType.singularHumanName }} | {{ parent() }}{% endblock %}
+{% block title %}Add {{ repository.singularHumanName }} | {{ parent() }}{% endblock %}
 
 {% block content_header %}
 
-	<h1>Add {{ dataType.singularHumanName }}</h1>
+	<h1>Add {{ repository.singularHumanName }}</h1>
 
-	<a href="{{ admin_url( dataType, 'index' ) }}">List {{ dataType.pluralHumanName }}</a>
+	<a href="{{ admin_url( repository, 'index' ) }}">List {{ repository.pluralHumanName }}</a>
 
 {% endblock %}
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Paginator;
+namespace Layer\Data\Paginator;
 
 use Layer\Utility\SetPropertiesTrait;
 use Symfony\Component\HttpFoundation\Request;
@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Class PaginatorRequest
  *
- * @package Layer\Paginator
+ * @package Layer\Data\Paginator
  */
 class PaginatorRequest implements PaginatorRequestInterface {
 
@@ -61,7 +61,7 @@ class PaginatorRequest implements PaginatorRequestInterface {
 	/**
 	 * @return int
 	 */
-	public function getPage() {
+	public function getCurrentPage() {
 
 		return (int)$this->request->get($this->pageKey) ? : 1;
 	}
@@ -69,7 +69,7 @@ class PaginatorRequest implements PaginatorRequestInterface {
 	/**
 	 * @return int|null
 	 */
-	public function getLimit() {
+	public function getPerPage() {
 
 		return ((int)$this->request->get($this->limitKey)) ? : null;
 	}

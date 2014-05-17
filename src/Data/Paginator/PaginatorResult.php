@@ -1,16 +1,15 @@
 <?php
 
-namespace Layer\Paginator;
+namespace Layer\Data\Paginator;
 
 use Doctrine\ORM\QueryBuilder;
-use Layer\Application;
-use Layer\Data\DataType;
+use Layer\Data\ManagedRepositoryInterface;
 use Layer\Utility\SetPropertiesTrait;
 
 /**
  * Class PaginatorQuery
  *
- * @package Layer\Paginator
+ * @package Layer\Data\Paginator
  */
 class PaginatorResult implements PaginatorResultInterface {
 
@@ -21,7 +20,10 @@ class PaginatorResult implements PaginatorResultInterface {
 	 */
 	protected $app;
 
-	protected $dataType;
+	/**
+	 * @var \Layer\Data\ManagedRepositoryInterface
+	 */
+	protected $repository;
 
 	/**
 	 * @var \Doctrine\ORM\QueryBuilder
@@ -29,31 +31,23 @@ class PaginatorResult implements PaginatorResultInterface {
 	protected $queryBuilder;
 
 	/**
-	 * @var int
-	 */
-	public $limit = 10;
-
-	/**
-	 * @var int
-	 */
-	public $maxLimit = 100;
-
-	/**
-	 * @param Application $app
+	 * @param ManagedRepositoryInterface $repository
 	 * @param QueryBuilder $queryBuilder
 	 * @param array $config
 	 */
-	public function __construct(Application $app, DataType $dataType, QueryBuilder $queryBuilder = null, array $config = []) {
+	public function __construct(ManagedRepositoryInterface $repository, QueryBuilder $queryBuilder = null, array $config = []) {
 
 		$this->_setProperties($config);
-		$this->app = $app;
-		$this->dataType = $dataType;
+		$this->repository = $repository;
 		if($queryBuilder === null) {
-			$queryBuilder = $dataType->createQueryBuilder();
+			$queryBuilder = $repository->createQueryBuilder();
 		}
 		$this->setQueryBuilder($queryBuilder);
 	}
 
+	/**
+	 * @param QueryBuilder $queryBuilder
+	 */
 	public function setQueryBuilder(QueryBuilder $queryBuilder) {
 		$this->queryBuilder = $queryBuilder;
 	}
@@ -67,42 +61,32 @@ class PaginatorResult implements PaginatorResultInterface {
 			'title' => 'Title',
 			'content' => 'Content'
 		];
-/*
-		$columns = [];
-		foreach ($this->dataType->fields() as $name => $field) {
-			if (!$field->visible || !$field->important) {
-				continue;
-			}
-			$columns[$name] = $field->label;
-		}
-
-		return $columns;*/
 	}
 
 	/**
 	 * @param int $page
-	 * @param null $limit
+	 * @param null $perPage
 	 * @param null $sortKey
 	 * @param null $direction
 	 * @param array $columns
-	 * @param QueryBuilder $queryBuilder
+	 * @param QueryBuilder $builder
 	 * @return mixed
 	 */
 	public function getData(
 		$page = 1,
-		$limit = null,
+		$perPage = null,
 		$sortKey = null,
 		$direction = null,
 		$columns = ['*'],
 		QueryBuilder $builder = null
 	) {
 
-		return $this->getQuery($page, $limit, $sortKey, $direction)->getResult();
+		return $this->getQuery($page, $perPage, $sortKey, $direction)->getResult();
 	}
 
 	/**
 	 * @param int $page
-	 * @param null $limit
+	 * @param null $perPage
 	 * @param null $sortKey
 	 * @param null $direction
 	 * @param QueryBuilder $queryBuilder
@@ -110,43 +94,44 @@ class PaginatorResult implements PaginatorResultInterface {
 	 */
 	public function getQuery(
 		$page = 1,
-		$limit = null,
+		$perPage = null,
 		$sortKey = null,
 		$direction = null,
 		QueryBuilder $queryBuilder = null
 	) {
 
-		$limit = (int)$limit;
-		if ($limit < 1) {
-			$limit = $this->limit;
-		}
-
 		$query = $this->_getQueryBuilder($queryBuilder)->getQuery();
-		$query->setFirstResult(($page - 1) * $limit)->setMaxResults($limit);
+		$query->setFirstResult(($page - 1) * $perPage)->setMaxResults($perPage);
 
 		return $query;
 	}
 
 	/**
-	 * @param Builder $queryBuilder
+	 * @param QueryBuilder $queryBuilder
 	 * @return int
 	 */
-	public function getCount(QueryBuilder $queryBuilder = null) {
+	public function getCount(QueryBuilder $queryBuilder = null, $alias = null) {
+
+		if($alias === null) {
+			$alias = $this->repository->getName();
+		}
 
 		return $this->_getQueryBuilder($queryBuilder)
-			->select("COUNT({$this->dataType->name})")
+			->select("COUNT({$alias})")
 			->getQuery()
 			->getSingleScalarResult();
 	}
 
-	public function getDataType() {
-		return $this->dataType;
+	/**
+	 * @return ManagedRepositoryInterface
+	 */
+	public function getRepository() {
+		return $this->repository;
 	}
 
 	/**
-	 * @param Builder $queryBuilder
-	 * @return Builder
-	 * @throws \Exception
+	 * @param QueryBuilder $queryBuilder
+	 * @return QueryBuilder
 	 */
 	protected function _getQueryBuilder(QueryBuilder $queryBuilder = null) {
 

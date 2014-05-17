@@ -1,16 +1,16 @@
 <?php
 
-namespace Layer\Paginator;
+namespace Layer\Data\Paginator;
 
 /**
  * Class Paginator
  *
  * @package Controller\Paginator
  */
-class Paginator implements PaginatorInterface {
+abstract class Paginator implements PaginatorInterface {
 
 	/**
-	 * @var \Layer\Paginator\PaginatorRequestInterface
+	 * @var \Layer\Data\Paginator\PaginatorRequestInterface
 	 */
 	protected $request;
 
@@ -20,11 +20,14 @@ class Paginator implements PaginatorInterface {
 	protected $result;
 
 	/**
-	 * Cached vars
-	 *
-	 * @var array
+	 * @var int
 	 */
-	protected $_vars = [];
+	protected $defaultPerPage = 10;
+
+	/**
+	 * @var int
+	 */
+	protected $maxPerPage = 100;
 
 	/**
 	 * @param PaginatorRequestInterface $request
@@ -47,10 +50,7 @@ class Paginator implements PaginatorInterface {
 	}
 
 	/**
-	 * @param int $page
-	 * @param null $limit
-	 * @param null $sortKey
-	 * @param null $direction
+	 * @return array
 	 */
 	public function getData() {
 
@@ -63,7 +63,7 @@ class Paginator implements PaginatorInterface {
 	public function getCurrentPage() {
 
 		if (!isset($this->_vars['page'])) {
-			$this->_vars['page'] = $this->request->getPage();
+			$this->_vars['page'] = $this->request->getCurrentPage();
 		}
 
 		return $this->_vars['page'];
@@ -74,11 +74,7 @@ class Paginator implements PaginatorInterface {
 	 */
 	public function getPerPage() {
 
-		if (!isset($this->_vars['limit'])) {
-			$this->_vars['limit'] = $this->request->getLimit();
-		}
-
-		return $this->_vars['limit'];
+		return min((int) $this->request->getPerPage() ?: $this->defaultPerPage, $this->maxPerPage);
 	}
 
 	/**
@@ -86,11 +82,7 @@ class Paginator implements PaginatorInterface {
 	 */
 	public function getSortKey() {
 
-		if (!isset($this->_vars['sortKey'])) {
-			$this->_vars['sortKey'] = $this->request->getSortKey();
-		}
-
-		return $this->_vars['sortKey'];
+		return $this->request->getSortKey();
 	}
 
 	/**
@@ -98,11 +90,7 @@ class Paginator implements PaginatorInterface {
 	 */
 	public function getDirection() {
 
-		if (!isset($this->_vars['direction'])) {
-			$this->_vars['direction'] = $this->request->getDirection();
-		}
-
-		return $this->_vars['direction'];
+		return $this->request->getDirection();
 	}
 
 	/**
@@ -110,11 +98,7 @@ class Paginator implements PaginatorInterface {
 	 */
 	public function getTotal() {
 
-		if (!isset($this->_vars['count'])) {
-			$this->_vars['count'] = $this->result->getCount();
-		}
-
-		return $this->_vars['count'];
+		return $this->result->getCount();
 	}
 
 	/**

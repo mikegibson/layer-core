@@ -1,23 +1,23 @@
 <?php
 
-namespace Layer\Paginator;
+namespace Layer\Data\Paginator;
 
 /**
  * Interface PaginatorRequestInterface
  *
- * @package Layer\Paginator
+ * @package Layer\Data\Paginator
  */
 interface PaginatorRequestInterface {
 
 	/**
 	 * @return int
 	 */
-	public function getPage();
+	public function getCurrentPage();
 
 	/**
 	 * @return int
 	 */
-	public function getLimit();
+	public function getPerPage();
 
 	/**
 	 * @return string|null

@@ -1,12 +1,12 @@
 <?php
 
-namespace Layer\View\Table;
+namespace Layer\View\Twig;
 
-use Layer\Paginator\Paginator;
-use Layer\Paginator\PaginatorResult;
-use Layer\View\Twig\TemplateBlockFunctionExtension;
+use Layer\Data\Paginator\Paginator;
+use Layer\Data\Paginator\PaginatorResult;
+use Layer\Data\Paginator\TableDataInterface;
 
-class TwigTableExtension extends TemplateBlockFunctionExtension {
+class TableExtension extends TemplateBlockFunctionExtension {
 
 	protected $template = 'block/table';
 
@@ -57,7 +57,7 @@ class TwigTableExtension extends TemplateBlockFunctionExtension {
 		if($context['table'] instanceof Paginator) {
 			$result = $context['table']->getResult();
 			if($result instanceof PaginatorResult) {
-				$context['dataType'] = $dataType = $result->getDataType();
+				$context['repository'] = $result->getRepository();
 			}
 		}
 		return parent::beforeRender($block, $context);

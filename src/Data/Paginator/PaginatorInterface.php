@@ -1,21 +1,16 @@
 <?php
 
-namespace Layer\Paginator;
-
-use Layer\View\Table\TableDataInterface;
+namespace Layer\Data\Paginator;
 
 /**
  * Interface PaginatorInterface
  *
- * @package Layer\Paginator
+ * @package Layer\Data\Paginator
  */
 interface PaginatorInterface extends TableDataInterface {
 
 	/**
-	 * @param int $page
-	 * @param null $limit
-	 * @param null $sortKey
-	 * @param null $direction
+	 * @return array
 	 */
 	public function getData();
 
@@ -35,6 +30,11 @@ interface PaginatorInterface extends TableDataInterface {
 	public function getPerPage();
 
 	/**
+	 * @return int
+	 */
+	public function getPageCount();
+
+	/**
 	 * @return string|null
 	 */
 	public function getSortKey();
@@ -43,5 +43,11 @@ interface PaginatorInterface extends TableDataInterface {
 	 * @return string|null
 	 */
 	public function getDirection();
+
+	/**
+	 * @param int $page
+	 * @return string
+	 */
+	public function getUrl($page = 1);
 
 }

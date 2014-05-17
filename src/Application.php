@@ -12,7 +12,6 @@ use Layer\View\Twig\TwigServiceProvider;
 use Layer\Utility\ArrayHelper;
 use Layer\Utility\Inflector;
 use Layer\Utility\StringHelper;
-use Layer\View\Html\HtmlHelper;
 use Silex\Application\MonologTrait;
 use Silex\Application\SecurityTrait;
 use Silex\Application\SwiftmailerTrait;
@@ -69,6 +68,10 @@ class Application extends \Silex\Application {
 		$app['path_layer'] = __DIR__;
 		$app['path_layer_resources'] = $app['path_layer'] . '/Resource';
 
+		$app['class_loader'] = $app->share(function() use($app) {
+			return require $app['path_vendor'] . '/autoload.php';
+		});
+
 		/**
 		 * Share helpers and utility classes
 		 */
@@ -80,9 +83,6 @@ class Application extends \Silex\Application {
 		});
 		$app['string_helper'] = $app->share(function () use ($app) {
 			return new StringHelper($app);
-		});
-		$app['html_helper'] = $app->share(function () use ($app) {
-			return new HtmlHelper($app);
 		});
 		$app['scaffold_factory'] = function() use($app) {
 			return new ScaffoldController($app);

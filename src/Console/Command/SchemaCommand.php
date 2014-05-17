@@ -2,7 +2,6 @@
 
 namespace Layer\Console\Command;
 
-use Illuminate\Database\Schema\Grammars\MySqlGrammar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -18,7 +17,7 @@ class SchemaCommand extends Command {
 	protected function execute(InputInterface $input, OutputInterface $output) {
 
 		$app = $this->getSilexApplication();
-
+/*
 		$connection = $app['db']->getConnection();
 		$grammar = new MySqlGrammar();
 		foreach ($app['data']->loaded() as $namespace => $types) {
@@ -33,7 +32,7 @@ class SchemaCommand extends Command {
 					$dataType->singularHumanName
 				), true);
 			}
-		}
+		}*/
 	}
 
 }

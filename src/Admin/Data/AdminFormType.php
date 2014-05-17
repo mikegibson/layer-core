@@ -2,17 +2,17 @@
 
 namespace Layer\Admin\Data;
 
-use Layer\Data\DataType;
-use Layer\Data\DataTypeFormType;
+use Layer\Data\EntityFormType;
+use Layer\Data\ManagedRepositoryInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class AdminFormType extends AbstractType {
 
 	/**
-	 * @var \Layer\Data\DataType
+	 * @var \Layer\Data\ManagedRepositoryInterface
 	 */
-	private $dataType;
+	private $repository;
 
 	/**
 	 * @var string
@@ -20,19 +20,19 @@ class AdminFormType extends AbstractType {
 	protected $name;
 
 	/**
-	 * @param DataType $dataType
+	 * @param ManagedRepositoryInterface $repository
 	 * @param $name
 	 */
-	public function __construct(DataType $dataType, $name) {
-		$this->dataType = $dataType;
+	public function __construct(ManagedRepositoryInterface $repository, $name) {
+		$this->repository = $repository;
 		$this->name = $name;
 	}
 
 	/**
-	 * @return DataType
+	 * @return ManagedRepositoryInterface
 	 */
-	public function getDataType() {
-		return $this->dataType;
+	public function getRepository() {
+		return $this->repository;
 	}
 
 	/**
@@ -47,7 +47,7 @@ class AdminFormType extends AbstractType {
 	 * @param array $options
 	 */
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		$builder->add('record', new DataTypeFormType($this->dataType), ['label' => false]);
+		$builder->add('record', new EntityFormType($this->repository), ['label' => false]);
 		$builder->add('save', 'submit', ['label' => 'Save and edit']);
 		$builder->add('save_and_add', 'submit', ['label' => 'Save and add another']);
 	}
