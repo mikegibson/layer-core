@@ -40,8 +40,11 @@ class RepositoryManager {
 	}
 
 	/**
+	 * Gets the repository for the given entity name
+	 *
 	 * @param $entityName
-	 * @return \Doctrine\Common\Persistence\ObjectRepository
+	 * @return mixed
+	 * @throws \InvalidArgumentException if repository not found
 	 */
 	public function getRepository($entityName) {
 
