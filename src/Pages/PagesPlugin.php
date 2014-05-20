@@ -46,14 +46,10 @@ class PagesPlugin extends Plugin {
 
 		});
 
-		$this->app['orm.repositories.content:pages'] = $app->share(function() use($app) {
-			return new PageRepository($this->app);
-		});
-
 	}
 
 	public function boot() {
-		$this->app['orm.rm']->addRepository($this->app['orm.repositories.content:pages']);
+		$this->app['orm.rm']->loadRepository($this->app['orm.em'], 'Layer\\Pages\\Page');
 	}
 
 }

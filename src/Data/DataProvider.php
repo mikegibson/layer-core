@@ -2,13 +2,14 @@
 /**
  * DataProvider
  *
- * ORM integration based on Doctrine ORM Service Provider by Dragonfly Development Inc
- * with some modifications, which is licensed under a MIT license:
- * https://github.com/dflydev/dflydev-doctrine-orm-service-provider
+ * ORM integration adapted from Doctrine ORM Service Provider by Dragonfly Development Inc,
+ * which is licensed under a MIT license: https://github.com/dflydev/dflydev-doctrine-orm-service-provider
  */
 
 namespace Layer\Data;
 
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Cache\ApcCache;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\CacheProvider;
@@ -27,9 +28,23 @@ use Doctrine\ORM\Mapping\Driver\XmlDriver;
 use Doctrine\ORM\Mapping\Driver\YamlDriver;
 use Gedmo\Sluggable\SluggableListener;
 use Gedmo\Timestampable\TimestampableListener;
+use Layer\Data\Metadata\Query\GetEditablePropertiesQuery;
+use Layer\Data\Metadata\Query\GetEntityCrudQuery;
+use Layer\Data\Metadata\Query\GetEntityHumanNameQuery;
+use Layer\Data\Metadata\Query\GetPropertyLabelQuery;
+use Layer\Data\Metadata\Query\GetTitlePropertyQuery;
+use Layer\Data\Metadata\Query\GetVisiblePropertiesQuery;
+use Layer\Data\Metadata\Query\GetVisiblePropertyLabelsQuery;
+use Layer\Data\Metadata\Query\IsPropertyEditableQuery;
+use Layer\Data\Metadata\Query\IsPropertyVisibleQuery;
+use Layer\Data\Metadata\Query\IsTitlePropertyQuery;
+use Layer\Data\Metadata\QueryCollection;
 use Silex\Application;
 use Silex\Provider\DoctrineServiceProvider;
+use Silex\Provider\ValidatorServiceProvider;
 use Silex\ServiceProviderInterface;
+use Symfony\Component\Validator\Mapping\Factory\LazyLoadingMetadataFactory;
+use Symfony\Component\Validator\Mapping\Loader\AnnotationLoader;
 
 class DataProvider implements ServiceProviderInterface {
 
@@ -49,6 +64,25 @@ class DataProvider implements ServiceProviderInterface {
 			}
 		}
 
+		$app['annotations.initializer'] = $app->protect(function() use($app) {
+			static $initialized = false;
+			if($initialized) {
+				return;
+			}
+			$initialized = true;
+
+			AnnotationRegistry::registerLoader([$app['class_loader'], 'loadClass']);
+		});
+
+		$app['annotations.reader'] = $app->share(function() use($app) {
+			$app['annotations.initializer']();
+			return new AnnotationReader();
+		});
+
+		$app['annotations.loader'] = $app->share(function() use($app) {
+			return new AnnotationLoader($app['annotations.reader']);
+		});
+
 		$app['orm.em.default_options'] = [
 			'connection' => 'default',
 			'mappings' => [],
@@ -65,16 +99,12 @@ class DataProvider implements ServiceProviderInterface {
 
 		$app['orm.ems.options.initializer'] = $app->protect(function () use ($app) {
 			static $initialized = false;
-
 			if ($initialized) {
 				return;
 			}
-
 			$initialized = true;
 
-			if($app['orm.register_class_loader']) {
-				\Doctrine\Common\Annotations\AnnotationRegistry::registerLoader([$app['class_loader'], 'loadClass']);
-			}
+			$app['annotations.initializer']();
 
 			if (!isset($app['orm.ems.options'])) {
 				$app['orm.ems.options'] = ['default' => isset($app['orm.em.options']) ? $app['orm.em.options'] : []];
@@ -123,10 +153,6 @@ class DataProvider implements ServiceProviderInterface {
 			}
 
 			return $ems;
-		});
-
-		$app['orm.rm'] = $app->share(function() {
-			return new RepositoryManager();
 		});
 
 		$app['orm.ems.config'] = $app->share(function($app) {
@@ -324,6 +350,10 @@ class DataProvider implements ServiceProviderInterface {
 				case 'memcached':
 					return $app['orm.cache.factory.memcached']($cacheOptions);
 				case 'filesystem':
+					// @todo Set this as a default somewhere else
+					if(!isset($cacheOptions['path'])) {
+						$cacheOptions['path'] = $app['path_cache'] . '/doctrine';
+					}
 					return $app['orm.cache.factory.filesystem']($cacheOptions);
 				case 'redis':
 					return $app['orm.cache.factory.redis']($cacheOptions);
@@ -383,17 +413,85 @@ class DataProvider implements ServiceProviderInterface {
 		$app['orm.proxies_dir'] = $app['path_cache'] . '/doctrine/proxies';
 		$app['orm.auto_generate_proxies'] = true;
 
+		$app['metadata.queries.getEntityCrud'] = $app->share(function() use($app) {
+			return new GetEntityCrudQuery($app['annotations.reader']);
+		});
+
+		$app['metadata.queries.getPropertyLabel'] = $app->share(function() use($app) {
+			return new GetPropertyLabelQuery($app['annotations.reader'], $app['inflector']);
+		});
+
+		$app['metadata.queries.isPropertyVisible'] = $app->share(function() use($app) {
+			return new IsPropertyVisibleQuery($app['annotations.reader']);
+		});
+
+		$app['metadata.queries.getVisibleProperties'] = $app->share(function() use($app) {
+			return new GetVisiblePropertiesQuery($app['metadata.queries.isPropertyVisible']);
+		});
+
+		$app['metadata.queries.getVisiblePropertyLabels'] = $app->share(function() use($app) {
+			return new GetVisiblePropertyLabelsQuery(
+				$app['metadata.queries.getVisibleProperties'],
+				$app['metadata.queries.getPropertyLabel']
+			);
+		});
+
+		$app['metadata.queries.isPropertyEditable'] = $app->share(function() use($app) {
+			return new IsPropertyEditableQuery($app['annotations.reader']);
+		});
+
+		$app['metadata.queries.getEditableProperties'] = $app->share(function() use($app) {
+			return new GetEditablePropertiesQuery($app['metadata.queries.isPropertyEditable']);
+		});
+
+		$app['metadata.queries.isTitleProperty'] = $app->share(function() use($app) {
+			return new IsTitlePropertyQuery($app['annotations.reader']);
+		});
+
+		$app['metadata.queries.getTitleProperty'] = $app->share(function() use($app) {
+			return new GetTitlePropertyQuery($app['metadata.queries.isTitleProperty']);
+		});
+
+		$app['metadata.queries.getEntityHumanName'] = $app->share(function() use($app) {
+			return new GetEntityHumanNameQuery($app['annotations.reader'], $app['inflector']);
+		});
+
+		$app['metadata.queries_collection'] = $app->share(function() use($app) {
+			$collection = new QueryCollection();
+			$collection->registerQuery($app['metadata.queries.getEntityCrud']);
+			$collection->registerQuery($app['metadata.queries.getPropertyLabel']);
+			$collection->registerQuery($app['metadata.queries.isPropertyVisible']);
+			$collection->registerQuery($app['metadata.queries.getVisibleProperties']);
+			$collection->registerQuery($app['metadata.queries.getVisiblePropertyLabels']);
+			$collection->registerQuery($app['metadata.queries.isPropertyEditable']);
+			$collection->registerQuery($app['metadata.queries.getEditableProperties']);
+			$collection->registerQuery($app['metadata.queries.isTitleProperty']);
+			$collection->registerQuery($app['metadata.queries.getTitleProperty']);
+			$collection->registerQuery($app['metadata.queries.getEntityHumanName']);
+			return $collection;
+		});
+
+		$app['orm.rm'] = $app->share(function() use($app) {
+			return new RepositoryManager($app['metadata.queries_collection']);
+		});
+
+		$app->register(new ValidatorServiceProvider());
+
+		$app['validator.mapping.class_metadata_factory'] = $app->share(function() use($app) {
+			return new LazyLoadingMetadataFactory($app['annotations.loader']);
+		});
+
 	}
 
 	/**
-	 * @param \Pimple $app
+	 * @param Application $app
 	 * @return array
 	 */
 	protected function _getOrmDefaults(Application $app) {
 		return [
+			// @todo orm.proxies_dir doesn't seem to get used
 			'orm.proxies_dir' => $app['path_cache'] . '/doctrine/proxies',
 			'orm.auto_generate_proxies' => true,
-			'orm.register_class_loader' => true,
 			'orm.proxies_namespace' => 'DoctrineProxy',
 			'orm.default_cache' => 'array',
 			'orm.em.options' => [
@@ -409,7 +507,6 @@ class DataProvider implements ServiceProviderInterface {
 	}
 
 	public function boot(Application $app) {
-
 	}
 
 }

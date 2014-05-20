@@ -3,19 +3,20 @@
 namespace Layer\Data;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Repository\RepositoryFactory;
 
-class DummyRepositoryFactory implements \Doctrine\ORM\Repository\RepositoryFactory {
+class DummyRepositoryFactory implements RepositoryFactory {
 
 	/**
 	 * @var RepositoryManager
 	 */
-	private $manager;
+	private $repositoryManager;
 
 	/**
-	 * @param RepositoryManager $manager
+	 * @param RepositoryManagerInterface $repositoryManager
 	 */
-	public function __construct(RepositoryManager $manager) {
-		$this->manager = $manager;
+	public function __construct(RepositoryManagerInterface $repositoryManager) {
+		$this->repositoryManager = $repositoryManager;
 	}
 
 	/**
@@ -26,7 +27,7 @@ class DummyRepositoryFactory implements \Doctrine\ORM\Repository\RepositoryFacto
 	 * @return \Doctrine\Common\Persistence\ObjectRepository
 	 */
 	public function getRepository(EntityManagerInterface $entityManager, $entityName) {
-		return $this->manager->getRepository($entityName);
+		return $this->repositoryManager->getRepository($entityName);
 	}
 
 }

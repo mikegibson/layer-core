@@ -3,13 +3,16 @@
 namespace Layer\Pages;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Mapping\Annotation as Behavior;
+use Layer\Data\Metadata\Annotation as Layer;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Layer\Pages\Page
  *
  * @ORM\Entity
  * @ORM\Table(name="content_pages")
+ * @Layer\CrudEntity
  */
 class Page {
 
@@ -19,6 +22,7 @@ class Page {
 	 * @ORM\Id
 	 * @ORM\Column(type="integer")
 	 * @ORM\GeneratedValue
+	 * @Layer\PropertyLabel("ID")
 	 */
 	protected $id;
 
@@ -26,14 +30,15 @@ class Page {
 	 * @var string $title
 	 *
 	 * @ORM\Column(type="string")
+	 * @Assert\NotBlank
 	 */
 	protected $title;
 
 	/**
-	 * @var string slug
+	 * @var string $slug
 	 *
-	 * @Gedmo\Slug(fields={"title"})
 	 * @ORM\Column(type="string", unique=true)
+	 * @Behavior\Slug(fields={"title"})
 	 */
 	protected $slug;
 
@@ -41,18 +46,21 @@ class Page {
 	 * @var text $content
 	 *
 	 * @ORM\Column(type="text")
+	 * @Layer\HtmlContent
 	 */
 	protected $content;
 
 	/**
-	 * @Gedmo\Timestampable(on="create")
 	 * @ORM\Column(type="datetime")
+	 * @Behavior\Timestampable(on="create")
+	 * @Layer\InvisibleProperty
 	 */
 	protected $created;
 
 	/**
-	 * @Gedmo\Timestampable(on="update")
 	 * @ORM\Column(type="datetime")
+	 * @Behavior\Timestampable(on="update")
+	 * @Layer\InvisibleProperty
 	 */
 	protected $updated;
 

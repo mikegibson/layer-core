@@ -2,12 +2,12 @@
 
 namespace Layer\Pages;
 
-use Layer\Data\EntityRepository;
+use Layer\Data\ManagedRepository;
 
-class PageRepository extends EntityRepository {
+class PageRepository extends ManagedRepository {
 
-	public function getNamespace() {
-		return 'content';
+	public function getName() {
+		return 'content:pages';
 	}
 
 }

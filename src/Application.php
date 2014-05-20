@@ -26,7 +26,6 @@ use Silex\Provider\SessionServiceProvider;
 use Silex\Provider\SwiftmailerServiceProvider;
 use Silex\Provider\TranslationServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
-use Silex\Provider\ValidatorServiceProvider;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -97,7 +96,6 @@ class Application extends \Silex\Application {
 		$app->register(new SessionServiceProvider(), [
 			'session.storage.save_path' => $app['path_session']
 		]);
-		$app->register(new ValidatorServiceProvider());
 		$app->register(new HttpFragmentServiceProvider());
 		$app->register(new SwiftmailerServiceProvider());
 		$app->register(new ConsoleServiceProvider(), [
@@ -157,12 +155,12 @@ class Application extends \Silex\Application {
 			}
 
 			// @todo Finish config routing
-			$mounts = $this->config('routes.mount') ? : [];
+		/*	$mounts = $this->config('routes.mount') ? : [];
 
 			foreach ($mounts as $prefix => $controllers) {
 				$this->mount($prefix, $this[$controllers]);
 			}
-
+*/
 			$this['assetic.asset_manager']->set('js_modernizr', $this['assets.js.modernizr']);
 
 		}

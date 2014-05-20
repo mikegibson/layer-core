@@ -1,21 +1,25 @@
 <?php
 
-namespace Layer\Data;
+namespace Layer\Data\Form;
 
+use Layer\Data\ManagedRepositoryInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class EntityFormType extends AbstractType {
 
-	private $repository;
+	protected $repository;
 
-	protected $typeMap = [
-		'text' => 'textarea'
-	];
+	protected $isCreate;
 
-	public function __construct(ManagedRepositoryInterface $repository) {
+	/**
+	 * @param ManagedRepositoryInterface $repository
+	 * @param bool $isCreate
+	 */
+	public function __construct(ManagedRepositoryInterface $repository, $isCreate = false) {
 		$this->repository = $repository;
+		$this->isCreate = $isCreate;
 	}
 
 	public function getName() {
@@ -27,16 +31,12 @@ class EntityFormType extends AbstractType {
 	}
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		$metadata = $this->repository->getEntityMetadata();
-		foreach($this->repository->getEditableFields() as $field) {
-			$type = null;
-			if(isset($metadata->fieldMappings[$field])) {
-				$mapping = $metadata->fieldMappings[$field];
-				if(isset($this->typeMap[$mapping['type']])) {
-					$type = $this->typeMap[$mapping['type']];
-				}
+		$properties = $this->repository->getPropertyMetadata(null, "Layer\\Data\\Metadata\\Crud\\EditableField");
+		foreach($properties as $field => $info) {
+			if(($this->isCreate && !$info->onCreate) || (!$this->isCreate && !$info->onUpdate)) {
+				continue;
 			}
-			$builder->add($field, $type);
+			$builder->add($field, $info->inputType, []);
 		}
 	}
 

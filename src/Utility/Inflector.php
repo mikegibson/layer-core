@@ -24,7 +24,7 @@ use Layer\Application;
  *
  * @link          http://book.cakephp.org/2.0/en/core-utility-libraries/inflector.html
  */
-class Inflector {
+class Inflector implements InflectorInterface {
 
 	/**
 	 * @var \Silex\Application
@@ -430,7 +430,7 @@ class Inflector {
 	 *
 	 * @param string $type Inflection type
 	 * @param string $key Original value
-	 * @param string $value Inflected value
+	 * @param string|bool $value Inflected value
 	 * @return string Inflected value, from cache
 	 */
 	protected function _cache($type, $key, $value = false) {
@@ -531,11 +531,7 @@ class Inflector {
 	}
 
 	/**
-	 * Return $word in plural form.
-	 *
-	 * @param string $word Word in singular
-	 * @return string Word in plural
-	 * @link http://book.cakephp.org/2.0/en/core-utility-libraries/inflector.html#Inflector::pluralize
+	 * {@inheritdoc}
 	 */
 	public function pluralize($word) {
 
@@ -578,11 +574,7 @@ class Inflector {
 	}
 
 	/**
-	 * Return $word in singular form.
-	 *
-	 * @param string $word Word in plural
-	 * @return string Word in singular
-	 * @link http://book.cakephp.org/2.0/en/core-utility-libraries/inflector.html#Inflector::singularize
+	 * {@inheritdoc}
 	 */
 	public function singularize($word) {
 
@@ -634,11 +626,7 @@ class Inflector {
 	}
 
 	/**
-	 * Returns the given lower_case_and_underscored_word as a CamelCased word.
-	 *
-	 * @param string $lowerCaseAndUnderscoredWord Word to camelize
-	 * @return string Camelized word. LikeThis.
-	 * @link http://book.cakephp.org/2.0/en/core-utility-libraries/inflector.html#Inflector::camelize
+	 * {@inheritdoc}
 	 */
 	public function camelize($lowerCaseAndUnderscoredWord) {
 
@@ -651,11 +639,7 @@ class Inflector {
 	}
 
 	/**
-	 * Returns the given camelCasedWord as an underscored_word.
-	 *
-	 * @param string $camelCasedWord Camel-cased word to be "underscorized"
-	 * @return string Underscore-syntaxed version of the $camelCasedWord
-	 * @link http://book.cakephp.org/2.0/en/core-utility-libraries/inflector.html#Inflector::underscore
+	 * {@inheritdoc}
 	 */
 	public function underscore($camelCasedWord) {
 
@@ -668,17 +652,12 @@ class Inflector {
 	}
 
 	/**
-	 * Returns the given underscored_word_group as a Human Readable Word Group.
-	 * (Underscores are replaced by spaces and capitalized following words.)
-	 *
-	 * @param string $lowerCaseAndUnderscoredWord String to be made more readable
-	 * @return string Human-readable string
-	 * @link http://book.cakephp.org/2.0/en/core-utility-libraries/inflector.html#Inflector::humanize
+	 * {@inheritdoc}
 	 */
 	public function humanize($lowerCaseAndUnderscoredWord) {
 
 		if (!($result = $this->_cache(__FUNCTION__, $lowerCaseAndUnderscoredWord))) {
-			$result = ucwords(str_replace('_', ' ', $lowerCaseAndUnderscoredWord));
+			$result = str_replace('_', ' ', $lowerCaseAndUnderscoredWord);
 			$this->_cache(__FUNCTION__, $lowerCaseAndUnderscoredWord, $result);
 		}
 
@@ -686,11 +665,7 @@ class Inflector {
 	}
 
 	/**
-	 * Returns corresponding table name for given model $className. ("people" for the model class "Person").
-	 *
-	 * @param string $className Name of class to get database table name for
-	 * @return string Name of the database table for given class
-	 * @link http://book.cakephp.org/2.0/en/core-utility-libraries/inflector.html#Inflector::tableize
+	 * {@inheritdoc}
 	 */
 	public function tableize($className) {
 
@@ -703,11 +678,7 @@ class Inflector {
 	}
 
 	/**
-	 * Returns Cake model class name ("Person" for the database table "people".) for given database table.
-	 *
-	 * @param string $tableName Name of database table to get class name for
-	 * @return string Class name
-	 * @link http://book.cakephp.org/2.0/en/core-utility-libraries/inflector.html#Inflector::classify
+	 * {@inheritdoc}
 	 */
 	public function classify($tableName) {
 
@@ -720,11 +691,7 @@ class Inflector {
 	}
 
 	/**
-	 * Returns camelBacked version of an underscored string.
-	 *
-	 * @param string $string
-	 * @return string in variable form
-	 * @link http://book.cakephp.org/2.0/en/core-utility-libraries/inflector.html#Inflector::variable
+	 * {@inheritdoc}
 	 */
 	public function variable($string) {
 
@@ -739,13 +706,7 @@ class Inflector {
 	}
 
 	/**
-	 * Returns a string with all spaces converted to underscores (by default), accented
-	 * characters converted to non-accented characters, and non word characters removed.
-	 *
-	 * @param string $string the string you want to slug
-	 * @param string $replacement will replace keys in map
-	 * @return string
-	 * @link http://book.cakephp.org/2.0/en/core-utility-libraries/inflector.html#Inflector::slug
+	 * {@inheritdoc}
 	 */
 	public function slug($string, $replacement = '_') {
 

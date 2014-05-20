@@ -6,19 +6,11 @@ use Doctrine\Common\Persistence\ObjectRepository;
 
 interface ManagedRepositoryInterface extends ObjectRepository {
 
-	public function getEntityMetadata();
+	public function queryMetadata($name, array $options = []);
+
+	public function getClassMetadata();
 
 	public function getName();
-
-	public function getNamespace();
-
-	public function getBasename();
-
-	public function getSingularHumanName();
-
-	public function getPluralHumanName();
-
-	public function getEditableFields();
 
 	public function createEntity();
 
@@ -29,6 +21,8 @@ interface ManagedRepositoryInterface extends ObjectRepository {
 	public function createNamedQuery($queryName);
 
 	public function createNativeNamedQuery($queryName);
+
+	//public function createFormType(MetadataDriverInterface $driver = null);
 
 	public function clear();
 
