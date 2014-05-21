@@ -458,16 +458,16 @@ class DataProvider implements ServiceProviderInterface {
 
 		$app['metadata.queries_collection'] = $app->share(function() use($app) {
 			$collection = new QueryCollection();
-			$collection->registerQuery($app['metadata.queries.getEntityCrud']);
-			$collection->registerQuery($app['metadata.queries.getPropertyLabel']);
-			$collection->registerQuery($app['metadata.queries.isPropertyVisible']);
-			$collection->registerQuery($app['metadata.queries.getVisibleProperties']);
-			$collection->registerQuery($app['metadata.queries.getVisiblePropertyLabels']);
-			$collection->registerQuery($app['metadata.queries.isPropertyEditable']);
-			$collection->registerQuery($app['metadata.queries.getEditableProperties']);
-			$collection->registerQuery($app['metadata.queries.isTitleProperty']);
-			$collection->registerQuery($app['metadata.queries.getTitleProperty']);
-			$collection->registerQuery($app['metadata.queries.getEntityHumanName']);
+			$collection->registerQuery($app['metadata.queries.getEntityCrud'])
+				->registerQuery($app['metadata.queries.getPropertyLabel'])
+				->registerQuery($app['metadata.queries.isPropertyVisible'])
+				->registerQuery($app['metadata.queries.getVisibleProperties'])
+				->registerQuery($app['metadata.queries.getVisiblePropertyLabels'])
+				->registerQuery($app['metadata.queries.isPropertyEditable'])
+				->registerQuery($app['metadata.queries.getEditableProperties'])
+				->registerQuery($app['metadata.queries.isTitleProperty'])
+				->registerQuery($app['metadata.queries.getTitleProperty'])
+				->registerQuery($app['metadata.queries.getEntityHumanName']);
 			return $collection;
 		});
 

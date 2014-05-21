@@ -8,6 +8,7 @@ class QueryCollection {
 
 	/**
 	 * @param QueryInterface $query
+	 * @return $this
 	 * @throws \InvalidArgumentException
 	 */
 	public function registerQuery(QueryInterface $query) {
@@ -16,6 +17,7 @@ class QueryCollection {
 			throw new \InvalidArgumentException(sprintf('Query "%s" is already registered!', $name));
 		}
 		$this->queries[$name] = $query;
+		return $this;
 	}
 
 	/**
