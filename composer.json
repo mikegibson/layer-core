@@ -24,8 +24,8 @@
 		"symfony/validator": "2.5.*@dev",
 		"symfony/yaml": "2.5.*@dev",
 		"twig/twig": ">=1.8,<2.0-dev",
-		"doctrine/dbal": "2.5.*@dev",
-		"doctrine/orm": "2.5.*@dev",
+		"doctrine/dbal": "=v2.4.2",
+		"doctrine/orm": "=v2.4.2",
 		"gedmo/doctrine-extensions": "2.3.*@dev",
 		"kriswallsmith/assetic": "1.2.*@dev",
 		"knplabs/console-service-provider": "dev-master"
