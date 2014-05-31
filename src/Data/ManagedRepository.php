@@ -5,11 +5,16 @@ namespace Layer\Data;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Selectable;
 use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Layer\Data\Form\EntityFormType;
 use Layer\Data\Metadata\QueryCollection;
 
-abstract class ManagedRepository implements ManagedRepositoryInterface, Selectable {
+class ManagedRepository implements ManagedRepositoryInterface, Selectable {
+
+	/**
+	 * @var \Doctrine\ORM\EntityManagerInterface
+	 */
+	private $entityManager;
 
 	/**
 	 * @var \Doctrine\ORM\EntityRepository
@@ -21,6 +26,9 @@ abstract class ManagedRepository implements ManagedRepositoryInterface, Selectab
 	 */
 	private $classMetadata;
 
+	/**
+	 * @var Metadata\QueryCollection
+	 */
 	private $queryCollection;
 
 	/**
@@ -29,13 +37,27 @@ abstract class ManagedRepository implements ManagedRepositoryInterface, Selectab
 	 * @param QueryCollection $queryCollection
 	 */
 	public function __construct(
+		EntityManagerInterface $entityManager,
 		ObjectRepository $baseRepository,
 		ClassMetadata $classMetadata,
 		QueryCollection $queryCollection
 	) {
+		$this->entityManager = $entityManager;
 		$this->baseRepository = $baseRepository;
 		$this->classMetadata = $classMetadata;
 		$this->queryCollection = $queryCollection;
+	}
+
+	public function getName() {
+		return $this->queryMetadata('getEntityName');
+	}
+
+	public function getClassName() {
+		return $this->getClassMetadata()->name;
+	}
+
+	public function getEntityManager() {
+		return $this->entityManager;
 	}
 
 	public function createEntity() {
@@ -98,7 +120,7 @@ abstract class ManagedRepository implements ManagedRepositoryInterface, Selectab
 	 */
 	public function matching(Criteria $criteria) {
 		if(!$this->baseRepository instanceof Selectable) {
-			throw new \LogicException('The base repository does not implement Selectable!');
+			throw new \LogicException('The base repository does not implement Selectable.');
 		}
 		return $this->baseRepository->matching($criteria);
 	}
@@ -117,10 +139,6 @@ abstract class ManagedRepository implements ManagedRepositoryInterface, Selectab
 		}
 		$query = $this->queryCollection->getQuery($name);
 		return $query->getResult($this->getClassMetadata(), $options);
-	}
-
-	public function getClassName() {
-		return $this->getClassMetadata()->name;
 	}
 
 	public function __call($method, $args) {

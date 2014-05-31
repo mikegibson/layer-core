@@ -27,12 +27,12 @@ class GetEntityHumanNameQuery implements QueryInterface {
 	public function getResult(ClassMetadata $classMetadata, array $options = []) {
 		$annotation = $this->reader->getClassAnnotation($classMetadata->getReflectionClass(), $this->annotationClass);
 		if(!is_a($annotation, $this->annotationClass)) {
-			return $this->getFallback($classMetadata, $options);
+			return $this->getFallbackResult($classMetadata, $options);
 		}
 		return empty($options['plural']) ? $annotation->singular : $annotation->plural;
 	}
 
-	protected function getFallback(ClassMetadata $classMetadata, array $options) {
+	protected function getFallbackResult(ClassMetadata $classMetadata, array $options) {
 		$parts = explode('\\', $classMetadata->getName());
 		$className = array_pop($parts);
 		$humanized = $this->inflector->humanize($this->inflector->underscore($className));

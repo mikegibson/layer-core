@@ -1,0 +1,33 @@
+{% extends '@cms/layout/cms.twig' %}
+
+{% if pluralName is not defined %}
+	{% set pluralName = repository.getEntityHumanName({plural: true}) %}
+{% endif %}
+
+{% if title is not defined %}
+	{% set title = 'List ' ~ pluralName %}
+{% endif %}
+
+{% set childNodes = node.visibleChildNodes %}
+
+{% block title %}{{ title }} | {{ parent() }}{% endblock %}
+
+{% block content %}
+
+	<h1>{{ title }}</h1>
+
+	{% if childNodes is not empty %}
+	<nav>
+		<ul>
+		{% for childNode in childNodes %}
+			<li><a href="{{ cms_url(childNode.path) }}">{{ childNode.label }}</a></li>
+		{% endfor %}
+		</ul>
+	</nav>
+	{% endif %}
+
+	{{ table( paginator ) }}
+
+	{{ paginator_links( paginator ) }}
+
+{% endblock %}

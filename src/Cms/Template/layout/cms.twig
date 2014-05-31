@@ -1,0 +1,44 @@
+{% extends "layout/standard.twig" %}
+
+{% table_theme '@cms/block/table.twig' %}
+{% paginator_theme '@cms/block/paginator.twig' %}
+
+{% block stylesheets %}
+
+	{{ parent() }}
+
+	<link rel="stylesheet" type="text/css" href="{{ asset_url('css_cms') }}"/>
+
+{% endblock %}
+
+{% block header %}
+
+	<h1>{{ app_name }} Cms</h1>
+
+{% endblock %}
+
+{% block content %}
+
+	{% if block('content_header') is not empty %}
+	<header>
+
+		{% block content_header %}{% endblock %}
+
+	</header>
+	{% endif %}
+
+	<div class="inner">
+
+		{% block content_inner %}{% endblock %}
+
+	</div>
+
+{% endblock %}
+
+{% block javascripts %}
+
+	{{ parent() }}
+
+	<script src="{{ asset_url('js_cms') }}"></script>
+
+{% endblock %}

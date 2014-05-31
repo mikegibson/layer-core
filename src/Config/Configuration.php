@@ -148,7 +148,7 @@ class Configuration {
 	public function write($key, $value = null, $default = false) {
 
 		if ($this->locked()) {
-			throw new \RuntimeException('You cannot write values once the configuration has been locked!');
+			throw new \RuntimeException('You cannot write values once the configuration has been locked.');
 		}
 
 		if (is_array($key)) {

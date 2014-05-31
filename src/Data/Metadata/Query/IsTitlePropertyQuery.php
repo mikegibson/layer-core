@@ -6,14 +6,16 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 
 class IsTitlePropertyQuery extends PropertyAnnotationQuery {
 
-	protected $annotationClass = 'Layer\\Data\\Metadata\\Annotation\\TitleProperty';
-
 	protected $titleProperties = [
 		'title', 'name'
 	];
 
 	public function getName() {
 		return 'isTitleProperty';
+	}
+
+	protected function getAnnotationClass() {
+		return 'Layer\\Data\\Metadata\\Annotation\\TitleProperty';
 	}
 
 	protected function getResultFromAnnotation(ClassMetadata $classMetadata, $annotation, array $options) {

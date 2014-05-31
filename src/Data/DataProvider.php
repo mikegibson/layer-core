@@ -31,7 +31,9 @@ use Gedmo\Timestampable\TimestampableListener;
 use Layer\Data\Metadata\Query\GetEditablePropertiesQuery;
 use Layer\Data\Metadata\Query\GetEntityCrudQuery;
 use Layer\Data\Metadata\Query\GetEntityHumanNameQuery;
+use Layer\Data\Metadata\Query\GetEntityNameQuery;
 use Layer\Data\Metadata\Query\GetPropertyLabelQuery;
+use Layer\Data\Metadata\Query\GetPropertyOrmQuery;
 use Layer\Data\Metadata\Query\GetTitlePropertyQuery;
 use Layer\Data\Metadata\Query\GetVisiblePropertiesQuery;
 use Layer\Data\Metadata\Query\GetVisiblePropertyLabelsQuery;
@@ -413,12 +415,20 @@ class DataProvider implements ServiceProviderInterface {
 		$app['orm.proxies_dir'] = $app['path_cache'] . '/doctrine/proxies';
 		$app['orm.auto_generate_proxies'] = true;
 
+		$app['metadata.queries.getEntityName'] = $app->share(function() use($app) {
+			return new GetEntityNameQuery($app['annotations.reader']);
+		});
+
 		$app['metadata.queries.getEntityCrud'] = $app->share(function() use($app) {
 			return new GetEntityCrudQuery($app['annotations.reader']);
 		});
 
 		$app['metadata.queries.getPropertyLabel'] = $app->share(function() use($app) {
 			return new GetPropertyLabelQuery($app['annotations.reader'], $app['inflector']);
+		});
+
+		$app['metadata.queries.getPropertyOrm'] = $app->share(function() use($app) {
+			return new GetPropertyOrmQuery($app['annotations.reader']);
 		});
 
 		$app['metadata.queries.isPropertyVisible'] = $app->share(function() use($app) {
@@ -458,8 +468,11 @@ class DataProvider implements ServiceProviderInterface {
 
 		$app['metadata.queries_collection'] = $app->share(function() use($app) {
 			$collection = new QueryCollection();
-			$collection->registerQuery($app['metadata.queries.getEntityCrud'])
+			$collection
+				->registerQuery($app['metadata.queries.getEntityName'])
+				->registerQuery($app['metadata.queries.getEntityCrud'])
 				->registerQuery($app['metadata.queries.getPropertyLabel'])
+				->registerQuery($app['metadata.queries.getPropertyOrm'])
 				->registerQuery($app['metadata.queries.isPropertyVisible'])
 				->registerQuery($app['metadata.queries.getVisibleProperties'])
 				->registerQuery($app['metadata.queries.getVisiblePropertyLabels'])
@@ -472,7 +485,7 @@ class DataProvider implements ServiceProviderInterface {
 		});
 
 		$app['orm.rm'] = $app->share(function() use($app) {
-			return new RepositoryManager($app['metadata.queries_collection']);
+			return new RepositoryManager($app['dispatcher'], $app['metadata.queries_collection']);
 		});
 
 		$app->register(new ValidatorServiceProvider());

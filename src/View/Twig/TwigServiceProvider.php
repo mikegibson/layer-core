@@ -50,6 +50,10 @@ class TwigServiceProvider extends \Silex\Provider\TwigServiceProvider {
 			return $twig;
 		}));
 
+		$app['twig.view'] = $app->share(function() use($app) {
+			return new View($app['twig']);
+		});
+
 	}
 
 }

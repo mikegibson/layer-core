@@ -9,8 +9,6 @@ use Layer\Data\Metadata\QueryInterface;
 
 abstract class PropertyAnnotationQuery implements QueryInterface {
 
-	protected $annotationClass;
-
 	protected $reader;
 
 	public function __construct(Reader $reader) {
@@ -25,9 +23,11 @@ abstract class PropertyAnnotationQuery implements QueryInterface {
 			throw new \InvalidArgumentException('The property option must be specified!');
 		}
 		$property = $classMetadata->getReflectionProperty($options['property']);
-		$annotation = $this->reader->getPropertyAnnotation($property, $this->annotationClass);
+		$annotation = $this->reader->getPropertyAnnotation($property, $this->getAnnotationClass());
 		return $this->getResultFromAnnotation($classMetadata, $annotation, $options);
 	}
+
+	abstract protected function getAnnotationClass();
 
 	abstract protected function getResultFromAnnotation(ClassMetadata $classMetadata, $annotation, array $options);
 

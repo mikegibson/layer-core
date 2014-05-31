@@ -1,0 +1,22 @@
+{% extends 'block/table.twig' %}
+
+{% block table_value %}
+{% spaceless %}
+
+	{% set escape = true %}
+	{% set link = false %}
+
+	{#
+	{% if(columnKey == dataType.titleField) %}
+		{% set link = true %}
+	{% endif %}
+	#}
+
+	{% if(escape) %}
+		{% set value = value|escape %}
+	{% endif %}
+
+	{% if link %}<a href="{{ cms_url(repository, 'edit', {'id': row.id}) }}">{% endif %}{{ value|raw }}{% if link %}</a>{% endif %}
+
+{% endspaceless %}
+{% endblock %}

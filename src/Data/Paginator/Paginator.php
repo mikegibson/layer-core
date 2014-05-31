@@ -7,17 +7,17 @@ namespace Layer\Data\Paginator;
  *
  * @package Controller\Paginator
  */
-abstract class Paginator implements PaginatorInterface {
-
-	/**
-	 * @var \Layer\Data\Paginator\PaginatorRequestInterface
-	 */
-	protected $request;
+class Paginator implements PaginatorInterface {
 
 	/**
 	 * @var PaginatorResultInterface
 	 */
-	protected $result;
+	private $result;
+
+	/**
+	 * @var \Layer\Data\Paginator\PaginatorRequestInterface
+	 */
+	private $request;
 
 	/**
 	 * @var int
@@ -37,8 +37,8 @@ abstract class Paginator implements PaginatorInterface {
 		PaginatorResultInterface $result,
 		PaginatorRequestInterface $request
 	) {
-		$this->request = $request;
 		$this->result = $result;
+		$this->request = $request;
 	}
 
 	/**
@@ -62,11 +62,7 @@ abstract class Paginator implements PaginatorInterface {
 	 */
 	public function getCurrentPage() {
 
-		if (!isset($this->_vars['page'])) {
-			$this->_vars['page'] = $this->request->getCurrentPage();
-		}
-
-		return $this->_vars['page'];
+		return $this->request->getCurrentPage();
 	}
 
 	/**

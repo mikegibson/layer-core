@@ -3,10 +3,8 @@
 namespace Layer\Data\Paginator;
 
 use Doctrine\ORM\QueryBuilder;
-use Layer\Data\ManagedRepositoryInterface;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Class PaginatorTrait
@@ -16,47 +14,46 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 trait PaginatorTrait {
 
 	/**
-	 * @param ManagedRepositoryInterface $repository
 	 * @param Request $request
-	 * @param UrlGeneratorInterface $generator
 	 * @param QueryBuilder $queryBuilder
 	 * @param array $resultConfig
 	 * @param array $requestConfig
 	 * @return mixed
 	 */
-	protected function _buildPaginator(
-		ManagedRepositoryInterface $repository,
-		Request $request,
-		UrlGeneratorInterface $generator,
+	protected function buildPaginator(
 		QueryBuilder $queryBuilder = null,
+		Request $request,
 		array $resultConfig = [],
 		array $requestConfig = []
 	) {
 
-		$paginatorResult = $this->_getPaginatorResult($repository, $queryBuilder, $resultConfig);
-		$paginatorRequest = $this->_getPaginatorRequest($request, $requestConfig);
+		$paginatorResult = $this->getPaginatorResult($queryBuilder, $resultConfig);
+		$paginatorRequest = $this->getPaginatorRequest($request, $requestConfig);
 
-		return $this->_getPaginator($paginatorResult, $paginatorRequest, $generator);
+		return $this->getPaginator($paginatorResult, $paginatorRequest);
 	}
 
 	/**
 	 * @param PaginatorResultInterface $result
 	 * @param PaginatorRequestInterface $request
-	 * @param UrlGeneratorInterface $generator
 	 * @return mixed
 	 */
-	abstract protected function _getPaginator(
+	abstract protected function getPaginator(
 		PaginatorResultInterface $result,
-		PaginatorRequestInterface $request,
-		UrlGeneratorInterface $generator
+		PaginatorRequestInterface $request
 	);
+
+	/**
+	 * @return \Layer\Data\ManagedRepositoryInterface
+	 */
+	abstract protected function getRepository();
 
 	/**
 	 * @param Request $request
 	 * @param array $config
 	 * @return PaginatorRequest
 	 */
-	protected function _getPaginatorRequest(
+	protected function getPaginatorRequest(
 		Request $request,
 		array $config = []
 	) {
@@ -64,17 +61,15 @@ trait PaginatorTrait {
 	}
 
 	/**
-	 * @param ManagedRepositoryInterface $repository
 	 * @param QueryBuilder $queryBuilder
 	 * @param array $config
 	 * @return PaginatorResult
 	 */
-	protected function _getPaginatorResult(
-		ManagedRepositoryInterface $repository,
+	protected function getPaginatorResult(
 		QueryBuilder $queryBuilder = null,
 		array $config = []
 	) {
-		return new PaginatorResult($repository, $queryBuilder, $config);
+		return new PaginatorResult($this->getRepository(), $queryBuilder, $config);
 	}
 
 }

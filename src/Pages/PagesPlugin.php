@@ -2,6 +2,10 @@
 
 namespace Layer\Pages;
 
+use Layer\Cms\Node\RepositoryCmsNode;
+use Layer\Cms\RootCmsNode;
+use Layer\Data\RepositoryManager;
+use Layer\Node\WrappedNode;
 use Layer\Plugin\Plugin;
 use Silex\Application;
 
@@ -46,10 +50,27 @@ class PagesPlugin extends Plugin {
 
 		});
 
+	//	$app['cms.nodes.pages'] = $app->share(function() use($app) {
+	//		return new RepositoryCmsNode($app['orm.rm']->getRepository('pages'));
+	//	});
+
 	}
 
 	public function boot() {
 		$this->app['orm.rm']->loadRepository($this->app['orm.em'], 'Layer\\Pages\\Page');
+	//	if(isset($this->app['cms.root_node'])) {
+
+	//		$this->app['cms.root_node']->wrapChildNode($this->app['cms.nodes.pages']);
+
+		//	die('here');
+
+			/*$app['admin.cms.root_node'] = $app->extend('admin.cms.root_node', function(RootCmsNode $rootNode) use($app) {
+				$rootNode->addChildNode();
+			});
+			$rootNode = $app['admin.cms.root_node'];
+			$p
+			$rootNode->registerChildNode*/
+	//	}
 	}
 
 }

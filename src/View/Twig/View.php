@@ -2,7 +2,6 @@
 
 namespace Layer\View\Twig;
 
-use Layer\Application;
 use Layer\View\ViewInterface;
 
 /**
@@ -13,30 +12,31 @@ use Layer\View\ViewInterface;
 class View implements ViewInterface {
 
 	/**
-	 * @var \Layer\Application
+	 * @var \Twig_Environment
 	 */
-	protected $app;
-
-	/**
-	 * @var string
-	 */
-	protected $_template;
+	private $twig;
 
 	/**
 	 * @param \Twig_Environment $twig
-	 * @param string $template
 	 */
-	public function __construct(Application $app, $template) {
-		$this->app = $app;
-		$this->_template = $template;
+	public function __construct(\Twig_Environment $twig) {
+		$this->twig = $twig;
 	}
 
 	/**
+	 * @param array $template
 	 * @param array $data
 	 * @return string
 	 */
-	public function render(array $data) {
-		return $this->app['twig']->render($this->_template, $data);
+	public function render($template, array $data = []) {
+		return $this->getTwig()->render($template, $data);
+	}
+
+	/**
+	 * @return \Twig_Environment
+	 */
+	protected function getTwig() {
+		return $this->twig;
 	}
 
 }

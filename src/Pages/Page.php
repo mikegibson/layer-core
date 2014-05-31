@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @ORM\Table(name="content_pages")
  * @Layer\CrudEntity
+ * @Layer\EntityName("pages")
  */
 class Page {
 
@@ -102,6 +103,10 @@ class Page {
 
 	public function setTitle($title) {
 		$this->title = $title;
+	}
+
+	public function setSlug($slug) {
+		$this->slug = $slug;
 	}
 
 	public function setContent($content) {

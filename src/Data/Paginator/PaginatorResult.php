@@ -14,13 +14,6 @@ use Layer\Utility\SetPropertiesTrait;
  */
 class PaginatorResult implements PaginatorResultInterface {
 
-	use SetPropertiesTrait;
-
-	/**
-	 * @var \Layer\Application
-	 */
-	protected $app;
-
 	/**
 	 * @var \Layer\Data\ManagedRepositoryInterface
 	 */
@@ -36,20 +29,8 @@ class PaginatorResult implements PaginatorResultInterface {
 	 * @param QueryBuilder $queryBuilder
 	 * @param array $config
 	 */
-	public function __construct(ManagedRepositoryInterface $repository, QueryBuilder $queryBuilder = null, array $config = []) {
-
-		$this->_setProperties($config);
+	public function __construct(ManagedRepositoryInterface $repository, QueryBuilder $queryBuilder) {
 		$this->repository = $repository;
-		if($queryBuilder === null) {
-			$queryBuilder = $repository->createQueryBuilder();
-		}
-		$this->setQueryBuilder($queryBuilder);
-	}
-
-	/**
-	 * @param QueryBuilder $queryBuilder
-	 */
-	public function setQueryBuilder(QueryBuilder $queryBuilder) {
 		$this->queryBuilder = $queryBuilder;
 	}
 
@@ -57,7 +38,7 @@ class PaginatorResult implements PaginatorResultInterface {
 	 * @return array
 	 */
 	public function getColumns() {
-		return $this->repository->getVisiblePropertyLabels(['important' => true]);
+		return $this->repository->queryMetadata('getVisiblePropertyLabels', ['important' => true]);
 	}
 
 	/**
@@ -74,11 +55,11 @@ class PaginatorResult implements PaginatorResultInterface {
 		$perPage = null,
 		$sortKey = null,
 		$direction = null,
-		$columns = ['*'],
-		QueryBuilder $builder = null
+		$columns = ['*']
 	) {
 
-		return $this->getQuery($page, $perPage, $sortKey, $direction)->getResult();
+		$query = $this->getQuery($page, $perPage, $sortKey, $direction);
+		return $query->getResult();
 	}
 
 	/**
@@ -93,11 +74,10 @@ class PaginatorResult implements PaginatorResultInterface {
 		$page = 1,
 		$perPage = null,
 		$sortKey = null,
-		$direction = null,
-		QueryBuilder $queryBuilder = null
+		$direction = null
 	) {
 
-		$query = $this->_getQueryBuilder($queryBuilder)->getQuery();
+		$query = $this->queryBuilder->getQuery();
 		$query->setFirstResult(($page - 1) * $perPage)->setMaxResults($perPage);
 
 		return $query;
@@ -107,13 +87,11 @@ class PaginatorResult implements PaginatorResultInterface {
 	 * @param QueryBuilder $queryBuilder
 	 * @return int
 	 */
-	public function getCount(QueryBuilder $queryBuilder = null, $alias = null) {
+	public function getCount() {
 
-		if($alias === null) {
-			$alias = $this->repository->getName();
-		}
+		$alias = $this->repository->getName();
 
-		return $this->_getQueryBuilder($queryBuilder)
+		return $this->queryBuilder
 			->select("COUNT({$alias})")
 			->getQuery()
 			->getSingleScalarResult();
@@ -124,16 +102,6 @@ class PaginatorResult implements PaginatorResultInterface {
 	 */
 	public function getRepository() {
 		return $this->repository;
-	}
-
-	/**
-	 * @param QueryBuilder $queryBuilder
-	 * @return QueryBuilder
-	 */
-	protected function _getQueryBuilder(QueryBuilder $queryBuilder = null) {
-
-		return ($queryBuilder === null) ? $this->queryBuilder : $queryBuilder;
-
 	}
 
 }

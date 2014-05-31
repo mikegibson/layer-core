@@ -12,8 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class PaginatorRequest implements PaginatorRequestInterface {
 
-	use SetPropertiesTrait;
-
 	/**
 	 * @var \Symfony\Component\HttpFoundation\Request
 	 */
@@ -22,39 +20,37 @@ class PaginatorRequest implements PaginatorRequestInterface {
 	/**
 	 * @var string
 	 */
-	public $pageKey = 'page';
+	protected $pageKey = 'page';
 
 	/**
 	 * @var string
 	 */
-	public $limitKey = 'limit';
+	protected $limitKey = 'limit';
 
 	/**
 	 * @var string
 	 */
-	public $sortKeyKey = 'sort';
+	protected $sortKeyKey = 'sort';
 
 	/**
 	 * @var string
 	 */
-	public $directionKey = 'direction';
+	protected $directionKey = 'direction';
 
 	/**
 	 * @var string
 	 */
-	public $ascValue = 'asc';
+	protected $ascValue = 'asc';
 
 	/**
 	 * @var string
 	 */
-	public $descValue = 'desc';
+	protected $descValue = 'desc';
 
 	/**
 	 * @param Request $request
 	 */
-	public function __construct(Request $request, array $config = []) {
-
-		$this->_setProperties($config);
+	public function __construct(Request $request) {
 		$this->request = $request;
 	}
 

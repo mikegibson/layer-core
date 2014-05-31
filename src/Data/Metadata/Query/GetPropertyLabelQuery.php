@@ -9,9 +9,7 @@ use Layer\Utility\InflectorInterface;
 
 class GetPropertyLabelQuery extends PropertyAnnotationQuery {
 
-	protected $inflector;
-
-	protected $annotationClass = 'Layer\\Data\\Metadata\\Annotation\\PropertyLabel';
+	private $inflector;
 
 	public function __construct(Reader $reader, InflectorInterface $inflector) {
 		parent::__construct($reader);
@@ -20,6 +18,10 @@ class GetPropertyLabelQuery extends PropertyAnnotationQuery {
 
 	public function getName() {
 		return 'getPropertyLabel';
+	}
+
+	protected function getAnnotationClass() {
+		return 'Layer\\Data\\Metadata\\Annotation\\PropertyLabel';
 	}
 
 	protected function getResultFromAnnotation(ClassMetadata $classMetadata, $annotation, array $options) {
@@ -31,7 +33,11 @@ class GetPropertyLabelQuery extends PropertyAnnotationQuery {
 
 	protected function getFallbackResult(ClassMetadata $classMetadata, array $options) {
 		$reflProperty = $classMetadata->getReflectionProperty($options['property']);
-		return ucfirst($this->inflector->humanize($reflProperty->getName()));
+		return ucfirst($this->getInflector()->humanize($reflProperty->getName()));
+	}
+
+	protected function getInflector() {
+		return $this->inflector;
 	}
 
 }

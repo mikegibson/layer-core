@@ -8,10 +8,8 @@ class IsPropertyVisibleQuery extends PropertyAnnotationQuery {
 
 	private $namespace = 'Layer\\Data\\Metadata\\Annotation\\';
 
-	protected $annotationClass;
-
-	protected function initialize() {
-		$this->annotationClass = $this->namespace . 'CrudEntity';
+	protected function getAnnotationClass() {
+		return $this->namespace . 'CrudEntity';
 	}
 
 	public function getName() {
@@ -19,7 +17,7 @@ class IsPropertyVisibleQuery extends PropertyAnnotationQuery {
 	}
 
 	protected function getResultFromAnnotation(ClassMetadata $classMetadata, $annotation, array $options) {
-		if(is_a($annotation, $this->annotationClass)) {
+		if(is_a($annotation, $this->getAnnotationClass())) {
 			if(!empty($options['important'])) {
 				return !empty($annotation->important);
 			}

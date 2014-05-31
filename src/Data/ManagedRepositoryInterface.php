@@ -12,6 +12,8 @@ interface ManagedRepositoryInterface extends ObjectRepository {
 
 	public function getName();
 
+	public function getEntityManager();
+
 	public function createEntity();
 
 	public function createQueryBuilder($alias = null, $indexBy = null);

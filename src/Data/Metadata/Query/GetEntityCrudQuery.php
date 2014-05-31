@@ -25,10 +25,10 @@ class GetEntityCrudQuery implements QueryInterface {
 		if(is_a($annotation, $this->annotationClass)) {
 			return $annotation;
 		}
-		return $this->getFallback($classMetadata, $options);
+		return $this->getFallbackResult($classMetadata, $options);
 	}
 
-	protected function getFallback(ClassMetadata $classMetadata, array $options) {
+	protected function getFallbackResult(ClassMetadata $classMetadata, array $options) {
 		$reflClass = new \ReflectionClass($this->annotationClass);
 		return $reflClass->newInstance();
 	}

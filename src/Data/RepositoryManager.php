@@ -4,25 +4,20 @@ namespace Layer\Data;
 
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository as BaseRepository;
 use Layer\Data\Metadata\QueryCollection;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class RepositoryManager implements RepositoryManagerInterface {
 
 	/**
-	 * Base entity repository classname
+	 * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
 	 */
-	const REPOSITORY_CLASS = 'Layer\\Data\\ManagedRepository';
+	private $eventDispatcher;
 
 	/**
-	 * @var DummyRepositoryFactory
+	 * @var ManagedRepositoryFactory
 	 */
 	private $factory;
-
-	/**
-	 * @var Metadata\QueryCollection
-	 */
-	private $queryCollection;
 
 	/**
 	 * The list of ManagedRepository instances.
@@ -35,45 +30,38 @@ class RepositoryManager implements RepositoryManagerInterface {
 	 * Constructor
 	 * Create the repository factory
 	 */
-	public function __construct(QueryCollection $queryCollection) {
-		$this->queryCollection = $queryCollection;
-		$this->factory = new DummyRepositoryFactory($this);
+	public function __construct(EventDispatcherInterface $eventDispatcher, QueryCollection $queryCollection) {
+		$this->eventDispatcher = $eventDispatcher;
+		$this->factory = new ManagedRepositoryFactory($this, $queryCollection);
 	}
 
 	/**
 	 * @param EntityManagerInterface $entityManager
-	 * @param string $entityClass
-	 * @param string|null $repositoryClass
-	 * @throws \InvalidArgumentException
+	 * @param $entityClass
+	 * @return $this
 	 */
-	public function loadRepository(EntityManagerInterface $entityManager, $entityClass, $repositoryClass = null) {
-		if($repositoryClass === null) {
-			$repositoryClass = $entityClass . 'Repository';
-		}
-		$reflection = new \ReflectionClass($repositoryClass);
-		if(!$reflection->isSubclassOf(static::REPOSITORY_CLASS)) {
-			throw new \InvalidArgumentException(
-				sprintf('Class %s is not a subclass of %s', $repositoryClass, static::REPOSITORY_CLASS)
-			);
-		}
-		$classMetadata = $entityManager->getClassMetadata($entityClass);
-		$baseRepository = new BaseRepository($entityManager, $classMetadata);
-		$repository = new $repositoryClass($baseRepository, $classMetadata, $this->queryCollection);
+	public function loadRepository(EntityManagerInterface $entityManager, $entityClass) {
+		$repository = $this->factory->getRepository($entityManager, $entityClass);
 		$this->registerRepository($repository);
+		return $this;
 	}
 
 	/**
 	 * Register a repository
 	 *
 	 * @param ManagedRepositoryInterface $repository
+	 * @return $this
 	 * @throws \LogicException
 	 */
 	public function registerRepository(ManagedRepositoryInterface $repository) {
 		$name = $repository->getName();
 		if($this->hasRepository($name)) {
-			throw new \LogicException(sprintf('Repository %s is already registered!', $name));
+			throw new \LogicException(sprintf('Repository %s is already registered.', $name));
 		}
-		$this->repositories[$name] = $repository;
+		$event = new ManagedRepositoryEvent($repository);
+		$this->eventDispatcher->dispatch(ManagedRepositoryEvent::REGISTER, $event);
+		$this->repositories[$name] = $event->getRepository();
+		return $this;
 	}
 
 	/**
@@ -82,7 +70,7 @@ class RepositoryManager implements RepositoryManagerInterface {
 	public function getRepository($name) {
 
 		if (!$this->hasRepository($name)) {
-			throw new \InvalidArgumentException(sprintf('Repository %s was not found!', $name));
+			throw new \InvalidArgumentException(sprintf('Repository %s was not found.', $name));
 		}
 
 		return $this->repositories[$name];
@@ -109,6 +97,13 @@ class RepositoryManager implements RepositoryManagerInterface {
 	 */
 	public function initializeConfiguration(Configuration $config) {
 		$config->setRepositoryFactory($this->factory);
+	}
+
+	/**
+	 * @return EventDispatcherInterface
+	 */
+	protected function getEventDispatcher() {
+		return $this->eventDispatcher;
 	}
 
 }
