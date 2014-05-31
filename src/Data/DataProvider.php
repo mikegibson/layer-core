@@ -28,6 +28,7 @@ use Doctrine\ORM\Mapping\Driver\XmlDriver;
 use Doctrine\ORM\Mapping\Driver\YamlDriver;
 use Gedmo\Sluggable\SluggableListener;
 use Gedmo\Timestampable\TimestampableListener;
+use Gedmo\Tree\TreeListener;
 use Layer\Data\Metadata\Query\GetEditablePropertiesQuery;
 use Layer\Data\Metadata\Query\GetEntityCrudQuery;
 use Layer\Data\Metadata\Query\GetEntityHumanNameQuery;
@@ -45,6 +46,7 @@ use Silex\Application;
 use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\ValidatorServiceProvider;
 use Silex\ServiceProviderInterface;
+use Symfony\Bridge\Doctrine\Form\DoctrineOrmExtension;
 use Symfony\Component\Validator\Mapping\Factory\LazyLoadingMetadataFactory;
 use Symfony\Component\Validator\Mapping\Loader\AnnotationLoader;
 
@@ -97,6 +99,10 @@ class DataProvider implements ServiceProviderInterface {
 
 		$app['orm.em.listeners.timestampable'] = $app->share(function() {
 			return new TimestampableListener();
+		});
+
+		$app['orm.em.listeners.tree'] = $app->share(function() {
+			return new TreeListener();
 		});
 
 		$app['orm.ems.options.initializer'] = $app->protect(function () use ($app) {
@@ -494,6 +500,13 @@ class DataProvider implements ServiceProviderInterface {
 			return new LazyLoadingMetadataFactory($app['annotations.loader']);
 		});
 
+		$app->extend('form.extensions', function ($extensions) use($app) {
+			$managerRegistry = new ManagerRegistry(null, [], ['orm.em'], null, null, $app['orm.proxies_namespace']);
+			$managerRegistry->setContainer($app);
+			$extensions[] = new DoctrineOrmExtension($managerRegistry);
+			return $extensions;
+		});
+
 	}
 
 	/**
@@ -505,7 +518,7 @@ class DataProvider implements ServiceProviderInterface {
 			// @todo orm.proxies_dir doesn't seem to get used
 			'orm.proxies_dir' => $app['path_cache'] . '/doctrine/proxies',
 			'orm.auto_generate_proxies' => true,
-			'orm.proxies_namespace' => 'DoctrineProxy',
+			'orm.proxies_namespace' => 'Doctrine\Common\Proxy\Proxy',
 			'orm.default_cache' => 'array',
 			'orm.em.options' => [
 				'mappings' => [
@@ -515,7 +528,7 @@ class DataProvider implements ServiceProviderInterface {
 					]
 				]
 			],
-			'orm.em.listeners' => ['sluggable', 'timestampable']
+			'orm.em.listeners' => ['sluggable', 'timestampable', 'tree']
 		];
 	}
 

@@ -34,13 +34,13 @@ class GetCmsFormFieldPropertyQuery extends PropertyAnnotationQuery {
 			$annotation = new $class([]);
 		}
 		$type = $annotation->type;
+		$fieldOptions = $annotation->options;
 		if($type === null) {
 			$orm = $this->propertyOrmQuery->getResult($classMetadata, ['property' => $options['property']]);
 			if(isset($this->typeMap[$orm->type])) {
 				$type = $this->typeMap[$orm->type];
 			}
 		}
-		$fieldOptions = $annotation->options;
 		return [
 			'type' => $type,
 			'options' => $fieldOptions
