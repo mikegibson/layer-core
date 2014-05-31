@@ -1,5 +1,9 @@
 {% extends "@cms/layout/cms.twig" %}
 
+{% if title is not defined %}
+	{% set title = repository.getEntityHumanName({'plural': true, 'capitalize': true}) %}
+{% endif %}
+
 {% block content_header %}
 
 	<h1>{{ title }}</h1>
