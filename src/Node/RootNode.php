@@ -13,7 +13,7 @@ class RootNode extends OrphanNode {
 		$this->label = $label;
 	}
 
-	public function getName() {
+	public function getKey() {
 		return $this->key;
 	}
 

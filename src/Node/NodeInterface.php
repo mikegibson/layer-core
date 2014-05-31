@@ -6,7 +6,7 @@ interface NodeInterface {
 
 	const SEPARATOR = '/';
 
-	public function getName();
+	public function getKey();
 
 	public function getLabel();
 
@@ -25,5 +25,7 @@ interface NodeInterface {
 	public function registerChildNode(NodeInterface $childNode);
 
 	public function wrapChildNode(NodeInterface $baseNode);
+
+	public function sortChildNodes($callback);
 
 }

@@ -47,6 +47,7 @@ class TwigServiceProvider extends \Silex\Provider\TwigServiceProvider {
 			$twig->addExtension(new FlashExtension());
 			$twig->addExtension(new TableExtension());
 			$twig->addExtension(new PaginatorExtension());
+			$twig->addExtension(new ListExtension());
 			return $twig;
 		}));
 

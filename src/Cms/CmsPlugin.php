@@ -6,8 +6,8 @@ use Layer\Cms\Action\DashboardAction;
 use Layer\Cms\Data\CmsRepository;
 use Layer\Cms\Data\Metadata\Query\GetCmsFormFieldPropertyQuery;
 use Layer\Cms\Data\Metadata\Query\GetCmsFormFieldsQuery;
+use Layer\Cms\Node\CmsNavigationNode;
 use Layer\Cms\Node\RepositoryCmsNodeFactory;
-use Layer\Cms\Node\RootCmsNode;
 use Layer\Cms\Data\Metadata\Query\GetCmsEntityQuery;
 use Layer\Cms\Data\Metadata\Query\GetCmsEntitySlugQuery;
 use Layer\Cms\View\CmsHelper;
@@ -15,6 +15,9 @@ use Layer\Cms\View\TwigCmsExtension;
 use Layer\Controller\NodeController;
 use Layer\Data\ManagedRepositoryEvent;
 use Layer\Data\Metadata\QueryCollection;
+use Layer\Node\ControllerNode;
+use Layer\Node\ControllerNodeListNode;
+use Layer\Node\WrappedControllerNode;
 use Layer\Plugin\Plugin;
 use Silex\Application;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -41,7 +44,7 @@ class CmsPlugin extends Plugin {
 			$cms = $app['controllers_factory'];
 
 			$cms->match('/{node}', 'cms.node_controller:dispatch')
-				->assert('node', '[a-z0-9\-/]+')
+				->assert('node', '[a-z0-9\-/]*')
 				->bind('cms');
 
 			return $cms;
@@ -108,7 +111,7 @@ class CmsPlugin extends Plugin {
 			);
 		});
 
-		$app['metadata.queries_collection'] = $app->extend(
+		$app->extend(
 			'metadata.queries_collection',
 			function(QueryCollection $collection) use($app) {
 				$collection
@@ -128,8 +131,19 @@ class CmsPlugin extends Plugin {
 			return new RepositoryCmsNodeFactory($app);
 		});
 
+		$app['cms.dashboard_node'] = $app->share(function() use($app) {
+			return new ControllerNode('cms', $app['cms.actions.dashboard']);
+		});
+
 		$app['cms.root_node'] = $app->share(function() use($app) {
-			return new RootCmsNode($app['cms.actions.dashboard']);
+			return new WrappedControllerNode($app['cms.dashboard_node']);
+		});
+
+		$app['cms.navigation_list'] = $app->share(function() use($app) {
+			$node = new CmsNavigationNode($app['cms.root_node'], $app['url_generator']);
+			$dashboardNode = new ControllerNodeListNode($app['cms.dashboard_node'], $app['url_generator'], $node);
+			$node->registerChildNode($dashboardNode, false, true);
+			return $node;
 		});
 
 		$app->extend('dispatcher', function(EventDispatcherInterface $dispatcher) use($app) {

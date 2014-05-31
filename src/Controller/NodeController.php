@@ -25,7 +25,11 @@ class NodeController {
 	public function dispatch(Request $request) {
 		$rootNode = $this->getRootNode();
 		$nodePath = $request->get('node');
-		$node = $rootNode->getDescendent($nodePath);
+		if($nodePath === '') {
+			$node = $rootNode;
+		} else {
+			$node = $rootNode->getDescendent($nodePath);
+		}
 		if(!$node instanceof ControllerNodeInterface) {
 			throw new \RuntimeException();
 		}

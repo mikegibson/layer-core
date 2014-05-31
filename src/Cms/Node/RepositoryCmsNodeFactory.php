@@ -37,7 +37,9 @@ class RepositoryCmsNodeFactory implements RepositoryCmsNodeFactoryInterface {
 		$rootNode = null;
 		foreach($nodes as $k => $node) {
 			if($rootNode === null) {
-				$nodes[$k] = $rootNode = $this->getRootCmsNode()->wrapChildNode($node, $repository->getCmsSlug());
+				$key = $repository->getCmsSlug();
+				$label = $repository->queryMetadata('getEntityHumanName', ['plural' => true, 'capitalize' => true]);
+				$nodes[$k] = $rootNode = $this->getRootCmsNode()->wrapChildNode($node, $key, $label);
 			} else {
 				$nodes[$k] = $rootNode->wrapChildNode($node);
 			}
@@ -65,7 +67,7 @@ class RepositoryCmsNodeFactory implements RepositoryCmsNodeFactoryInterface {
 	}
 
 	protected function createNodeFromAction(ActionInterface $action) {
-		return new ControllerNode($action);
+		return new ControllerNode('cms', $action);
 	}
 
 	/**

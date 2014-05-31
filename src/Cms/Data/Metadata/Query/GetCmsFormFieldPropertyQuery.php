@@ -25,7 +25,7 @@ class GetCmsFormFieldPropertyQuery extends PropertyAnnotationQuery {
 	}
 
 	protected function getAnnotationClass() {
-		return 'Layer\\Cms\Data\\Metadata\\Annotation\\FormFieldProperty';
+		return 'Layer\\Cms\\Data\\Metadata\\Annotation\\FormFieldProperty';
 	}
 
 	protected function getResultFromAnnotation(ClassMetadata $classMetadata, $annotation, array $options) {

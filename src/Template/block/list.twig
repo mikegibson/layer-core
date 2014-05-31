@@ -1,0 +1,20 @@
+{% block list %}
+	{% if node.areChildrenOrdered %}<ol>{% else %}<ul>{% endif %}
+		{% for childNode in node.childNodes %}
+		{{ list_item( childNode ) }}
+		{% endfor %}
+	{% if not node.areChildrenOrdered %}</ul>{% else %}</ol>{% endif %}
+{% endblock %}
+
+{% block list_item %}
+	<li>
+	{% if node.url is not empty %}
+		<a href="{{ node.url }}">{{ node.label }}</a>
+	{% else %}
+		{{ node.label }}
+	{% endif %}
+	{% if node.childNodes is not empty %}
+		{{ list( node ) }}
+	{% endif %}
+	</li>
+{% endblock %}

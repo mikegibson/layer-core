@@ -11,8 +11,8 @@ abstract class OrphanControllerNode extends OrphanNode implements ControllerNode
 		return parent::registerChildNode($childNode);
 	}
 
-	protected function createWrappedNode(NodeInterface $baseNode, $name = null, $label = null) {
-		return new WrappedControllerNode($baseNode, $this, $name, $label);
+	protected function createWrappedNode(NodeInterface $baseNode, $key = null, $label = null, $baseChildrenAccessible = true) {
+		return new WrappedControllerNode($baseNode, $this, $key, $label, $baseChildrenAccessible);
 	}
 
 	public function isVisible() {

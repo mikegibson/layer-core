@@ -7,37 +7,42 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ControllerNode extends OrphanControllerNode implements ControllerNodeInterface {
 
+	private $routeName;
+
 	/**
 	 * @var ActionInterface
 	 */
 	private $action;
 
-	private $name;
+	private $key;
 
-	public function __construct(ActionInterface $action, $name = null) {
+	public function __construct($routeName, ActionInterface $action, $key = null) {
+		$this->routeName = $routeName;
 		$this->action = $action;
-		$this->name = $name;
+		$this->key = $key;
+	}
+
+	public function getRouteName() {
+		return $this->routeName;
 	}
 
 	public function getActionName() {
-		$action = $this->getAction();
-		if(!is_object($action)) {
-			var_dump(\get_call_stack());
-			var_dump($action);
-			die('here');
-		}
-		return $action->getName();
+		return $this->getAction()->getName();
 	}
 
-	public function getName() {
-		if($this->name !== null) {
-			return $this->name;
+	public function getActionLabel() {
+		return $this->getAction()->getLabel();
+	}
+
+	public function getKey() {
+		if($this->key !== null) {
+			return $this->key;
 		}
 		return $this->getActionName();
 	}
 
 	public function getLabel() {
-		return $this->getAction()->getLabel();
+		return $this->getActionLabel();
 	}
 
 	public function getTemplate() {

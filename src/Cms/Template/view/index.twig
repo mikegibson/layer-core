@@ -16,15 +16,7 @@
 
 	<h1>{{ title }}</h1>
 
-	{% if childNodes is not empty %}
-	<nav>
-		<ul>
-		{% for childNode in childNodes %}
-			<li><a href="{{ cms_url(childNode.path) }}">{{ childNode.label }}</a></li>
-		{% endfor %}
-		</ul>
-	</nav>
-	{% endif %}
+	{% include '@cms/element/nav_repository' %}
 
 	{{ table( paginator ) }}
 

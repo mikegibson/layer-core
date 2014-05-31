@@ -8,22 +8,31 @@ class WrappedNode extends AbstractNode {
 
 	private $parentNode;
 
-	protected $name;
+	private $name;
 
-	protected $label;
+	private $label;
 
-	public function __construct(NodeInterface $baseNode, NodeInterface $parentNode, $name = null, $label = null) {
+	private $baseChildrenAccessible;
+
+	public function __construct(
+		NodeInterface $baseNode,
+		NodeInterface $parentNode = null,
+		$name = null,
+		$label = null,
+		$baseChildrenAccessible = true
+	) {
 		$this->baseNode = $baseNode;
 		$this->parentNode = $parentNode;
 		$this->name = $name;
 		$this->label = $label;
+		$this->baseChildrenAccessible = $baseChildrenAccessible;
 	}
 
-	public function getName() {
+	public function getKey() {
 		if($this->name !== null) {
 			return $this->name;
 		}
-		return $this->getBaseNode()->getName();
+		return $this->getBaseNode()->getKey();
 	}
 
 	public function getLabel() {
@@ -42,7 +51,10 @@ class WrappedNode extends AbstractNode {
 	}
 
 	public function getChildNodes() {
-		$keys = array_keys(array_merge($this->baseNode->getChildNodes(), $this->childNodes));
+		if(!$this->areBaseChildrenAccessible()) {
+			return parent::getChildNodes();
+		}
+		$keys = array_keys(array_merge($this->getBaseNode()->getChildNodes(), $this->childNodes));
 		$nodes = [];
 		foreach($keys as $key) {
 			$nodes[$key] = $this->getChildNode($key);
@@ -51,16 +63,26 @@ class WrappedNode extends AbstractNode {
 	}
 
 	public function hasChildNode($key) {
+		if(!$this->areBaseChildrenAccessible()) {
+			return parent::hasChildNode($key);
+		}
 		return $this->baseNode->hasChildNode($key) || isset($this->childNodes[$key]);
 	}
 
 	public function getChildNode($key) {
+		if(!$this->areBaseChildrenAccessible()) {
+			return parent::getChildNode($key);
+		}
 		if(!isset($this->childNodes[$key])) {
-			$node = $this->baseNode->getChildNode($key);
+			$node = $this->getBaseNode()->getChildNode($key);
 			$class = get_class($this);
 			$this->childNodes[$key] = new $class($node, $this);
 		}
 		return $this->childNodes[$key];
+	}
+
+	protected function areBaseChildrenAccessible() {
+		return $this->baseChildrenAccessible;
 	}
 
 }

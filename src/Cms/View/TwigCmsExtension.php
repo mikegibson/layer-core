@@ -2,6 +2,8 @@
 
 namespace Layer\Cms\View;
 
+use Layer\Cms\Node\CmsRepositoryNavigationNode;
+use Layer\Node\ControllerNodeInterface;
 use Layer\View\Twig\Extension;
 
 /**
@@ -19,7 +21,7 @@ class TwigCmsExtension extends Extension {
 	/**
 	 * @var array
 	 */
-	protected $methods = ['url'];
+	protected $methods = ['url', 'repository_nav'];
 
 	/**
 	 * @param CmsHelper $helper

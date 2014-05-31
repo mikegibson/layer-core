@@ -27,9 +27,14 @@ class GetEntityHumanNameQuery implements QueryInterface {
 	public function getResult(ClassMetadata $classMetadata, array $options = []) {
 		$annotation = $this->reader->getClassAnnotation($classMetadata->getReflectionClass(), $this->annotationClass);
 		if(!is_a($annotation, $this->annotationClass)) {
-			return $this->getFallbackResult($classMetadata, $options);
+			$humanized = $this->getFallbackResult($classMetadata, $options);
+		} else {
+			$humanized = empty($options['plural']) ? $annotation->singular : $annotation->plural;
 		}
-		return empty($options['plural']) ? $annotation->singular : $annotation->plural;
+		if(!empty($options['capitalize'])) {
+			$humanized = $this->capitalize($humanized);
+		}
+		return $humanized;
 	}
 
 	protected function getFallbackResult(ClassMetadata $classMetadata, array $options) {
@@ -40,6 +45,10 @@ class GetEntityHumanNameQuery implements QueryInterface {
 			$humanized = $this->inflector->pluralize($humanized);
 		}
 		return $humanized;
+	}
+
+	protected function capitalize($humanized) {
+		return ucfirst($humanized);
 	}
 
 }

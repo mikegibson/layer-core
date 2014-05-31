@@ -6,7 +6,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 interface ControllerNodeInterface extends NodeInterface {
 
+	public function getRouteName();
+
 	public function getActionName();
+
+	public function getActionLabel();
 
 	public function invokeAction(Request $request);
 

@@ -21,32 +21,36 @@ abstract class AbstractNode implements NodeInterface {
 		return $this->childNodes[$key];
 	}
 
-	public function wrapChildNode(NodeInterface $baseNode, $name = null, $label = null) {
-		$wrappedNode = $this->createWrappedNode($baseNode, $name, $label);
+	public function wrapChildNode(NodeInterface $baseNode, $key = null, $label = null, $baseChildrenAccessible = true) {
+		$wrappedNode = $this->createWrappedNode($baseNode, $key, $label, $baseChildrenAccessible);
 		$this->registerChildNode($wrappedNode);
 		return $wrappedNode;
 	}
 
-	protected function createWrappedNode(NodeInterface $baseNode, $name = null, $label = null) {
-		return new WrappedNode($baseNode, $this, $name, $label);
+	protected function createWrappedNode(NodeInterface $baseNode, $key = null, $label = null, $baseChildrenAccessible = true) {
+		return new WrappedNode($baseNode, $this, $key, $label, $baseChildrenAccessible);
 	}
 
-	public function registerChildNode(NodeInterface $node, $overwrite = false) {
+	public function registerChildNode(NodeInterface $node, $overwrite = false, $prepend = false) {
 		if($node->getParentNode() !== $this) {
 			throw new \RuntimeException('Nodes being registered must return this node from their getParentNode method.');
 		}
-		$key = $node->getName();
+		$key = $node->getKey();
 		if(!$overwrite && $this->hasChildNode($key)) {
 			throw new \InvalidArgumentException(sprintf('Node key %s is already registered.', $key));
 		}
-		$this->childNodes[$key] = $node;
+		if($prepend) {
+			$this->childNodes = array_merge([$key => null], $this->getChildNodes(), [$key => $node]);
+		} else {
+			$this->childNodes[$key] = $node;
+		}
 	}
 
 	public function getPath() {
 		$parts = [];
 		$node = $this;
 		while(null !== ($parent = $node->getParentNode())) {
-			array_unshift($parts, $node->getName());
+			array_unshift($parts, $node->getKey());
 			$node = $parent;
 		}
 		return implode(static::SEPARATOR, $parts);
@@ -59,6 +63,12 @@ abstract class AbstractNode implements NodeInterface {
 			$node = $node->getChildNode($key);
 		}
 		return $node;
+	}
+
+	public function sortChildNodes($callback) {
+		$childNodes = $this->getChildNodes();
+		uasort($childNodes, $callback);
+		$this->childNodes = $childNodes;
 	}
 
 }

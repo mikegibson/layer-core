@@ -16,7 +16,7 @@ class Node extends AbstractNode {
 		$this->parentNode = $parentNode;
 	}
 
-	public function getName() {
+	public function getKey() {
 		return $this->key;
 	}
 
