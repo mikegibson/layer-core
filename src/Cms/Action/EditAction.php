@@ -28,8 +28,11 @@ class EditAction extends SaveAction {
 	}
 
 	protected function getFormData(Request $request) {
-		if(!($id = $request->get('id')) || !($record = $this->getRepository()->find($id))) {
-			throw new HttpException(404);
+		if(!$id = $request->get('id')) {
+			throw new HttpException(404, 'No ID was specified.');
+		}
+		if(!$record = $this->getRepository()->find($id)) {
+			throw new HttpException(404, sprintf('No record exists with ID %d.', $id));
 		}
 		$formData = new \stdClass();
 		$formData->record = $record;
