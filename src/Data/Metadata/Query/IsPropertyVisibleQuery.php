@@ -16,6 +16,15 @@ class IsPropertyVisibleQuery extends PropertyAnnotationQuery {
 		return 'isPropertyVisible';
 	}
 
+	public function getResult(ClassMetadata $classMetadata, array $options = []) {
+		$this->checkProperty($options);
+		$getter = 'get' . ucfirst($options['property']);
+		if(!$classMetadata->getReflectionClass()->hasMethod($getter)) {
+			return false;
+		}
+		return parent::getResult($classMetadata, $options);
+	}
+
 	protected function getResultFromAnnotation(ClassMetadata $classMetadata, $annotation, array $options) {
 		if(is_a($annotation, $this->getAnnotationClass())) {
 			if(!empty($options['important'])) {
@@ -28,10 +37,10 @@ class IsPropertyVisibleQuery extends PropertyAnnotationQuery {
 
 	protected function getFallbackResult(ClassMetadata $classMetadata, array $options) {
 		$property = $classMetadata->getReflectionProperty($options['property']);
-		if($this->reader->getPropertyAnnotation($property, $this->namespace . 'InvisibleProperty')) {
+		if($this->getReader()->getPropertyAnnotation($property, $this->namespace . 'InvisibleProperty')) {
 			return false;
 		}
-		if($crudProperty = $this->reader->getPropertyAnnotation($property, $this->namespace . 'CrudProperty')) {
+		if($crudProperty = $this->getReader()->getPropertyAnnotation($property, $this->namespace . 'CrudProperty')) {
 			return $crudProperty->visible;
 		}
 		return true;

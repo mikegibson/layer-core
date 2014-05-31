@@ -38,6 +38,10 @@ class IsPropertyEditableQuery implements QueryInterface {
 		if(!isset($options['property'])) {
 			throw new \InvalidArgumentException('The property option must be specified!');
 		}
+		$setter = 'set' . ucfirst($options['property']);
+		if(!$classMetadata->getReflectionClass()->hasMethod($setter)) {
+			return false;
+		}
 		$property = $classMetadata->getReflectionProperty($options['property']);
 		$create = !isset($options['create']) || $options['create'];
 		if($annotation = $this->reader->getPropertyAnnotation($property, 'Layer\\Data\\Metadata\\Annotation\\LockedProperty')) {
