@@ -4,19 +4,17 @@
 {% spaceless %}
 
 	{% set escape = true %}
-	{% set link = false %}
+	{% set link_url = null %}
 
-	{#
-	{% if(columnKey == dataType.titleField) %}
-		{% set link = true %}
+	{% if(repository.hasCmsNode('edit') and repository.isTitleProperty({'property':columnKey})) %}
+		{% set link_url = cms_url( repository.getCmsNode('edit').getPath(), {'id': row.id} ) %}
 	{% endif %}
-	#}
 
 	{% if(escape) %}
 		{% set value = value|escape %}
 	{% endif %}
 
-	{% if link %}<a href="{{ cms_url(repository, 'edit', {'id': row.id}) }}">{% endif %}{{ value|raw }}{% if link %}</a>{% endif %}
+	{% if link_url is not null %}<a href="{{ link_url }}">{% endif %}{{ value|raw }}{% if link_url is not null %}</a>{% endif %}
 
 {% endspaceless %}
 {% endblock %}

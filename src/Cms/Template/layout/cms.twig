@@ -3,6 +3,8 @@
 {% table_theme '@cms/block/table.twig' %}
 {% paginator_theme '@cms/block/paginator.twig' %}
 
+{% block title %}{% if title is defined %}{{ title }} | {% endif %}CMS | {{ parent() }}{% endblock %}
+
 {% block stylesheets %}
 
 	{{ parent() }}

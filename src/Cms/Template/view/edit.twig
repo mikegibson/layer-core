@@ -1,5 +1,4 @@
-{% extends "@cms/layout/cms.twig" %}
-{% form_theme form "@cms/form/cms.twig" %}
+{% extends "@cms/layout/cms_repository_form.twig" %}
 
 {% if singularName is not defined %}
 	{% set singularName = repository.getEntityHumanName() %}
@@ -8,17 +7,3 @@
 {% if title is not defined %}
 	{% set title = 'Edit ' ~ singularName %}
 {% endif %}
-
-{% block title %}{{ title }} | {{ parent() }}{% endblock %}
-
-{% block content_header %}
-
-	<h1>{{ title }}</h1>
-
-{% endblock %}
-
-{% block content_inner %}
-
-	{{ form( form ) }}
-
-{% endblock %}

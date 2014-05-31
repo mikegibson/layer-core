@@ -1,4 +1,4 @@
-{% extends '@cms/layout/cms.twig' %}
+{% extends '@cms/layout/cms_repository.twig' %}
 
 {% if pluralName is not defined %}
 	{% set pluralName = repository.getEntityHumanName({plural: true}) %}
@@ -8,15 +8,7 @@
 	{% set title = 'List ' ~ pluralName %}
 {% endif %}
 
-{% set childNodes = node.visibleChildNodes %}
-
-{% block title %}{{ title }} | {{ parent() }}{% endblock %}
-
-{% block content %}
-
-	<h1>{{ title }}</h1>
-
-	{% include '@cms/element/nav_repository' %}
+{% block content_inner %}
 
 	{{ table( paginator ) }}
 
