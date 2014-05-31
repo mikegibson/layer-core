@@ -9,8 +9,8 @@
 
 		{% block meta %}
 		<meta charset="{{ app_charset }}" />
-		{% if block('meta_description') is not empty %}
-		<meta name="description" content="{% block meta_description %}{% endblock %}">
+		{% if meta_description is defined %}
+		<meta name="description" content="{{ meta_description }}">
 		{% endif %}
 		{% endblock %}
 
