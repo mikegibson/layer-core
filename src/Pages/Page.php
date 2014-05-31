@@ -4,6 +4,7 @@ namespace Layer\Pages;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Behavior;
+use Layer\Data\EntityTrait\TreeTrait;
 use Layer\Data\Metadata\Annotation as Layer;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -12,6 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Entity
  * @ORM\Table(name="content_pages")
+ * @Behavior\Tree(type="nested")
  * @Layer\CrudEntity
  * @Layer\EntityName("pages")
  */
@@ -50,6 +52,20 @@ class Page {
 	 * @Layer\HtmlContent
 	 */
 	protected $content;
+
+	use TreeTrait;
+
+	/**
+	 * @Behavior\TreeParent
+	 * @ORM\ManyToOne(targetEntity="Page", inversedBy="children")
+	 * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
+	 */
+	protected $parent;
+
+	/**
+	 * @ORM\OneToMany(targetEntity="Page", mappedBy="parent")
+	 */
+	protected $children;
 
 	/**
 	 * @ORM\Column(type="datetime")
@@ -111,6 +127,10 @@ class Page {
 
 	public function setContent($content) {
 		$this->content = $content;
+	}
+
+	public function __toString() {
+		return $this->getTitle();
 	}
 
 }
