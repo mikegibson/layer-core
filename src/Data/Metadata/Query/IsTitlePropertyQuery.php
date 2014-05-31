@@ -19,7 +19,7 @@ class IsTitlePropertyQuery extends PropertyAnnotationQuery {
 	}
 
 	protected function getResultFromAnnotation(ClassMetadata $classMetadata, $annotation, array $options) {
-		if(is_a($annotation, $this->annotationClass)) {
+		if(is_a($annotation, $this->getAnnotationClass())) {
 			return true;
 		}
 		if(!empty($options['strict'])) {
