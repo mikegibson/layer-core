@@ -4,7 +4,6 @@ namespace Layer\Pages;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Behavior;
-use Layer\Data\EntityTrait\TreeTrait;
 use Layer\Data\Metadata\Annotation as Layer;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -53,8 +52,6 @@ class Page {
 	 */
 	protected $content;
 
-	use TreeTrait;
-
 	/**
 	 * @Behavior\TreeParent
 	 * @ORM\ManyToOne(targetEntity="Page", inversedBy="children")
@@ -63,7 +60,40 @@ class Page {
 	protected $parent;
 
 	/**
+	 * @var int $lft
+	 *
+	 * @Behavior\TreeLeft
+	 * @ORM\Column(type="integer")
+	 */
+	protected $lft;
+
+	/**
+	 * @var int $rght
+	 *
+	 * @Behavior\TreeRight
+	 * @ORM\Column(type="integer")
+	 */
+	protected $rgt;
+
+	/**
+	 * @var int|null $root
+	 *
+	 * @Behavior\TreeRoot
+	 * @ORM\Column(type="integer", nullable=true)
+	 */
+	protected $root;
+
+	/**
+	 * @var int $level
+	 *
+	 * @Behavior\TreeLevel
+	 * @ORM\Column(name="lvl", type="integer")
+	 */
+	protected $level;
+
+	/**
 	 * @ORM\OneToMany(targetEntity="Page", mappedBy="parent")
+	 * @Layer\InvisibleProperty
 	 */
 	protected $children;
 
@@ -109,6 +139,45 @@ class Page {
 		return $this->content;
 	}
 
+	/**
+	 * @return Page|null
+	 */
+	public function getParent() {
+		return $this->parent;
+	}
+
+	public function getChildren() {
+		return $this->children;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getLeft() {
+		return $this->lft;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getRight() {
+		return $this->rgt;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getRoot() {
+		return $this->root;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getLevel() {
+		return $this->level;
+	}
+
 	public function getCreated() {
 		return $this->created;
 	}
@@ -127,6 +196,10 @@ class Page {
 
 	public function setContent($content) {
 		$this->content = $content;
+	}
+
+	public function setParent($parent) {
+		$this->parent = $parent;
 	}
 
 	public function __toString() {
