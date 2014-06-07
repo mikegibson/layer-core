@@ -30,6 +30,7 @@ use Doctrine\ORM\Mapping\Driver\YamlDriver;
 use Gedmo\Sluggable\SluggableListener;
 use Gedmo\Timestampable\TimestampableListener;
 use Gedmo\Tree\TreeListener;
+use Layer\Console\Command\SchemaCommand;
 use Layer\Data\Metadata\Query\GetEditablePropertiesQuery;
 use Layer\Data\Metadata\Query\GetEntityCrudQuery;
 use Layer\Data\Metadata\Query\GetEntityHumanNameQuery;
@@ -519,6 +520,15 @@ class DataProvider implements ServiceProviderInterface {
 		$app->extend('form.extensions', function ($extensions) use($app) {
 			$extensions[] = new DoctrineOrmExtension($app['orm.manager_registry']);
 			return $extensions;
+		});
+
+		$app['console.commands.schema'] = $app->share(function() {
+			return new SchemaCommand();
+		});
+
+		$app->extend('console', function(\Knp\Console\Application $consoleApp) use($app) {
+			$consoleApp->add($app['console.commands.schema']);
+			return $consoleApp;
 		});
 
 	}
