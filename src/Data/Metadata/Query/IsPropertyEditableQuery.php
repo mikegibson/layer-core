@@ -63,6 +63,7 @@ class IsPropertyEditableQuery implements QueryInterface {
 			if($annotation->editable === CrudProperty::EDITABLE_ON_UPDATE) {
 				return !$create;
 			}
+			throw new \RuntimeException('The editable property has an invalid value.');
 		}
 		foreach($this->bannedAnnotations as $annotationName) {
 			if($this->reader->getPropertyAnnotation($property, $annotationName)) {
