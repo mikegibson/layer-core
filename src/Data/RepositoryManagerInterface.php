@@ -2,7 +2,17 @@
 
 namespace Layer\Data;
 
+use Doctrine\ORM\EntityManagerInterface;
+
 interface RepositoryManagerInterface {
+
+	public function loadRepository(EntityManagerInterface $entityManager, $entityClass);
+
+	/**
+	 * @param ManagedRepositoryInterface $repository
+	 * @return mixed
+	 */
+	public function registerRepository(ManagedRepositoryInterface $repository);
 
 	/**
 	 * Gets the repository class for the given name

@@ -2,17 +2,19 @@
 
 namespace Layer\Node;
 
-abstract class OrphanControllerNode extends OrphanNode implements ControllerNodeInterface {
+use Layer\Action\ActionInterface;
+
+abstract class OrphanControllerNode extends OrphanNode implements ControllerNodeInterface, ActionInterface {
 
 	public function registerChildNode(NodeInterface $childNode) {
 		if(!$childNode instanceof ControllerNodeInterface) {
 			throw new \InvalidArgumentException('Child nodes must implement ControllerNodeInterface.');
 		}
-		return parent::registerChildNode($childNode);
+		parent::registerChildNode($childNode);
 	}
 
-	protected function createWrappedNode(NodeInterface $baseNode, $key = null, $label = null, $baseChildrenAccessible = true) {
-		return new WrappedControllerNode($baseNode, $this, $key, $label, $baseChildrenAccessible);
+	protected function createWrappedNode(NodeInterface $baseNode, $name = null, $label = null, $baseChildrenAccessible = true) {
+		return new WrappedControllerNode($baseNode, $this, $name, $label, $baseChildrenAccessible);
 	}
 
 	public function isVisible() {

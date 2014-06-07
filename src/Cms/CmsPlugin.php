@@ -12,7 +12,6 @@ use Layer\Cms\Data\Metadata\Query\GetCmsEntityQuery;
 use Layer\Cms\Data\Metadata\Query\GetCmsEntitySlugQuery;
 use Layer\Cms\View\CmsHelper;
 use Layer\Cms\View\TwigCmsExtension;
-use Layer\Controller\NodeController;
 use Layer\Data\ManagedRepositoryEvent;
 use Layer\Data\Metadata\QueryCollection;
 use Layer\Node\ControllerNode;
@@ -21,6 +20,7 @@ use Layer\Node\WrappedControllerNode;
 use Layer\Plugin\Plugin;
 use Silex\Application;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class CmsProvider
@@ -35,16 +35,23 @@ class CmsPlugin extends Plugin {
 
 		$app = $this->app;
 
-		$app['cms.node_controller'] = $app->share(function() use($app) {
-			return new NodeController($app['cms.root_node'], $app['twig.view']);
-		});
-
 		$app['cms.controllers'] = $app->share(function () use ($app) {
 
 			$cms = $app['controllers_factory'];
 
-			$cms->match('/{node}', 'cms.node_controller:dispatch')
+			$cms->match('/{node}', function(Request $request) use($app) {
+					return $app['action_dispatcher']->dispatch($request->get('node'), $request);
+				})
 				->assert('node', '[a-z0-9\-/]*')
+				->beforeMatch(function($attrs) use($app) {
+					try {
+						$node = trim($attrs['node'], '/');
+						$attrs['node'] = $app['cms.root_node']->getDescendent($node);
+					} catch(\InvalidArgumentException $e) {
+						return false;
+					}
+					return $attrs;
+				})
 				->bind('cms');
 
 			return $cms;

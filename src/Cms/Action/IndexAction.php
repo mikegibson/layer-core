@@ -2,9 +2,9 @@
 
 namespace Layer\Cms\Action;
 
+use Layer\Action\ActionInterface;
 use Layer\Cms\Data\CmsRepositoryInterface;
 use Layer\Cms\Data\Paginator;
-use Layer\Controller\Action\ActionInterface;
 use Layer\Data\Paginator\PaginatorRequest;
 use Layer\Data\Paginator\PaginatorResult;
 use Symfony\Component\HttpFoundation\Request;

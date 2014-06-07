@@ -12,7 +12,7 @@ interface ControllerNodeInterface extends NodeInterface {
 
 	public function getActionLabel();
 
-	public function invokeAction(Request $request);
+	public function invoke(Request $request);
 
 	public function getTemplate();
 

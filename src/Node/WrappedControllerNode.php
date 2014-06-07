@@ -2,9 +2,10 @@
 
 namespace Layer\Node;
 
+use Layer\Action\ActionInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class WrappedControllerNode extends WrappedNode implements ControllerNodeInterface {
+class WrappedControllerNode extends WrappedNode implements ControllerNodeInterface, ActionInterface {
 
 	public function __construct(
 		ControllerNodeInterface $baseNode,
@@ -34,9 +35,9 @@ class WrappedControllerNode extends WrappedNode implements ControllerNodeInterfa
 
 	public function getVisibleChildNodes() {
 		$nodes = [];
-		foreach($this->getChildNodes() as $key => $node) {
+		foreach($this->getChildNodes() as $name => $node) {
 			if($node->isVisible()) {
-				$nodes[$key] = $node;
+				$nodes[$name] = $node;
 			}
 		}
 		return $nodes;
@@ -46,12 +47,12 @@ class WrappedControllerNode extends WrappedNode implements ControllerNodeInterfa
 		return $this->getBaseNode()->getTemplate();
 	}
 
-	public function invokeAction(Request $request) {
-		return $this->getBaseNode()->invokeAction($request);
+	public function invoke(Request $request) {
+		return $this->getBaseNode()->invoke($request);
 	}
 
-	protected function createWrappedNode(NodeInterface $baseNode, $key = null, $label = null, $baseChildrenAccessible = true) {
-		return new WrappedControllerNode($baseNode, $this, $key, $label, $baseChildrenAccessible);
+	protected function createWrappedNode(NodeInterface $baseNode, $name = null, $label = null, $baseChildrenAccessible = true) {
+		return new WrappedControllerNode($baseNode, $this, $name, $label, $baseChildrenAccessible);
 	}
 
 	/**

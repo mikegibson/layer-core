@@ -4,6 +4,7 @@ namespace Layer\Pages;
 
 use Layer\Plugin\Plugin;
 use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class PagesPlugin
@@ -16,40 +17,45 @@ class PagesPlugin extends Plugin {
 
 	public function register() {
 
-		$app = $this->app;
+		$this->app['pages.entity_class'] = 'Layer\\Pages\\Page';
 
-		$app['pages.controllers'] = $app->share(function () use ($app) {
-
-			$pages = $app['controllers_factory'];
-
-			$pages->get('/{record}', 'pages.controllers.pages_controller:dispatch')
-				->value('action', 'view')
-				->convert('record', function ($page) use ($app) {
-
-					$query = $app['data.content/pages']->query()->where('slug', $page);
-
-					if (!$record = $query->first()) {
-						$app->abort(404);
-					}
-
-					return $record;
-
-				});
-
-			return $pages;
-
+		$this->app['pages.repository'] = $this->app->share(function() {
+			return $this->app['orm.rm']->loadRepository($this->app['orm.em'], $this->app['pages.entity_class']);
 		});
 
-		$app['pages.controllers.pages_controller'] = $app->share(function () use ($app) {
+		$this->app['pages.root_node'] = $this->app->share(function() {
+			return new PageNode($this->app['pages.repository']);
+		});
 
-			return new PagesController($app);
+		$this->app['pages.controllers'] = $this->app->share(function () {
+
+			$pages = $this->app['controllers_factory'];
+
+			$pages->get('/{node}', function(Request $request) {
+					return $this->app['action_dispatcher']->dispatch($request->get('node'), $request);
+				})
+				->assert('node', '[a-z0-9\-/]*')
+				->beforeMatch(function($attrs) {
+					try {
+						$node = trim($attrs['node'], '/');
+						$attrs['node'] = $this->app['pages.root_node']->getDescendent($node);
+					} catch(\InvalidArgumentException $e) {
+						return false;
+					}
+					return $attrs;
+				})
+				->bind('pages');
+
+			return $pages;
 
 		});
 
 	}
 
 	public function boot() {
-		$this->app['orm.rm']->loadRepository($this->app['orm.em'], 'Layer\\Pages\\Page');
+
+		$this->app['pages.repository'];
+
 	}
 
 }

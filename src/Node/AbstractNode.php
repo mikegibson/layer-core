@@ -10,39 +10,39 @@ abstract class AbstractNode implements NodeInterface {
 		return $this->childNodes;
 	}
 
-	public function hasChildNode($key) {
-		return isset($this->childNodes[$key]);
+	public function hasChildNode($name) {
+		return isset($this->childNodes[$name]);
 	}
 
-	public function getChildNode($key) {
-		if(!$this->hasChildNode($key)) {
-			throw new \InvalidArgumentException(sprintf('Child node %s does not exist.', $key));
+	public function getChildNode($name) {
+		if(!$this->hasChildNode($name)) {
+			throw new \InvalidArgumentException(sprintf('Child node %s does not exist.', $name));
 		}
-		return $this->childNodes[$key];
+		return $this->childNodes[$name];
 	}
 
-	public function wrapChildNode(NodeInterface $baseNode, $key = null, $label = null, $baseChildrenAccessible = true) {
-		$wrappedNode = $this->createWrappedNode($baseNode, $key, $label, $baseChildrenAccessible);
+	public function wrapChildNode(NodeInterface $baseNode, $name = null, $label = null, $baseChildrenAccessible = true) {
+		$wrappedNode = $this->createWrappedNode($baseNode, $name, $label, $baseChildrenAccessible);
 		$this->registerChildNode($wrappedNode);
 		return $wrappedNode;
 	}
 
-	protected function createWrappedNode(NodeInterface $baseNode, $key = null, $label = null, $baseChildrenAccessible = true) {
-		return new WrappedNode($baseNode, $this, $key, $label, $baseChildrenAccessible);
+	protected function createWrappedNode(NodeInterface $baseNode, $name = null, $label = null, $baseChildrenAccessible = true) {
+		return new WrappedNode($baseNode, $this, $name, $label, $baseChildrenAccessible);
 	}
 
 	public function registerChildNode(NodeInterface $node, $overwrite = false, $prepend = false) {
 		if($node->getParentNode() !== $this) {
 			throw new \RuntimeException('Nodes being registered must return this node from their getParentNode method.');
 		}
-		$key = $node->getKey();
-		if(!$overwrite && $this->hasChildNode($key)) {
-			throw new \InvalidArgumentException(sprintf('Node key %s is already registered.', $key));
+		$name = $node->getName();
+		if(!$overwrite && $this->hasChildNode($name)) {
+			throw new \InvalidArgumentException(sprintf('Node name %s is already registered.', $name));
 		}
 		if($prepend) {
-			$this->childNodes = array_merge([$key => null], $this->getChildNodes(), [$key => $node]);
+			$this->childNodes = array_merge([$name => null], $this->getChildNodes(), [$name => $node]);
 		} else {
-			$this->childNodes[$key] = $node;
+			$this->childNodes[$name] = $node;
 		}
 	}
 
@@ -50,17 +50,25 @@ abstract class AbstractNode implements NodeInterface {
 		$parts = [];
 		$node = $this;
 		while(null !== ($parent = $node->getParentNode())) {
-			array_unshift($parts, $node->getKey());
+			array_unshift($parts, $node->getName());
 			$node = $parent;
 		}
 		return implode(static::SEPARATOR, $parts);
 	}
 
 	public function getDescendent($path) {
-		$keys = explode(static::SEPARATOR, $path);
+		$parts = explode(static::SEPARATOR, $path);
 		$node = $this;
-		foreach($keys as $key) {
-			$node = $node->getChildNode($key);
+		foreach($parts as $name) {
+			$node = $node->getChildNode($name);
+		}
+		return $node;
+	}
+
+	public function getRootNode() {
+		$node = $this;
+		while(($parentNode = $node->getParentNode()) instanceof NodeInterface) {
+			$node = $parentNode;
 		}
 		return $node;
 	}

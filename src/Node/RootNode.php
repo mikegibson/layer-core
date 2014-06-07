@@ -4,17 +4,17 @@ namespace Layer\Node;
 
 class RootNode extends OrphanNode {
 
-	private $key;
+	private $name;
 
 	private $label;
 
-	public function __construct($key = 'root', $label = 'Root') {
-		$this->key = $key;
+	public function __construct($name = 'root', $label = 'Root') {
+		$this->name = $name;
 		$this->label = $label;
 	}
 
-	public function getKey() {
-		return $this->key;
+	public function getName() {
+		return $this->name;
 	}
 
 	public function getLabel() {

@@ -2,10 +2,10 @@
 
 namespace Layer\Node;
 
-use Layer\Controller\Action\ActionInterface;
+use Layer\Action\ActionInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class ControllerNode extends OrphanControllerNode implements ControllerNodeInterface {
+class ControllerNode extends OrphanControllerNode implements ControllerNodeInterface, ActionInterface {
 
 	private $routeName;
 
@@ -14,12 +14,12 @@ class ControllerNode extends OrphanControllerNode implements ControllerNodeInter
 	 */
 	private $action;
 
-	private $key;
+	private $name;
 
-	public function __construct($routeName, ActionInterface $action, $key = null) {
+	public function __construct($routeName, ActionInterface $action, $name = null) {
 		$this->routeName = $routeName;
 		$this->action = $action;
-		$this->key = $key;
+		$this->name = $name;
 	}
 
 	public function getRouteName() {
@@ -34,9 +34,9 @@ class ControllerNode extends OrphanControllerNode implements ControllerNodeInter
 		return $this->getAction()->getLabel();
 	}
 
-	public function getKey() {
-		if($this->key !== null) {
-			return $this->key;
+	public function getName() {
+		if($this->name !== null) {
+			return $this->name;
 		}
 		return $this->getActionName();
 	}
@@ -49,8 +49,12 @@ class ControllerNode extends OrphanControllerNode implements ControllerNodeInter
 		return $this->getAction()->getTemplate();
 	}
 
-	public function invokeAction(Request $request) {
-		return $this->getAction()->invoke($request);
+	public function invoke(Request $request) {
+		$ret = $this->getAction()->invoke($request);
+		if(is_array($ret)) {
+			$ret['node'] = $this;
+		}
+		return $ret;
 	}
 
 	public function isVisible() {

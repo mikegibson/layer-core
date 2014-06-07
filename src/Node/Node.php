@@ -4,20 +4,20 @@ namespace Layer\Node;
 
 class Node extends AbstractNode {
 
-	protected $key;
+	protected $name;
 
 	protected $label;
 
 	protected $parentNode;
 
-	public function __construct($key, $label, NodeInterface $parentNode) {
-		$this->key = $key;
+	public function __construct($name, $label, NodeInterface $parentNode) {
+		$this->name = $name;
 		$this->label = $label;
 		$this->parentNode = $parentNode;
 	}
 
-	public function getKey() {
-		return $this->key;
+	public function getName() {
+		return $this->name;
 	}
 
 	public function getLabel() {

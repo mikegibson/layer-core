@@ -2,7 +2,7 @@
 
 namespace Layer\Cms\Action;
 
-use Layer\Controller\Action\ActionInterface;
+use Layer\Action\ActionInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class DashboardAction implements ActionInterface {

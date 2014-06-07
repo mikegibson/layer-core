@@ -36,8 +36,8 @@ class WrappedListNode extends WrappedNode implements ListNodeInterface {
 		return parent::getBaseNode();
 	}
 
-	protected function createWrappedNode(NodeInterface $baseNode, $key = null, $label = null, $baseChildrenAccessible = true) {
-		return new WrappedListNode($baseNode, $this, $key, $label, $baseChildrenAccessible);
+	protected function createWrappedNode(NodeInterface $baseNode, $name = null, $label = null, $baseChildrenAccessible = true) {
+		return new WrappedListNode($baseNode, $this, $name, $label, $baseChildrenAccessible);
 	}
 
 }

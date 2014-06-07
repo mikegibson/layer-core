@@ -39,7 +39,7 @@
 {% block table_body_row %}
 	<tr class="tr-{{ rowKey }}">
 		{% for columnKey in table.columns|keys %}
-		{{ table_body_cell( table, attribute(row, columnKey), columnKey , rowKey, row) }}
+		{{ table_body_cell( table, attribute(row, columnKey) ~ '', columnKey , rowKey, row) }}
 		{% endfor %}
 	</tr>
 {% endblock %}

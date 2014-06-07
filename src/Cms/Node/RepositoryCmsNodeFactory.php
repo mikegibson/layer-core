@@ -2,12 +2,12 @@
 
 namespace Layer\Cms\Node;
 
+use Layer\Action\ActionInterface;
 use Layer\Application;
 use Layer\Cms\Action\AddAction;
 use Layer\Cms\Action\EditAction;
 use Layer\Cms\Action\IndexAction;
 use Layer\Cms\Data\CmsRepositoryInterface;
-use Layer\Controller\Action\ActionInterface;
 use Layer\Node\ControllerNode;
 
 class RepositoryCmsNodeFactory implements RepositoryCmsNodeFactoryInterface {
@@ -24,25 +24,20 @@ class RepositoryCmsNodeFactory implements RepositoryCmsNodeFactoryInterface {
 	 */
 	public function getRepositoryCmsNodes(CmsRepositoryInterface $repository) {
 		$crud = $repository->queryMetadata('getEntityCrud');
-		$nodes = [];
-		if($crud->read) {
-			$nodes[] = $this->createIndexNode($repository);
+		if(!$crud->read) {
+			return [];
 		}
+		$nodes = [];
+		$rootNode = $this->getRootCmsNode();
+		$indexNode = $this->createIndexNode($repository);
+		$name = $repository->getCmsSlug();
+		$label = $repository->queryMetadata('getEntityHumanName', ['plural' => true, 'capitalize' => true]);
+		$nodes[] = $repositoryRoot = $rootNode->wrapChildNode($indexNode, $name, $label);
 		if($crud->create) {
-			$nodes[] = $this->createAddNode($repository);
+			$nodes[] = $repositoryRoot->wrapChildNode($this->createAddNode($repository));
 		}
 		if($crud->update) {
-			$nodes[] = $this->createEditNode($repository);
-		}
-		$rootNode = null;
-		foreach($nodes as $k => $node) {
-			if($rootNode === null) {
-				$key = $repository->getCmsSlug();
-				$label = $repository->queryMetadata('getEntityHumanName', ['plural' => true, 'capitalize' => true]);
-				$nodes[$k] = $rootNode = $this->getRootCmsNode()->wrapChildNode($node, $key, $label);
-			} else {
-				$nodes[$k] = $rootNode->wrapChildNode($node);
-			}
+			$nodes[] = $repositoryRoot->wrapChildNode($this->createEditNode($repository));
 		}
 		return $nodes;
 	}

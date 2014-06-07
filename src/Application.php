@@ -3,10 +3,12 @@
 namespace Layer;
 
 use Knp\Provider\ConsoleServiceProvider;
+use Layer\Action\ActionDispatcher;
 use Layer\Asset\AssetServiceProvider;
 use Layer\Config\ConfigServiceProvider;
 use Layer\Data\DataProvider;
 use Layer\Plugin\PluginServiceProvider;
+use Layer\Route\UrlMatcher;
 use Layer\View\Twig\TwigServiceProvider;
 use Layer\Utility\ArrayHelper;
 use Layer\Utility\Inflector;
@@ -119,6 +121,16 @@ class Application extends \Silex\Application {
 		));
 		$app->register(new DataProvider());
 
+		$app['route_class'] = 'Layer\\Route\\Route';
+
+		$app['url_matcher'] = $app->share(function() use($app) {
+			return new UrlMatcher($app['routes'], $app['request_context']);
+		});
+
+		$app['action_dispatcher'] = $app->share(function() use($app) {
+			return new ActionDispatcher($app['twig.view']);
+		});
+
 		$app['assets.js.modernizr'] = $app->share(function () use ($app) {
 			$asset = $app['assetic.factory']->createAsset([
 				'@layer/js/modernizr.js'
@@ -150,13 +162,6 @@ class Application extends \Silex\Application {
 				date_default_timezone_set($timezone);
 			}
 
-			// @todo Finish config routing
-		/*	$mounts = $this->config('routes.mount') ? : [];
-
-			foreach ($mounts as $prefix => $controllers) {
-				$this->mount($prefix, $this[$controllers]);
-			}
-*/
 			$this['assetic.asset_manager']->set('js_modernizr', $this['assets.js.modernizr']);
 
 		}

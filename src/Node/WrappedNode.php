@@ -28,11 +28,11 @@ class WrappedNode extends AbstractNode {
 		$this->baseChildrenAccessible = $baseChildrenAccessible;
 	}
 
-	public function getKey() {
+	public function getName() {
 		if($this->name !== null) {
 			return $this->name;
 		}
-		return $this->getBaseNode()->getKey();
+		return $this->getBaseNode()->getName();
 	}
 
 	public function getLabel() {
@@ -54,31 +54,31 @@ class WrappedNode extends AbstractNode {
 		if(!$this->areBaseChildrenAccessible()) {
 			return parent::getChildNodes();
 		}
-		$keys = array_keys(array_merge($this->getBaseNode()->getChildNodes(), $this->childNodes));
+		$names = array_keys(array_merge($this->getBaseNode()->getChildNodes(), $this->childNodes));
 		$nodes = [];
-		foreach($keys as $key) {
-			$nodes[$key] = $this->getChildNode($key);
+		foreach($names as $name) {
+			$nodes[$name] = $this->getChildNode($name);
 		}
 		return $nodes;
 	}
 
-	public function hasChildNode($key) {
+	public function hasChildNode($name) {
 		if(!$this->areBaseChildrenAccessible()) {
-			return parent::hasChildNode($key);
+			return parent::hasChildNode($name);
 		}
-		return $this->baseNode->hasChildNode($key) || isset($this->childNodes[$key]);
+		return $this->baseNode->hasChildNode($name) || isset($this->childNodes[$name]);
 	}
 
-	public function getChildNode($key) {
+	public function getChildNode($name) {
 		if(!$this->areBaseChildrenAccessible()) {
-			return parent::getChildNode($key);
+			return parent::getChildNode($name);
 		}
-		if(!isset($this->childNodes[$key])) {
-			$node = $this->getBaseNode()->getChildNode($key);
+		if(!isset($this->childNodes[$name])) {
+			$node = $this->getBaseNode()->getChildNode($name);
 			$class = get_class($this);
-			$this->childNodes[$key] = new $class($node, $this);
+			$this->childNodes[$name] = new $class($node, $this);
 		}
-		return $this->childNodes[$key];
+		return $this->childNodes[$name];
 	}
 
 	protected function areBaseChildrenAccessible() {

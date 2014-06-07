@@ -12,7 +12,7 @@ class RootListNode extends ListNode {
 		return null;
 	}
 
-	public function getKey() {
+	public function getName() {
 		return null;
 	}
 

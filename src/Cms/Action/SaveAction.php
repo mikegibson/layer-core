@@ -2,10 +2,10 @@
 
 namespace Layer\Cms\Action;
 
+use Layer\Action\ActionInterface;
 use Layer\Cms\Data\CmsRecordFormType;
 use Layer\Cms\Data\CmsRepositoryInterface;
 use Layer\Cms\Data\EntityFormType;
-use Layer\Controller\Action\ActionInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;

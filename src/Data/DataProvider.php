@@ -10,6 +10,7 @@ namespace Layer\Data;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\Common\Annotations\CachedReader;
 use Doctrine\Common\Cache\ApcCache;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\CacheProvider;
@@ -78,9 +79,18 @@ class DataProvider implements ServiceProviderInterface {
 			AnnotationRegistry::registerLoader([$app['class_loader'], 'loadClass']);
 		});
 
-		$app['annotations.reader'] = $app->share(function() use($app) {
+		$app['annotations.base_reader'] = $app->share(function() use($app) {
 			$app['annotations.initializer']();
 			return new AnnotationReader();
+		});
+
+		$app['annotations.cache'] = $app->share(function() use($app) {
+			return $app['orm.cache.locator']('default', 'annotations', []);
+		});
+
+		$app['annotations.reader'] = $app->share(function() use($app) {
+			$app['annotations.initializer']();
+			return new CachedReader($app['annotations.base_reader'], $app['annotations.cache'], false);
 		});
 
 		$app['annotations.loader'] = $app->share(function() use($app) {
@@ -500,10 +510,14 @@ class DataProvider implements ServiceProviderInterface {
 			return new LazyLoadingMetadataFactory($app['annotations.loader']);
 		});
 
-		$app->extend('form.extensions', function ($extensions) use($app) {
+		$app['orm.manager_registry'] = $app->share(function() use($app) {
 			$managerRegistry = new ManagerRegistry(null, [], ['orm.em'], null, null, $app['orm.proxies_namespace']);
 			$managerRegistry->setContainer($app);
-			$extensions[] = new DoctrineOrmExtension($managerRegistry);
+			return $managerRegistry;
+		});
+
+		$app->extend('form.extensions', function ($extensions) use($app) {
+			$extensions[] = new DoctrineOrmExtension($app['orm.manager_registry']);
 			return $extensions;
 		});
 

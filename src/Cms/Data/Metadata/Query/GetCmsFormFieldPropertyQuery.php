@@ -12,7 +12,7 @@ class GetCmsFormFieldPropertyQuery extends PropertyAnnotationQuery {
 	protected $propertyOrmQuery;
 
 	protected $typeMap = [
-		'text' => 'textarea'
+	//	'text' => 'textarea'
 	];
 
 	public function __construct(Reader $reader, GetPropertyOrmQuery $propertyOrmQuery) {

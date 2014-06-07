@@ -42,8 +42,7 @@ class RepositoryManager implements RepositoryManagerInterface {
 	 */
 	public function loadRepository(EntityManagerInterface $entityManager, $entityClass) {
 		$repository = $this->factory->getRepository($entityManager, $entityClass);
-		$this->registerRepository($repository);
-		return $this;
+		return $this->registerRepository($repository);
 	}
 
 	/**
@@ -58,10 +57,12 @@ class RepositoryManager implements RepositoryManagerInterface {
 		if($this->hasRepository($name)) {
 			throw new \LogicException(sprintf('Repository %s is already registered.', $name));
 		}
+
 		$event = new ManagedRepositoryEvent($repository);
 		$this->eventDispatcher->dispatch(ManagedRepositoryEvent::REGISTER, $event);
-		$this->repositories[$name] = $event->getRepository();
-		return $this;
+		$repository = $event->getRepository();
+
+		return $this->repositories[$name] = $repository;
 	}
 
 	/**

@@ -50,8 +50,8 @@ class ControllerNodeListNode extends ListNode {
 		return $this->parentNode;
 	}
 
-	public function getKey() {
-		return $this->getControllerNode()->getKey();
+	public function getName() {
+		return $this->getControllerNode()->getName();
 	}
 
 	public function getUrl(array $params = []) {
