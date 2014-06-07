@@ -83,6 +83,8 @@ class Application extends \Silex\Application {
 			return $app['config']->read('debug');
 		});
 
+		$this->registerErrorHandlers();
+
 		/**
 		 * Register service providers
 		 */
@@ -236,6 +238,34 @@ class Application extends \Silex\Application {
 				'ignoreMissing' => true
 			]
 		];
+	}
+
+	protected function registerErrorHandlers() {
+
+		/**
+		 * Turn on some debugging features if in debug mode
+		 */
+		if ($this['debug']) {
+
+			error_reporting(-1);
+
+			\Symfony\Component\Debug\ErrorHandler::register();
+
+			if ('cli' !== php_sapi_name()) {
+				\Symfony\Component\Debug\ExceptionHandler::register();
+				// CLI - display errors only if they're not already logged to STDERR
+			} elseif (!ini_get('log_errors') || ini_get('error_log')) {
+				ini_set('display_errors', 1);
+			}
+
+			$this->error(function (\Exception $e) {
+				return new \Symfony\Component\HttpFoundation\Response(
+					nl2br($e->getMessage() . PHP_EOL . $e->getTraceAsString())
+				);
+			});
+
+		}
+
 	}
 
 }
