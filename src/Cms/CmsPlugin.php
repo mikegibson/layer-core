@@ -20,7 +20,6 @@ use Layer\Node\WrappedControllerNode;
 use Layer\Plugin\Plugin;
 use Silex\Application;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class CmsProvider
@@ -36,30 +35,7 @@ class CmsPlugin extends Plugin {
 	public function register() {
 
 		$this->app['cms.controllers'] = $this->app->share(function () {
-
-			$cms = $this->app['controllers_factory'];
-
-			$cms->match('/{node}', function(Request $request) {
-					return $this->app['action_dispatcher']->dispatch($request->get('node'), $request);
-				})
-				->assert('node', '[a-z0-9\-/]*')
-				->beforeMatch(function($attrs) {
-					try {
-						$nodePath = trim($attrs['node'], '/');
-						$node = $this->app['cms.root_node'];
-						if($nodePath !== '') {
-							$node = $node->getDescendent($nodePath);;
-						}
-						$attrs['node'] = $node;
-					} catch(\InvalidArgumentException $e) {
-						return false;
-					}
-					return $attrs;
-				})
-				->bind('cms');
-
-			return $cms;
-
+			return $this->app['nodes.controllers_factory']($this->app['cms.root_node']);
 		});
 
 		$this->app['cms.helper'] = $this->app->share(function () {
