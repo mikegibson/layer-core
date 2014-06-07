@@ -8,6 +8,7 @@ use Layer\Asset\AssetServiceProvider;
 use Layer\Config\ConfigServiceProvider;
 use Layer\Config\Configuration;
 use Layer\Data\DataProvider;
+use Layer\Node\ControllerNodeInterface;
 use Layer\Plugin\PluginServiceProvider;
 use Layer\Route\UrlMatcher;
 use Layer\View\Twig\TwigServiceProvider;
@@ -126,7 +127,7 @@ class Application extends \Silex\Application {
 			return new UrlMatcher($app['routes'], $app['request_context']);
 		});
 
-		$app['action_dispatcher'] = $app->share(function() use($app) {
+		$app['actions.dispatcher'] = $app->share(function() use($app) {
 			return new ActionDispatcher($app['twig.view']);
 		});
 
@@ -139,6 +140,36 @@ class Application extends \Silex\Application {
 				'output' => 'js/modernizr.js'
 			]);
 			return $asset;
+		});
+
+		$app['nodes.matcher'] = $app->protect(function(ControllerNodeInterface $node, $key = 'node') {
+			return function(array $attrs) use($node, $key) {
+				try {
+					$nodePath = trim($attrs[$key], '/');
+					if($nodePath !== '') {
+						$node = $node->getDescendent($nodePath);;
+					}
+					$attrs[$key] = $node;
+				} catch(\InvalidArgumentException $e) {
+					return false;
+				}
+				return $attrs;
+			};
+		});
+
+		$app['nodes.dispatcher'] = $app->protect(function($key = 'node') use($app) {
+			return function(Request $request) use($app, $key) {
+				return $app['actions.dispatcher']->dispatch($request->get($key), $request);
+			};
+		});
+
+		$app['nodes.controllers_factory'] = $app->protect(function(ControllerNodeInterface $rootNode, $key = 'node') use($app) {
+			$controllers = $app['controllers_factory'];
+			$controllers->match('/{' . $key . '}', $app['nodes.dispatcher']($key))
+				->assert($key, '.*')
+				->beforeMatch($app['nodes.matcher']($rootNode, $key))
+				->bind($rootNode->getRouteName());
+			return $controllers;
 		});
 
 	}
