@@ -2,18 +2,20 @@
 
 namespace Layer\Action;
 
-use Layer\Node\ControllerNodeInterface;
 use Layer\View\ViewInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
+/**
+ * Class ActionDispatcher
+ * @package Layer\Action
+ */
 class ActionDispatcher {
 
 	/**
 	 * @var \Layer\View\ViewInterface
 	 */
-	private $view;
+	protected $view;
 
 	/**
 	 * @param ViewInterface $view
@@ -23,7 +25,7 @@ class ActionDispatcher {
 	}
 
 	/**
-	 * @param ControllerNodeInterface $node
+	 * @param ActionInterface $action
 	 * @param Request $request
 	 * @return array
 	 */
@@ -34,18 +36,7 @@ class ActionDispatcher {
 			return $data;
 		}
 		$data['action'] = $action;
-		return $this->getView()->render($template, $data);
-	}
-
-	protected function throwNotFoundException() {
-		throw new HttpException(404, 'Page not found.');
-	}
-
-	/**
-	 * @return ViewInterface
-	 */
-	protected function getView() {
-		return $this->view;
+		return $this->view->render($template, $data);
 	}
 
 }
