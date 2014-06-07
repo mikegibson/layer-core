@@ -8,8 +8,6 @@ abstract class Plugin {
 
 	protected $app;
 
-	protected $name;
-
 	protected $depends = [];
 
 	private $__path;
@@ -17,9 +15,6 @@ abstract class Plugin {
 	public function __construct(Application $app) {
 
 		$this->app = $app;
-		if (empty($this->name)) {
-			$app->abort(500, 'No plugin name was specified!');
-		}
 	}
 
 	public function register() {
@@ -30,10 +25,7 @@ abstract class Plugin {
 
 	}
 
-	public function getName() {
-
-		return $this->name;
-	}
+	abstract public function getName();
 
 	public function getPath() {
 

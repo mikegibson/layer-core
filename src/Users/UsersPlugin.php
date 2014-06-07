@@ -6,7 +6,9 @@ use Layer\Plugin\Plugin;
 
 class UsersPlugin extends Plugin {
 
-	protected $name = 'users';
+	public function getName() {
+		return 'users';
+	}
 
 	public function register() {
 

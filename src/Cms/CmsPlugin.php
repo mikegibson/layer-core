@@ -29,7 +29,9 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class CmsPlugin extends Plugin {
 
-	protected $name = 'cms';
+	public function getName() {
+		return 'cms';
+	}
 
 	public function register() {
 

@@ -13,7 +13,9 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class PagesPlugin extends Plugin {
 
-	protected $name = 'pages';
+	public function getName() {
+		return 'pages';
+	}
 
 	public function register() {
 
