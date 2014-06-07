@@ -3,7 +3,6 @@
 namespace Layer\Plugin;
 
 use Layer\Application;
-use Symfony\Component\Debug\Exception\FatalErrorException;
 
 /**
  * Class PluginCollection
@@ -137,14 +136,14 @@ class PluginCollection {
 			foreach ($missing as $dep => $plugins) {
 				$messages[] = sprintf('Plugin %s is required by plugin %s!', $dep, implode(', ', $plugins));
 			}
-			throw new FatalErrorException(implode('; ', $messages));
+			throw new \RuntimeException(implode('; ', $messages));
 		}
 	}
 
 	private function __checkNotBooted() {
 
 		if ($this->__booted) {
-			throw new FatalErrorException('The app has already booted!');
+			throw new \RuntimeException('The app has already booted!');
 		}
 	}
 
