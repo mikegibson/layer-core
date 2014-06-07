@@ -6,6 +6,7 @@ use Knp\Provider\ConsoleServiceProvider;
 use Layer\Action\ActionDispatcher;
 use Layer\Asset\AssetServiceProvider;
 use Layer\Config\ConfigServiceProvider;
+use Layer\Config\Configuration;
 use Layer\Data\DataProvider;
 use Layer\Plugin\PluginServiceProvider;
 use Layer\Route\UrlMatcher;
@@ -85,6 +86,20 @@ class Application extends \Silex\Application {
 			return new StringHelper($app);
 		});
 
+		$app->register(new ConfigServiceProvider());
+
+		/**
+		 * Load config files
+		 */
+		$app->extend('config', function(Configuration $config) use($app) {
+			$config->load($this->getConfigAutoload());
+			return $config;
+		});
+
+		$app['debug'] = $app->protect(function() use($app) {
+			return $app['config']->read('debug');
+		});
+
 		/**
 		 * Register service providers
 		 */
@@ -101,7 +116,6 @@ class Application extends \Silex\Application {
 			'console.version' => '1.0.0',
 			'console.project_directory' => $app['path_root']
 		]);
-		$app->register(new ConfigServiceProvider());
 		$app->register(new TwigServiceProvider(), [
 			'twig.options' => [
 				'cache' => $app['path_cache'] . '/twig',
@@ -150,10 +164,6 @@ class Application extends \Silex\Application {
 	public function boot() {
 
 		if (!$this->booted) {
-
-			$this['config']->lock();
-
-			$this['debug'] = !!$this->config('debug');
 
 			/**
 			 * Set the timezone
@@ -212,6 +222,19 @@ class Application extends \Silex\Application {
 			$request->enableHttpMethodParameterOverride();
 		}
 		return parent::handle($request, $type, $catch);
+	}
+
+	protected function getConfigAutoload() {
+		return [
+			'app' => [
+				'nest' => false
+			],
+			'database',
+			'local' => [
+				'nest' => false,
+				'ignoreMissing' => true
+			]
+		];
 	}
 
 }

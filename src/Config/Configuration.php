@@ -18,8 +18,6 @@ class Configuration {
 
 	protected $_drivers = [];
 
-	protected $_locked = false;
-
 	public function __construct(Application $app) {
 
 		$this->app = $app;
@@ -147,10 +145,6 @@ class Configuration {
 
 	public function write($key, $value = null, $default = false) {
 
-		if ($this->locked()) {
-			throw new \RuntimeException('You cannot write values once the configuration has been locked.');
-		}
-
 		if (is_array($key)) {
 			foreach ($key as $_key => $_value) {
 				$this->write($_key, $_value, $default);
@@ -177,15 +171,7 @@ class Configuration {
 	}
 
 	public function writeDefault($key, $value = null) {
-		return $this->write($key, $value, true);
-	}
-
-	public function lock() {
-		$this->_locked = true;
-	}
-
-	public function locked() {
-		return $this->_locked;
+		$this->write($key, $value, true);
 	}
 
 }
