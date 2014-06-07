@@ -33,20 +33,18 @@ class CmsPlugin extends Plugin {
 
 	public function register() {
 
-		$app = $this->app;
+		$this->app['cms.controllers'] = $this->app->share(function () {
 
-		$app['cms.controllers'] = $app->share(function () use ($app) {
+			$cms = $this->app['controllers_factory'];
 
-			$cms = $app['controllers_factory'];
-
-			$cms->match('/{node}', function(Request $request) use($app) {
-					return $app['action_dispatcher']->dispatch($request->get('node'), $request);
+			$cms->match('/{node}', function(Request $request) {
+					return $this->app['action_dispatcher']->dispatch($request->get('node'), $request);
 				})
 				->assert('node', '[a-z0-9\-/]*')
-				->beforeMatch(function($attrs) use($app) {
+				->beforeMatch(function($attrs) {
 					try {
 						$nodePath = trim($attrs['node'], '/');
-						$node = $app['cms.root_node'];
+						$node = $this->app['cms.root_node'];
 						if($nodePath !== '') {
 							$node = $node->getDescendent($nodePath);;
 						}
@@ -62,22 +60,22 @@ class CmsPlugin extends Plugin {
 
 		});
 
-		$app['cms.helper'] = $app->share(function () use ($app) {
-			return new CmsHelper($app['url_generator']);
+		$this->app['cms.helper'] = $this->app->share(function () {
+			return new CmsHelper($this->app['url_generator']);
 		});
 
-		$app['twig'] = $app->share(
-			$app->extend('twig', function (\Twig_Environment $twig) use ($app) {
+		$this->app['twig'] = $this->app->share(
+			$this->app->extend('twig', function (\Twig_Environment $twig) {
 
-				$twig->addExtension(new TwigCmsExtension($app['cms.helper']));
+				$twig->addExtension(new TwigCmsExtension($this->app['cms.helper']));
 
 				return $twig;
 
 			})
 		);
 
-		$app['assets.js_cms'] = $app->share(function () use ($app) {
-			$asset = $app['assetic.factory']->createAsset([
+		$this->app['assets.js_cms'] = $this->app->share(function () {
+			$asset = $this->app['assetic.factory']->createAsset([
 				'@layer/js/jquery.js',
 				'@cms/js/cms.js'
 			], [
@@ -88,8 +86,8 @@ class CmsPlugin extends Plugin {
 			return $asset;
 		});
 
-		$app['assets.css_cms'] = $app->share(function () use ($app) {
-			$asset = $app['assetic.factory']->createAsset([
+		$this->app['assets.css_cms'] = $this->app->share(function () {
+			$asset = $this->app['assetic.factory']->createAsset([
 				'@cms/scss/cms.scss'
 			], [
 				'compass',
@@ -100,64 +98,64 @@ class CmsPlugin extends Plugin {
 			return $asset;
 		});
 
-		$app['metadata.queries.getCmsEntity'] = $app->share(function() use($app) {
-			return new GetCmsEntityQuery($app['annotations.reader']);
+		$this->app['metadata.queries.getCmsEntity'] = $this->app->share(function() {
+			return new GetCmsEntityQuery($this->app['annotations.reader']);
 		});
 
-		$app['metadata.queries.getCmsEntitySlug'] = $app->share(function() use($app) {
-			return new GetCmsEntitySlugQuery($app['metadata.queries.getCmsEntity'], $app['inflector']);
+		$this->app['metadata.queries.getCmsEntitySlug'] = $this->app->share(function() {
+			return new GetCmsEntitySlugQuery($this->app['metadata.queries.getCmsEntity'], $this->app['inflector']);
 		});
 
-		$app['metadata.queries.getCmsFormFieldProperty'] = $app->share(function() use($app) {
+		$this->app['metadata.queries.getCmsFormFieldProperty'] = $this->app->share(function() {
 			return new GetCmsFormFieldPropertyQuery(
-				$app['annotations.reader'],
-				$app['metadata.queries.getPropertyOrm']
+				$this->app['annotations.reader'],
+				$this->app['metadata.queries.getPropertyOrm']
 			);
 		});
 
-		$app['metadata.queries.getCmsFormFields'] = $app->share(function() use($app) {
+		$this->app['metadata.queries.getCmsFormFields'] = $this->app->share(function() {
 			return new GetCmsFormFieldsQuery(
-				$app['metadata.queries.getEditableProperties'],
-				$app['metadata.queries.getCmsFormFieldProperty']
+				$this->app['metadata.queries.getEditableProperties'],
+				$this->app['metadata.queries.getCmsFormFieldProperty']
 			);
 		});
 
-		$app->extend(
+		$this->app->extend(
 			'metadata.queries_collection',
-			function(QueryCollection $collection) use($app) {
+			function(QueryCollection $collection) {
 				$collection
-					->registerQuery($app['metadata.queries.getCmsEntity'])
-					->registerQuery($app['metadata.queries.getCmsEntitySlug'])
-					->registerQuery($app['metadata.queries.getCmsFormFieldProperty'])
-					->registerQuery($app['metadata.queries.getCmsFormFields']);
+					->registerQuery($this->app['metadata.queries.getCmsEntity'])
+					->registerQuery($this->app['metadata.queries.getCmsEntitySlug'])
+					->registerQuery($this->app['metadata.queries.getCmsFormFieldProperty'])
+					->registerQuery($this->app['metadata.queries.getCmsFormFields']);
 				return $collection;
 			}
 		);
 
-		$app['cms.actions.dashboard'] = $app->share(function() {
+		$this->app['cms.actions.dashboard'] = $this->app->share(function() {
 			return new DashboardAction();
 		});
 
-		$app['cms.repository_node_factory'] = $app->share(function() use($app) {
-			return new RepositoryCmsNodeFactory($app);
+		$this->app['cms.repository_node_factory'] = $this->app->share(function() {
+			return new RepositoryCmsNodeFactory($this->app);
 		});
 
-		$app['cms.dashboard_node'] = $app->share(function() use($app) {
-			return new ControllerNode('cms', $app['cms.actions.dashboard']);
+		$this->app['cms.dashboard_node'] = $this->app->share(function() {
+			return new ControllerNode('cms', $this->app['cms.actions.dashboard']);
 		});
 
-		$app['cms.root_node'] = $app->share(function() use($app) {
-			return new WrappedControllerNode($app['cms.dashboard_node']);
+		$this->app['cms.root_node'] = $this->app->share(function() {
+			return new WrappedControllerNode($this->app['cms.dashboard_node']);
 		});
 
-		$app['cms.navigation_list'] = $app->share(function() use($app) {
-			$node = new CmsNavigationNode($app['cms.root_node'], $app['url_generator']);
-			$dashboardNode = new ControllerNodeListNode($app['cms.dashboard_node'], $app['url_generator'], $node);
+		$this->app['cms.navigation_list'] = $this->app->share(function() {
+			$node = new CmsNavigationNode($this->app['cms.root_node'], $this->app['url_generator']);
+			$dashboardNode = new ControllerNodeListNode($this->app['cms.dashboard_node'], $this->app['url_generator'], $node);
 			$node->registerChildNode($dashboardNode, false, true);
 			return $node;
 		});
 
-		$app->extend('dispatcher', function(EventDispatcherInterface $dispatcher) use($app) {
+		$this->app->extend('dispatcher', function(EventDispatcherInterface $dispatcher) {
 			$dispatcher->addListener(ManagedRepositoryEvent::REGISTER, [$this, 'onRegisterRepository']);
 			return $dispatcher;
 		});
