@@ -4,6 +4,7 @@ namespace Layer\Data\Metadata\Query;
 
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Layer\Data\Metadata\Annotation\CrudProperty;
 use Layer\Data\Metadata\QueryInterface;
 
 class IsPropertyEditableQuery implements QueryInterface {
@@ -50,8 +51,17 @@ class IsPropertyEditableQuery implements QueryInterface {
 			}
 		}
 		if($annotation = $this->reader->getPropertyAnnotation($property, 'Layer\\Data\\Metadata\\Annotation\\CrudProperty')) {
-			if(!($create ? $annotation->create : $annotation->update)) {
+			if($annotation->editable === CrudProperty::EDITABLE_ALWAYS) {
+				return true;
+			}
+			if($annotation->editable === CrudProperty::EDITABLE_NEVER) {
 				return false;
+			}
+			if($annotation->editable === CrudProperty::EDITABLE_ON_CREATE) {
+				return $create;
+			}
+			if($annotation->editable === CrudProperty::EDITABLE_ON_UPDATE) {
+				return !$create;
 			}
 		}
 		foreach($this->bannedAnnotations as $annotationName) {

@@ -19,7 +19,7 @@ class CrudProperty extends Annotation {
 
 	const EDITABLE_ON_UPDATE = 'UPDATE';
 
-	public $visible;
+	public $visible = true;
 
 	public $editable = self::EDITABLE_ALWAYS;
 
