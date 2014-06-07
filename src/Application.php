@@ -50,24 +50,7 @@ class Application extends \Silex\Application {
 
 		$app = $this;
 
-		/**
-		 * Set some paths
-		 */
-		$app['path_root'] = realpath(__DIR__ . '/../../../..');
-		$app['path_app'] = $app['path_root'] . '/app';
-		$app['path_config'] = $app['path_app'] . '/Config';
-		$app['path_resources'] = $app['path_app'] . '/Resource';
-		$app['path_templates'] = $app['path_app'] . '/Template';
-		$app['path_vendor'] = $app['path_root'] . '/vendor';
-		$app['path_public'] = $app['path_root'] . '/public';
-		//   $app['path_public_assets'] = $app['path_public'] . '/assets';
-		$app['path_storage'] = $app['path_root'] . '/storage';
-		$app['path_log'] = $app['path_storage'] . '/log';
-		$app['path_tmp'] = $app['path_storage'] . '/tmp';
-		$app['path_cache'] = $app['path_tmp'] . '/cache';
-		$app['path_session'] = $app['path_tmp'] . '/session';
-		$app['path_layer'] = __DIR__;
-		$app['path_layer_resources'] = $app['path_layer'] . '/Resource';
+		$this->setPaths();
 
 		$app['class_loader'] = $app->share(function() use($app) {
 			return require $app['path_vendor'] . '/autoload.php';
@@ -222,6 +205,24 @@ class Application extends \Silex\Application {
 			$request->enableHttpMethodParameterOverride();
 		}
 		return parent::handle($request, $type, $catch);
+	}
+
+	protected function setPaths() {
+		$this['path_root'] = realpath(__DIR__ . '/../../../..');
+		$this['path_app'] = $this['path_root'] . '/app';
+		$this['path_config'] = $this['path_app'] . '/Config';
+		$this['path_resources'] = $this['path_app'] . '/Resource';
+		$this['path_templates'] = $this['path_app'] . '/Template';
+		$this['path_vendor'] = $this['path_root'] . '/vendor';
+		$this['path_public'] = $this['path_root'] . '/public';
+		//   $this['path_public_assets'] = $this['path_public'] . '/assets';
+		$this['path_storage'] = $this['path_root'] . '/storage';
+		$this['path_log'] = $this['path_storage'] . '/log';
+		$this['path_tmp'] = $this['path_storage'] . '/tmp';
+		$this['path_cache'] = $this['path_tmp'] . '/cache';
+		$this['path_session'] = $this['path_tmp'] . '/session';
+		$this['path_layer'] = __DIR__;
+		$this['path_layer_resources'] = $this['path_layer'] . '/Resource';
 	}
 
 	protected function getConfigAutoload() {
