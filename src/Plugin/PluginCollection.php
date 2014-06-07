@@ -65,13 +65,15 @@ class PluginCollection {
 			throw new \RuntimeException('Plugin classes must extend \\Layer\\Plugin!');
 		}
 
-		if ($this->loaded($plugin->name)) {
-			throw new \InvalidArgumentException(sprintf('Plugin %s is already loaded!', $plugin->name));
+		$name = $plugin->getName();
+
+		if ($this->loaded($name)) {
+			throw new \InvalidArgumentException(sprintf('Plugin %s is already loaded!', $name));
 		}
 
 		$plugin->register();
 
-		return $this->_loaded[$plugin->name] = $this->app['plugins.' . $plugin->name] = $plugin;
+		return $this->_loaded[$name] = $plugin;
 	}
 
 	/**
