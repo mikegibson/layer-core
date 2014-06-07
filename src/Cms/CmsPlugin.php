@@ -45,8 +45,12 @@ class CmsPlugin extends Plugin {
 				->assert('node', '[a-z0-9\-/]*')
 				->beforeMatch(function($attrs) use($app) {
 					try {
-						$node = trim($attrs['node'], '/');
-						$attrs['node'] = $app['cms.root_node']->getDescendent($node);
+						$nodePath = trim($attrs['node'], '/');
+						$node = $app['cms.root_node'];
+						if($nodePath !== '') {
+							$node = $node->getDescendent($nodePath);;
+						}
+						$attrs['node'] = $node;
 					} catch(\InvalidArgumentException $e) {
 						return false;
 					}
