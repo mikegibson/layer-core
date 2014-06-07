@@ -4,7 +4,7 @@ namespace Layer\Users;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Behavior;
-use Layer\Data\Metadata\Annotation as Meta;
+use Layer\Data\Metadata\Annotation as Layer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -12,7 +12,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Entity
  * @ORM\Table(name="users")
- * @Meta\CrudEntity
+ * @Layer\CrudEntity
+ * @Layer\EntityName("users")
  */
 class User {
 
@@ -38,6 +39,7 @@ class User {
 	 * @var string $password
 	 *
 	 * @ORM\Column(type="string")
+	 * @Layer\CrudProperty(editable="CREATE",visible=false)
 	 */
 	protected $password;
 
