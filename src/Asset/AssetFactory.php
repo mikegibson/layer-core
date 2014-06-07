@@ -8,8 +8,6 @@ class AssetFactory extends \Assetic\Factory\AssetFactory {
 
 	protected $app;
 
-	protected $locator;
-
 	public function __construct(Application $app) {
 		parent::__construct($app['path_resources'], $app->config('debug'));
 		$this->app = $app;
