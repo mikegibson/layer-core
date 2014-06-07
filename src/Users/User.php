@@ -39,7 +39,7 @@ class User {
 	 * @var string $password
 	 *
 	 * @ORM\Column(type="string")
-	 * @Layer\CrudProperty(editable="CREATE",visible=false)
+	 * @Layer\CrudProperty(editable="create",visible=false)
 	 */
 	protected $password;
 

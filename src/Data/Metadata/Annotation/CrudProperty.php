@@ -15,9 +15,9 @@ class CrudProperty extends Annotation {
 
 	const EDITABLE_NEVER = false;
 
-	const EDITABLE_ON_CREATE = 'CREATE';
+	const EDITABLE_ON_CREATE = 'create';
 
-	const EDITABLE_ON_UPDATE = 'UPDATE';
+	const EDITABLE_ON_UPDATE = 'update';
 
 	public $visible = true;
 
