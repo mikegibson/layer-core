@@ -25,7 +25,7 @@ class ConfigServiceProvider implements ServiceProviderInterface {
 
 			$config = new Configuration($app);
 
-			$config->loadLocator(new FileLocator($app['path_config']));
+			$config->loadLocator(new FileLocator($app['paths.config']));
 
 			$drivers = [
 				new YamlConfigDriver(),
@@ -34,6 +34,10 @@ class ConfigServiceProvider implements ServiceProviderInterface {
 			];
 
 			array_walk($drivers, [$config, 'loadDriver']);
+
+			if(!empty($app['config.autoload'])) {
+				$config->load($app['config.autoload']);
+			}
 
 			return $config;
 
