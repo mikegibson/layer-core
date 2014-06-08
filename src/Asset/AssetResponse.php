@@ -17,7 +17,7 @@ class AssetResponse extends StreamedResponse {
 
 		$file = $asset->getTargetPath();
 
-		$cachePath = $app['path_cache_assets'] . '/' . $file;
+		$cachePath = $app['paths.cache_assets'] . '/' . $file;
 
 		$cached = false;
 

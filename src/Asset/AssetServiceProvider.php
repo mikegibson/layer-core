@@ -23,14 +23,14 @@ class AssetServiceProvider implements ServiceProviderInterface {
 		$app['assetic'] = $app->share(function () use ($app) {
 			$app['assetic.options'] = array_replace(array(
 				//   'debug'              => $debug,
-				'formulae_cache_dir' => $app['path_cache'] . '/assetic'
+				'formulae_cache_dir' => $app['paths.cache'] . '/assetic'
 			), $app['assetic.options']);
 
 			return $app['assetic.factory'];
 		});
 
-		$app['path_cache_assets'] = $app['path_cache'] . '/assets';
-		$app['path_cache_assets_debug'] = $app['path_cache'] . '/assets_debug';
+		$app['paths.cache_assets'] = $app['paths.cache'] . '/assets';
+		$app['paths.cache_assets_debug'] = $app['paths.cache'] . '/assets_debug';
 
 		/**
 		 * Asset manager
@@ -51,7 +51,7 @@ class AssetServiceProvider implements ServiceProviderInterface {
 
 		$app['assetic.filters.compass'] = $app->share(function () use ($app) {
 			$filter = new CompassFilter();
-			$filter->setCacheLocation($app['path_cache'] . '/compass');
+			$filter->setCacheLocation($app['paths.cache'] . '/compass');
 			return $filter;
 		});
 
@@ -74,7 +74,7 @@ class AssetServiceProvider implements ServiceProviderInterface {
 		 * @return Assetic\AssetWriter
 		 */
 		$app['assetic.asset_writer'] = $app->share(function () use ($app) {
-			return new AssetWriter($app['path_cache_assets']);
+			return new AssetWriter($app['paths.cache_assets']);
 		});
 
 		/**
