@@ -2,6 +2,7 @@
 
 namespace Layer\Pages;
 
+use Layer\Node\ControllerNodeInterface;
 use Layer\Plugin\Plugin;
 use Silex\Application;
 
@@ -18,18 +19,21 @@ class PagesPlugin extends Plugin {
 
 	public function register() {
 
-		$this->app['pages.entity_class'] = 'Layer\\Pages\\Page';
+		$app = $this->app;
 
-		$this->app['pages.repository'] = $this->app->share(function() {
-			return $this->app['orm.rm']->loadRepository($this->app['orm.em'], $this->app['pages.entity_class']);
+		$app['pages.entity_class'] = 'Layer\\Pages\\Page';
+
+		$app['pages.repository'] = $app->share(function() use($app) {
+			return $app['orm.rm']->loadRepository($app['orm.em'], $app['pages.entity_class']);
 		});
 
-		$this->app['pages.root_node'] = $this->app->share(function() {
-			return new PageNode($this->app['pages.repository']);
+		$app['pages.root_node'] = $app->share(function() use($app) {
+			return new PageNode($app['pages.repository']);
 		});
 
-		$this->app['pages.controllers'] = $this->app->share(function () {
-			return $this->app['nodes.controllers_factory']($this->app['pages.root_node']);
+		$app->extend('app.home_node', function(ControllerNodeInterface $node) use($app) {
+			$node->adoptChildNodes($app['pages.root_node']);
+			return $node;
 		});
 
 	}
