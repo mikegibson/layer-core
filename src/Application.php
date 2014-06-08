@@ -48,6 +48,8 @@ class Application extends \Silex\Application {
 
 	use MonologTrait, SecurityTrait, SwiftmailerTrait, TranslationTrait, TwigTrait, UrlGeneratorTrait;
 
+	public $assets = [];
+
 	/**
 	 * Constructor
 	 */
@@ -61,11 +63,35 @@ class Application extends \Silex\Application {
 			$app['paths.' . $key] = $path;
 		}
 
-		$this->registerServiceProviders();
+		if(!isset($app['config.autoload'])) {
+			$app['config.autoload'] = [
+				'app' => [
+					'nest' => false
+				],
+				'database',
+				'local' => [
+					'nest' => false,
+					'ignoreMissing' => true
+				]
+			];
+		}
 
 		$app['class_loader'] = $app->share(function() use($app) {
 			return require $app['paths.vendor'] . '/autoload.php';
 		});
+
+		$app['debug'] = $app->protect(function() use($app) {
+			return $app['config']->read('debug');
+		});
+
+		$app['security.firewalls'] = $app->share(function() {
+			return [];
+		});
+
+		$this->registerServiceProviders();
+
+		$this->registerErrorHandlers();
+
 
 		/**
 		 * Share helpers and utility classes
@@ -90,7 +116,7 @@ class Application extends \Silex\Application {
 			return new ActionDispatcher($app['twig.view']);
 		});
 
-		$app['assets.js.modernizr'] = $app->share(function () use ($app) {
+		$app[$this->assets['js_modernizr'] = 'assets.js.modernizr'] = $app->share(function () use ($app) {
 			$asset = $app['assetic.factory']->createAsset([
 				'@layer/js/modernizr.js'
 			], [
@@ -155,21 +181,6 @@ class Application extends \Silex\Application {
 			return $app['nodes.controllers_factory']($app['app.home_node']);
 		});
 
-		$app['debug'] = $app->protect(function() use($app) {
-			return $app['config']->read('debug');
-		});
-
-		$app['config.autoload'] = [
-			'app' => [
-				'nest' => false
-			],
-			'database',
-			'local' => [
-				'nest' => false,
-				'ignoreMissing' => true
-			]
-		];
-
 	}
 
 	/**
@@ -179,11 +190,12 @@ class Application extends \Silex\Application {
 
 		if (!$this->booted) {
 
-			$this->registerErrorHandlers();
 			$this->setTimezone();
 			$this->initializeSecurity();
 
-			$this['assetic.asset_manager']->set('js_modernizr', $this['assets.js.modernizr']);
+			foreach($this->assets as $name => $appKey) {
+				$this['assetic.asset_manager']->set($name, $this[$appKey]);
+			}
 
 		}
 
