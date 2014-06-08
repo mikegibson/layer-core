@@ -12,7 +12,7 @@
 	"require": {
 		"php": ">=5.4",
 		"ext-mbstring": "*",
-		"silex/silex": "~1.1",
+		"silex/silex": "~1.2",
 		"symfony/config": "2.5.*@dev",
 		"symfony/debug": "2.5.*@dev",
 		"symfony/doctrine-bridge": "2.5.*@dev",
