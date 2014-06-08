@@ -25,11 +25,6 @@ abstract class SaveAction implements ActionInterface {
 	private $formFactory;
 
 	/**
-	 * @var \Symfony\Component\HttpFoundation\Session\Session
-	 */
-	private $session;
-
-	/**
 	 * @var \Symfony\Component\Routing\Generator\UrlGeneratorInterface
 	 */
 	private $urlGenerator;
@@ -43,12 +38,10 @@ abstract class SaveAction implements ActionInterface {
 	public function __construct(
 		CmsRepositoryInterface $repository,
 		FormFactoryInterface $formFactory,
-		Session $session,
 		UrlGeneratorInterface $urlGenerator
 	) {
 		$this->repository = $repository;
 		$this->formFactory = $formFactory;
-		$this->session = $session;
 		$this->urlGenerator = $urlGenerator;
 	}
 
@@ -59,7 +52,7 @@ abstract class SaveAction implements ActionInterface {
 
 		if ($form->isSubmitted()) {
 			$singularName = $repository->queryMetadata('getEntityHumanName');
-			$flashBag = $this->getSession()->getFlashBag();
+			$flashBag = $request->getSession()->getFlashBag();
 			if($form->isValid()) {
 				$postData = $form->getData();
 				$record = $postData->record;
@@ -124,13 +117,6 @@ abstract class SaveAction implements ActionInterface {
 	 */
 	protected function getFormFactory() {
 		return $this->formFactory;
-	}
-
-	/**
-	 * @return Session
-	 */
-	protected function getSession() {
-		return $this->session;
 	}
 
 	/**
