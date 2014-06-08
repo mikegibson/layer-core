@@ -371,7 +371,7 @@ class DataProvider implements ServiceProviderInterface {
 				case 'filesystem':
 					// @todo Set this as a default somewhere else
 					if(!isset($cacheOptions['path'])) {
-						$cacheOptions['path'] = $app['path_cache'] . '/doctrine';
+						$cacheOptions['path'] = $app['paths.cache'] . '/doctrine';
 					}
 					return $app['orm.cache.factory.filesystem']($cacheOptions);
 				case 'redis':
@@ -429,7 +429,7 @@ class DataProvider implements ServiceProviderInterface {
 			return $configs[$app['orm.ems.default']];
 		});
 
-		$app['orm.proxies_dir'] = $app['path_cache'] . '/doctrine/proxies';
+		$app['orm.proxies_dir'] = $app['paths.cache'] . '/doctrine/proxies';
 		$app['orm.auto_generate_proxies'] = true;
 
 		$app['metadata.queries.getEntityName'] = $app->share(function() use($app) {
@@ -540,7 +540,7 @@ class DataProvider implements ServiceProviderInterface {
 	protected function _getOrmDefaults(Application $app) {
 		return [
 			// @todo orm.proxies_dir doesn't seem to get used
-			'orm.proxies_dir' => $app['path_cache'] . '/doctrine/proxies',
+			'orm.proxies_dir' => $app['paths.cache'] . '/doctrine/proxies',
 			'orm.auto_generate_proxies' => true,
 			'orm.proxies_namespace' => 'Doctrine\Common\Proxy\Proxy',
 			'orm.default_cache' => 'array',
