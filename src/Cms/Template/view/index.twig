@@ -1,4 +1,4 @@
-{% extends '@cms/layout/cms_repository.twig' %}
+{% extends '@cms/layout/cms_repository' %}
 
 {% if pluralName is not defined %}
 	{% set pluralName = repository.getEntityHumanName({plural: true}) %}

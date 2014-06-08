@@ -113,7 +113,7 @@ class PageNode extends OrphanControllerNode {
 	}
 
 	public function getTemplate() {
-		return '@pages/view.twig';
+		return '@pages/view';
 	}
 
 	public function invoke(Request $request) {

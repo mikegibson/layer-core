@@ -11,7 +11,7 @@ class AddAction extends SaveAction {
 	}
 
 	public function getTemplate() {
-		return '@cms/view/add.twig';
+		return '@cms/view/add';
 	}
 
 	public function getLabel() {

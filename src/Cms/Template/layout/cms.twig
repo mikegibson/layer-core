@@ -1,7 +1,7 @@
-{% extends "layout/standard.twig" %}
+{% extends "layout/standard" %}
 
-{% table_theme '@cms/block/table.twig' %}
-{% paginator_theme '@cms/block/paginator.twig' %}
+{% table_theme '@cms/block/table' %}
+{% paginator_theme '@cms/block/paginator' %}
 
 {% block title %}{% if title is defined %}{{ title }} | {% endif %}CMS | {{ parent() }}{% endblock %}
 
@@ -17,7 +17,7 @@
 
 	<h1>{{ app_name }} CMS</h1>
 
-	{% include "@cms/element/nav_main.twig" %}
+	{% include "@cms/element/nav_main" %}
 
 {% endblock %}
 

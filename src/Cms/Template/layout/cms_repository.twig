@@ -1,4 +1,4 @@
-{% extends "@cms/layout/cms.twig" %}
+{% extends "@cms/layout/cms" %}
 
 {% if title is not defined %}
 	{% set title = repository.getEntityHumanName({'plural': true, 'capitalize': true}) %}

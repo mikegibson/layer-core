@@ -8,7 +8,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class EditAction extends SaveAction {
 
 	public function getTemplate() {
-		return '@cms/view/edit.twig';
+		return '@cms/view/edit';
 	}
 
 	public function getName() {
