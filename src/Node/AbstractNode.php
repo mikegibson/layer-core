@@ -46,6 +46,14 @@ abstract class AbstractNode implements NodeInterface {
 		}
 	}
 
+	public function adoptChildNodes(NodeInterface $node, $overwrite = false) {
+		foreach($node->getChildNodes() as $childNode) {
+			if($overwrite || !$this->hasChildNode($childNode->getName())) {
+				$this->wrapChildNode($childNode, null, null, true, $overwrite);
+			}
+		}
+	}
+
 	public function getPath() {
 		$parts = [];
 		$node = $this;

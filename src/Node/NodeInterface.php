@@ -28,6 +28,8 @@ interface NodeInterface {
 
 	public function wrapChildNode(NodeInterface $baseNode);
 
+	public function adoptChildNodes(NodeInterface $node);
+
 	public function sortChildNodes($callback);
 
 }
