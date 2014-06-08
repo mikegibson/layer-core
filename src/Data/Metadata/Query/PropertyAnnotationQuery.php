@@ -20,7 +20,7 @@ abstract class PropertyAnnotationQuery implements QueryInterface {
 
 	public function getResult(ClassMetadata $classMetadata, array $options = []) {
 		$this->checkProperty($options);
-		$property = $classMetadata->getReflectionProperty($options['property']);
+		$property = $classMetadata->getReflectionClass()->getProperty($options['property']);
 		$annotation = $this->getReader()->getPropertyAnnotation($property, $this->getAnnotationClass());
 		return $this->getResultFromAnnotation($classMetadata, $annotation, $options);
 	}

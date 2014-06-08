@@ -4,20 +4,26 @@ namespace Layer\Cms\Data\Metadata\Query;
 
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Layer\Data\Metadata\Query\GetPropertyOrmQuery;
+use Layer\Data\Metadata\Query\GetPropertyLabelQuery;
 use Layer\Data\Metadata\Query\PropertyAnnotationQuery;
 
 class GetCmsFormFieldPropertyQuery extends PropertyAnnotationQuery {
 
-	protected $propertyOrmQuery;
+	/**
+	 * @var \Layer\Data\Metadata\Query\GetPropertyLabelQuery
+	 */
+	protected $propertyLabelQuery;
 
-	protected $typeMap = [
-	//	'text' => 'textarea'
-	];
-
-	public function __construct(Reader $reader, GetPropertyOrmQuery $propertyOrmQuery) {
+	/**
+	 * @param Reader $reader
+	 * @param GetPropertyLabelQuery $propertyLabelQuery
+	 */
+	public function __construct(
+		Reader $reader,
+		GetPropertyLabelQuery $propertyLabelQuery)
+	{
 		parent::__construct($reader);
-		$this->propertyOrmQuery = $propertyOrmQuery;
+		$this->propertyLabelQuery = $propertyLabelQuery;
 	}
 
 	public function getName() {
@@ -35,11 +41,8 @@ class GetCmsFormFieldPropertyQuery extends PropertyAnnotationQuery {
 		}
 		$type = $annotation->type;
 		$fieldOptions = $annotation->options;
-		if($type === null) {
-			$orm = $this->propertyOrmQuery->getResult($classMetadata, ['property' => $options['property']]);
-			if(isset($this->typeMap[$orm->type])) {
-				$type = $this->typeMap[$orm->type];
-			}
+		if(!isset($fieldOptions['label'])) {
+			$fieldOptions['label'] = $this->propertyLabelQuery->getResult($classMetadata, ['property' => $options['property']]);
 		}
 		return [
 			'type' => $type,

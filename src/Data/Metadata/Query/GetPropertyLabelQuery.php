@@ -32,7 +32,7 @@ class GetPropertyLabelQuery extends PropertyAnnotationQuery {
 	}
 
 	protected function getFallbackResult(ClassMetadata $classMetadata, array $options) {
-		$reflProperty = $classMetadata->getReflectionProperty($options['property']);
+		$reflProperty = $classMetadata->getReflectionClass()->getProperty($options['property']);
 		return ucfirst($this->getInflector()->humanize($reflProperty->getName()));
 	}
 

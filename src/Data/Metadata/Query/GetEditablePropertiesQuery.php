@@ -20,7 +20,7 @@ class GetEditablePropertiesQuery implements QueryInterface {
 	public function getResult(ClassMetadata $classMetadata, array $options = []) {
 		$create = !isset($options['create']) || $options['create'];
 		$editableProperties = [];
-		foreach($classMetadata->getReflectionProperties() as $reflProperty) {
+		foreach($classMetadata->getReflectionClass()->getProperties() as $reflProperty) {
 			$property = $reflProperty->getName();
 			if($this->isPropertyEditableQuery->getResult($classMetadata, compact('property', 'create'))) {
 				$editableProperties[] = $property;

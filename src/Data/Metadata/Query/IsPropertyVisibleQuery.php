@@ -36,7 +36,7 @@ class IsPropertyVisibleQuery extends PropertyAnnotationQuery {
 	}
 
 	protected function getFallbackResult(ClassMetadata $classMetadata, array $options) {
-		$property = $classMetadata->getReflectionProperty($options['property']);
+		$property = $classMetadata->getReflectionClass()->getProperty($options['property']);
 		if($this->getReader()->getPropertyAnnotation($property, $this->namespace . 'InvisibleProperty')) {
 			return false;
 		}

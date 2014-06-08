@@ -43,7 +43,7 @@ class IsPropertyEditableQuery implements QueryInterface {
 		if(!$classMetadata->getReflectionClass()->hasMethod($setter)) {
 			return false;
 		}
-		$property = $classMetadata->getReflectionProperty($options['property']);
+		$property = $classMetadata->getReflectionClass()->getProperty($options['property']);
 		$create = !isset($options['create']) || $options['create'];
 		if($annotation = $this->reader->getPropertyAnnotation($property, 'Layer\\Data\\Metadata\\Annotation\\LockedProperty')) {
 			if($create ? $annotation->onCreate : $annotation->onUpdate) {
