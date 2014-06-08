@@ -52,12 +52,12 @@ class RepositoryCmsNodeFactory implements RepositoryCmsNodeFactoryInterface {
 	}
 
 	protected function createAddNode(CmsRepositoryInterface $repository) {
-		$action = new AddAction($repository, $this->getFormFactory(), $this->getSession(), $this->getUrlGenerator());
+		$action = new AddAction($repository, $this->getFormFactory(), $this->getUrlGenerator());
 		return $this->createNodeFromAction($action);
 	}
 
 	protected function createEditNode(CmsRepositoryInterface $repository) {
-		$action = new EditAction($repository, $this->getFormFactory(), $this->getSession(), $this->getUrlGenerator());
+		$action = new EditAction($repository, $this->getFormFactory(), $this->getUrlGenerator());
 		return $this->createNodeFromAction($action);
 	}
 
@@ -78,10 +78,6 @@ class RepositoryCmsNodeFactory implements RepositoryCmsNodeFactoryInterface {
 
 	protected function getUrlGenerator() {
 		return $this->app['url_generator'];
-	}
-
-	protected function getSession() {
-		return $this->app['session'];
 	}
 
 }
