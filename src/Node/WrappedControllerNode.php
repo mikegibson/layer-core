@@ -7,17 +7,28 @@ use Symfony\Component\HttpFoundation\Request;
 
 class WrappedControllerNode extends WrappedNode implements ControllerNodeInterface, ActionInterface {
 
+	protected $routeName;
+
 	public function __construct(
 		ControllerNodeInterface $baseNode,
 		ControllerNodeInterface $parentNode = null,
 		$name = null,
 		$label = null,
-		$baseChildrenAccessible = true
+		$baseChildrenAccessible = true,
+		$routeName = null
 	) {
 		parent::__construct($baseNode, $parentNode, $name, $label, $baseChildrenAccessible);
+		$this->routeName = $routeName;
 	}
 
 	public function getRouteName() {
+		if($this->routeName !== null) {
+			return $this->routeName;
+		}
+		$parentNode = $this->getParentNode();
+		if($parentNode !== null) {
+			return $parentNode->getRouteName();
+		}
 		return $this->getBaseNode()->getRouteName();
 	}
 
