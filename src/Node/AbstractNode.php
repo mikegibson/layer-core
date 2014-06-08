@@ -21,9 +21,16 @@ abstract class AbstractNode implements NodeInterface {
 		return $this->childNodes[$name];
 	}
 
-	public function wrapChildNode(NodeInterface $baseNode, $name = null, $label = null, $baseChildrenAccessible = true) {
+	public function wrapChildNode(
+		NodeInterface $baseNode,
+		$name = null,
+		$label = null,
+		$baseChildrenAccessible = true,
+		$overwrite = false,
+		$prepend = false
+	) {
 		$wrappedNode = $this->createWrappedNode($baseNode, $name, $label, $baseChildrenAccessible);
-		$this->registerChildNode($wrappedNode);
+		$this->registerChildNode($wrappedNode, $overwrite, $prepend);
 		return $wrappedNode;
 	}
 
