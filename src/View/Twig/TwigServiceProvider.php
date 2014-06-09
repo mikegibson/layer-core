@@ -21,13 +21,13 @@ class TwigServiceProvider extends \Silex\Provider\TwigServiceProvider {
 		$app['twig.loader.filesystem'] = $app->share(function () use($app) {
 
 			$loader = new Loader();
-			$loader->prependPath($app['path_templates']);
-			$loader->addPath($app['path_layer'] . '/Template');
+			$loader->prependPath($app['paths.templates']);
+			$loader->addPath($app['paths.layer'] . '/Template');
 
 			foreach($app['plugins']->loaded() as $name) {
 				$plugin = $app['plugins']->get($name);
 				foreach ([
-					 $app['path_app'] . '/Template/plugin/' . $name,
+					 $app['paths.app'] . '/Template/plugin/' . $name,
 					 $plugin->getPath() . '/Template'
 				 ] as $path) {
 					if (is_dir($path)) {
