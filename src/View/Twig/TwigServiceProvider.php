@@ -43,14 +43,14 @@ class TwigServiceProvider extends \Silex\Provider\TwigServiceProvider {
 
 		$app['twig.default_layout'] = 'layout/app';
 
-		$app['twig'] = $app->share($app->extend('twig', function(\Twig_Environment $twig) use($app) {
+		$app->extend('twig', function(\Twig_Environment $twig) use($app) {
 			$twig->addGlobal('default_layout', $app['twig.default_layout']);
 			$twig->addExtension(new FlashExtension());
 			$twig->addExtension(new TableExtension());
 			$twig->addExtension(new PaginatorExtension());
 			$twig->addExtension(new ListExtension());
 			return $twig;
-		}));
+		});
 
 		$app['twig.view'] = $app->share(function() use($app) {
 			return new View($app['twig']);
