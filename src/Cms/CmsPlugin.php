@@ -3,7 +3,6 @@
 namespace Layer\Cms;
 
 use Layer\Cms\Action\DashboardAction;
-use Layer\Cms\Action\LoginAction;
 use Layer\Cms\Data\CmsRepository;
 use Layer\Cms\Data\Metadata\Query\GetCmsFormFieldPropertyQuery;
 use Layer\Cms\Data\Metadata\Query\GetCmsFormFieldsQuery;
@@ -19,6 +18,7 @@ use Layer\Node\ControllerNode;
 use Layer\Node\ControllerNodeListNode;
 use Layer\Node\WrappedControllerNode;
 use Layer\Plugin\Plugin;
+use Layer\Users\Action\LoginAction;
 use Silex\Application;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -118,7 +118,11 @@ class CmsPlugin extends Plugin {
 		});
 
 		$app['cms.login_action'] = $app->share(function() use($app) {
-			return new LoginAction($app['form.factory'], $app['users.login_form_type']);
+			return new LoginAction(
+				$app['form.factory'],
+				$app['security.firewalls']['cms']['form']['check_path'],
+				'@cms/view/login'
+			);
 		});
 
 		$app['cms.login_node'] = $app->share(function() use($app) {
