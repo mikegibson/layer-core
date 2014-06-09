@@ -192,6 +192,7 @@ class Application extends \Silex\Application {
 
 			$this->setTimezone();
 			$this->initializeSecurity();
+			$this->mountControllers();
 
 			foreach($this->assets as $name => $appKey) {
 				$this['assetic.asset_manager']->set($name, $this[$appKey]);
@@ -342,6 +343,10 @@ class Application extends \Silex\Application {
 			$this->register(new SecurityServiceProvider());
 			$this->register(new RememberMeServiceProvider());
 		}
+	}
+
+	protected function mountControllers() {
+		$this->mount('/', $this['app.controllers']);
 	}
 
 }
