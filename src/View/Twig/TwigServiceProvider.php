@@ -41,7 +41,7 @@ class TwigServiceProvider extends \Silex\Provider\TwigServiceProvider {
 
 		$app['twig.form.templates'] = ['form/default.twig'];
 
-		$app['twig.default_layout'] = 'layout/standard.twig';
+		$app['twig.default_layout'] = 'layout/app';
 
 		$app['twig'] = $app->share($app->extend('twig', function(\Twig_Environment $twig) use($app) {
 			$twig->addGlobal('app_name', $app['config']->read('name'));
