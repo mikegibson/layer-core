@@ -4,23 +4,23 @@
 		{{ table_tbody( table ) }}
 		{{ table_tfoot( table ) }}
 	</table>
-{% endblock %}
+{% endblock table %}
 
 {% block table_thead %}
 	<thead>
 		{{ table_thead_rows( table ) }}
 	</thead>
-{% endblock %}
+{% endblock table_thead %}
 
 {% block table_thead_rows %}
 	<tr>{{ table_column_headers( table ) }}</tr>
-{% endblock %}
+{% endblock table_thead_rows %}
 
 {% block table_column_headers %}
 	{% for columnKey, label in table.columns %}
 	<th class="th-{{ columnKey }}">{{ table_column_label( table, label, columnKey ) }}</th>
 	{% endfor %}
-{% endblock %}
+{% endblock table_column_headers %}
 
 {% block table_column_label %}{{ label }}{% endblock %}
 
@@ -28,13 +28,13 @@
 	<tbody>
 		{{ table_body_rows( table ) }}
 	</tbody>
-{% endblock %}
+{% endblock table_tbody %}
 
 {% block table_body_rows %}
 	{% for rowKey, row in table.data %}
 		{{ table_body_row( table, row, rowKey) }}
 	{% endfor %}
-{% endblock %}
+{% endblock table_body_rows %}
 
 {% block table_body_row %}
 	<tr class="tr-{{ rowKey }}">
@@ -42,11 +42,11 @@
 		{{ table_body_cell( table, attribute(row, columnKey) ~ '', columnKey , rowKey, row) }}
 		{% endfor %}
 	</tr>
-{% endblock %}
+{% endblock table_body_row %}
 
 {% block table_body_cell %}
 	<td class="td-{{ columnKey }} td-{{ columnKey }}-{{ rowKey }}">{{ table_value(table, value, columnKey, rowKey, row) }}</td>
-{% endblock %}
+{% endblock table_body_cell %}
 
 {% block table_value %}{{ value }}{% endblock %}
 

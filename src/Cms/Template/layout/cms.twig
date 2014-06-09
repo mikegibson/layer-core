@@ -11,7 +11,7 @@
 
 	<link rel="stylesheet" type="text/css" href="{{ asset_url('css_cms') }}"/>
 
-{% endblock %}
+{% endblock stylesheets %}
 
 {% block header %}
 
@@ -19,7 +19,7 @@
 
 	{% include "@cms/element/nav_main" %}
 
-{% endblock %}
+{% endblock header %}
 
 {% block content %}
 
@@ -37,7 +37,7 @@
 
 	</div>
 
-{% endblock %}
+{% endblock content %}
 
 {% block javascripts %}
 
@@ -45,4 +45,4 @@
 
 	<script src="{{ asset_url('js_cms') }}"></script>
 
-{% endblock %}
+{% endblock javascripts %}

@@ -4,7 +4,7 @@
 		{{ list_item( childNode ) }}
 		{% endfor %}
 	{% if not node.areChildrenOrdered %}</ul>{% else %}</ol>{% endif %}
-{% endblock %}
+{% endblock list %}
 
 {% block list_item %}
 	<li>
@@ -17,4 +17,4 @@
 		{{ list( node ) }}
 	{% endif %}
 	</li>
-{% endblock %}
+{% endblock list_item %}

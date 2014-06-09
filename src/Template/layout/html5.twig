@@ -12,11 +12,11 @@
 		{% if meta_description is defined %}
 		<meta name="description" content="{{ meta_description }}">
 		{% endif %}
-		{% endblock %}
+		{% endblock meta %}
 
 		{% block stylesheets %}{% endblock %}
 
-		{% endblock %}
+		{% endblock head %}
 
 	</head>
 
@@ -28,7 +28,7 @@
 
 		{% block javascripts %}{% endblock %}
 
-		{% endblock %}
+		{% endblock body %}
 
 	</body>
 

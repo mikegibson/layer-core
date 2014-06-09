@@ -2,7 +2,7 @@
 {% spaceless %}
 Page {{ paginator.currentPage|number_format }} of {{ paginator.pageCount|number_format }}, showing {{ paginator.perPage|number_format }} of {{ paginator.total|number_format }} results
 {% endspaceless %}
-{% endblock %}
+{% endblock paginator_count %}
 
 {% block paginator_links %}
 {% spaceless %}
@@ -28,11 +28,11 @@ Page {{ paginator.currentPage|number_format }} of {{ paginator.pageCount|number_
 						<li class="last">{{ paginator_last( paginator ) }}</li>
 					{% endif %}
 				</ul>
-			{% endblock %}
+			{% endblock paginator_nav %}
 		</nav>
 	{% endif %}
 {% endspaceless %}
-{% endblock %}
+{% endblock paginator_links %}
 
 {% block paginator_link %}
 {% spaceless %}
@@ -52,7 +52,7 @@ Page {{ paginator.currentPage|number_format }} of {{ paginator.pageCount|number_
 		</a>
 	{% endif %}
 {% endspaceless %}
-{% endblock %}
+{% endblock paginator_link %}
 
 {% block paginator_prev %}
 {% spaceless %}
@@ -63,7 +63,7 @@ Page {{ paginator.currentPage|number_format }} of {{ paginator.pageCount|number_
 		{{ paginator_link( paginator, paginator.currentPage - 1, label ) }}
 	{% endif %}
 {% endspaceless %}
-{% endblock %}
+{% endblock paginator_prev %}
 
 {% block paginator_next %}
 {% spaceless %}
@@ -72,7 +72,7 @@ Page {{ paginator.currentPage|number_format }} of {{ paginator.pageCount|number_
 	{% endif %}
 	{{ paginator_link( paginator, paginator.currentPage + 1, label ) }}
 {% endspaceless %}
-{% endblock %}
+{% endblock paginator_next %}
 
 {% block paginator_first %}
 {% spaceless %}
@@ -81,7 +81,7 @@ Page {{ paginator.currentPage|number_format }} of {{ paginator.pageCount|number_
 	{% endif %}
 	{{ paginator_link( paginator, 1, label ) }}
 {% endspaceless %}
-{% endblock %}
+{% endblock paginator_first %}
 
 {% block paginator_last %}
 {% spaceless %}
@@ -90,4 +90,4 @@ Page {{ paginator.currentPage|number_format }} of {{ paginator.pageCount|number_
 	{% endif %}
 	{{ paginator_link( paginator, paginator.pageCount, label) }}
 {% endspaceless %}
-{% endblock %}
+{% endblock paginator_last %}

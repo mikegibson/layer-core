@@ -7,7 +7,7 @@
 	<meta name="viewport" content="{% block meta_viewport %}width=device-width, initial-scale=1{% endblock %}">
 	<meta http-equiv="X-UA-Compatible" content="{% block meta_x_ua_compatible %}IE=edge{% endblock %}">
 
-{% endblock %}
+{% endblock meta %}
 
 {% block head %}
 
@@ -15,7 +15,7 @@
 
 	<script src="{{ asset_url('js_modernizr') }}"></script>
 
-{% endblock %}
+{% endblock head %}
 
 {% block body %}
 
@@ -45,8 +45,8 @@
 		</footer>
 		{% endif %}
 
-	{% endblock %}
+	{% endblock container %}
 
 </div>
 
-{% endblock %}
+{% endblock body %}

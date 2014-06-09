@@ -14,7 +14,7 @@
 		{{ container|raw }}
 	{% endif %}
 {% endspaceless %}
-{% endblock %}
+{% endblock flash %}
 
 {% block flash_container %}
 {% spaceless %}
@@ -31,7 +31,7 @@
 
 	</div>
 {% endspaceless %}
-{% endblock %}
+{% endblock flash_container %}
 
 {% block flash_messages %}
 {% spaceless %}
@@ -46,7 +46,7 @@
 		{% endfor %}
 	{% endfor %}
 {% endspaceless %}
-{% endblock %}
+{% endblock flash_messages %}
 
 {% block flash_message %}
 <div class="flash flash-{{ key }}">
@@ -54,4 +54,4 @@
 	{{ message }}
 
 </div>
-{% endblock %}
+{% endblock flash_message %}
