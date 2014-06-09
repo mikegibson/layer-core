@@ -19,7 +19,6 @@ use Layer\Node\ControllerNodeListNode;
 use Layer\Node\WrappedControllerNode;
 use Layer\Plugin\Plugin;
 use Layer\Users\Action\LoginAction;
-use Silex\Application;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
