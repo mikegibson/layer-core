@@ -5,10 +5,10 @@
 
 		{% block head %}
 
-		<title>{% block title %}{{ app_name }}{% endblock %}</title>
+		<title>{% block title %}{{ app.name }}{% endblock %}</title>
 
 		{% block meta %}
-		<meta charset="{{ app_charset }}" />
+		<meta charset="{{ app.charset|lower }}" />
 		{% if meta_description is defined %}
 		<meta name="description" content="{{ meta_description }}">
 		{% endif %}
