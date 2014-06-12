@@ -192,10 +192,13 @@ class Application extends \Silex\Application {
 
 			$this->setTimezone();
 			$this->initializeSecurity();
-			$this->mountControllers();
 
 			foreach($this->assets as $name => $appKey) {
 				$this['assetic.asset_manager']->set($name, $this[$appKey]);
+			}
+
+			if(!$this->isCli()) {
+				$this->mountControllers();
 			}
 
 		}
@@ -246,6 +249,10 @@ class Application extends \Silex\Application {
 			$request->enableHttpMethodParameterOverride();
 		}
 		return parent::handle($request, $type, $catch);
+	}
+
+	public function isCli() {
+		return (php_sapi_name() === 'cli');
 	}
 
 	protected function getPaths() {
