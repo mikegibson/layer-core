@@ -35,7 +35,7 @@ class AssetServiceProvider implements ServiceProviderInterface {
 		/**
 		 * Asset manager
 		 *
-		 * @return Assetic\AssetManager
+		 * @return \Assetic\AssetManager
 		 */
 		$app['assetic.asset_manager'] = $app->share(function () {
 			return new AssetManager();
@@ -58,7 +58,7 @@ class AssetServiceProvider implements ServiceProviderInterface {
 		/**
 		 * Filter manager
 		 *
-		 * @return Assetic\FilterManager
+		 * @return \Assetic\FilterManager
 		 */
 		$app['assetic.filter_manager'] = $app->share(function () use ($app) {
 			$manager = new FilterManager();
@@ -71,7 +71,7 @@ class AssetServiceProvider implements ServiceProviderInterface {
 		/**
 		 * Asset writer, writes to the 'assetic.path_to_web' folder
 		 *
-		 * @return Assetic\AssetWriter
+		 * @return \Assetic\AssetWriter
 		 */
 		$app['assetic.asset_writer'] = $app->share(function () use ($app) {
 			return new AssetWriter($app['paths.cache_assets']);
@@ -80,7 +80,7 @@ class AssetServiceProvider implements ServiceProviderInterface {
 		/**
 		 * Factory
 		 *
-		 * @return Assetic\Factory\AssetFactory
+		 * @return \Assetic\Factory\AssetFactory
 		 */
 		$app['assetic.factory'] = $app->share(function () use ($app) {
 			$factory = new AssetFactory($app);
