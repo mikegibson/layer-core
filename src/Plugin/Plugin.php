@@ -2,26 +2,20 @@
 
 namespace Layer\Plugin;
 
-use Layer\Application;
+use Silex\Application;
+use Silex\ServiceProviderInterface;
 
-abstract class Plugin {
-
-	protected $app;
+abstract class Plugin implements ServiceProviderInterface {
 
 	protected $depends = [];
 
 	private $__path;
 
-	public function __construct(Application $app) {
-
-		$this->app = $app;
-	}
-
-	public function register() {
+	public function register(Application $app) {
 
 	}
 
-	public function boot() {
+	public function boot(Application $app) {
 
 	}
 
@@ -35,18 +29,6 @@ abstract class Plugin {
 		}
 
 		return $this->__path;
-	}
-
-	public function getDependencies() {
-
-		return $this->depends;
-	}
-
-	public function __get($name) {
-
-		if ($name === 'name') {
-			return $this->getName();
-		}
 	}
 
 }

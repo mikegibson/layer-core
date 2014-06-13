@@ -10,7 +10,7 @@ use Layer\Config\ConfigServiceProvider;
 use Layer\Data\DataProvider;
 use Layer\Node\ControllerNode;
 use Layer\Node\ControllerNodeInterface;
-use Layer\Plugin\PluginServiceProvider;
+use Layer\Plugin\Plugin;
 use Layer\Route\UrlMatcher;
 use Layer\View\Twig\TwigServiceProvider;
 use Layer\Utility\ArrayHelper;
@@ -32,6 +32,7 @@ use Silex\Provider\SessionServiceProvider;
 use Silex\Provider\SwiftmailerServiceProvider;
 use Silex\Provider\TranslationServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
+use Silex\ServiceProviderInterface;
 use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\Debug\ExceptionHandler;
 use Symfony\Component\Form\FormTypeInterface;
@@ -49,6 +50,8 @@ class Application extends \Silex\Application {
 	use MonologTrait, SecurityTrait, SwiftmailerTrait, TranslationTrait, TwigTrait, UrlGeneratorTrait;
 
 	public $assets = [];
+
+	private $plugins = [];
 
 	/**
 	 * Constructor
@@ -204,6 +207,46 @@ class Application extends \Silex\Application {
 	}
 
 	/**
+	 * @param ServiceProviderInterface $serviceProvider
+	 * @param array $values
+	 * @return \Silex\Application
+	 */
+	public function register(ServiceProviderInterface $serviceProvider, array $values = []) {
+		if($serviceProvider instanceof Plugin) {
+			$name = $serviceProvider->getName();
+			$this->plugins[$name] = $serviceProvider;
+		}
+		return parent::register($serviceProvider, $values);
+	}
+
+	/**
+	 * @param $name
+	 * @return bool
+	 */
+	public function hasPlugin($name) {
+		return isset($this->plugins[$name]);
+	}
+
+	/**
+	 * @param $name
+	 * @return \Layer\Plugin\Plugin
+	 * @throws \InvalidArgumentException
+	 */
+	public function getPlugin($name) {
+		if(!$this->hasPlugin($name)) {
+			throw new \InvalidArgumentException(sprintf('Plugin %s is not loaded', $name));
+		}
+		return $this->plugins[$name];
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getPlugins() {
+		return $this->plugins;
+	}
+
+	/**
 	 * Read a configuration value
 	 *
 	 * @param $key
@@ -302,7 +345,6 @@ class Application extends \Silex\Application {
 
 	protected function registerServiceProviders() {
 		$this->register(new ConfigServiceProvider());
-		$this->register(new PluginServiceProvider());
 		$this->register(new ServiceControllerServiceProvider());
 		$this->register(new UrlGeneratorServiceProvider());
 		$this->register(new SessionServiceProvider(), [

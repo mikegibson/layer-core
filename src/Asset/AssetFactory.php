@@ -22,9 +22,10 @@ class AssetFactory extends \Assetic\Factory\AssetFactory {
 					$this->app['paths.templates'] . '/layer' . $resource,
 					$this->app['paths.layer'] . '/Resource' . $resource
 				];
-			} elseif ($plugin = $this->app['plugins']->get($namespace)) {
+			} elseif ($this->app->hasPlugin($namespace)) {
+				$plugin = $this->app->getPlugin($namespace);
 				$paths = [
-					$this->app['paths.resources'] . '/plugin/' . $plugin->name . $resource,
+					$this->app['paths.resources'] . '/plugin/' . $plugin->getName() . $resource,
 					$plugin->getPath() . '/Resource' . $resource
 				];
 			}

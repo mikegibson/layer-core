@@ -19,6 +19,7 @@ use Layer\Node\ControllerNodeListNode;
 use Layer\Node\WrappedControllerNode;
 use Layer\Plugin\Plugin;
 use Layer\Users\Action\LoginAction;
+use Silex\Application;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -32,9 +33,7 @@ class CmsPlugin extends Plugin {
 		return 'cms';
 	}
 
-	public function register() {
-		
-		$app = $this->app;
+	public function register(Application $app) {
 
 		$app['cms.url_fragment'] = 'cms';
 
@@ -140,9 +139,12 @@ class CmsPlugin extends Plugin {
 			return $node;
 		});
 
-		$callback = [$this, 'onRegisterRepository'];
-		$app['dispatcher'] = $app->share($app->extend('dispatcher', function(EventDispatcherInterface $dispatcher) use($callback) {
-			$dispatcher->addListener(ManagedRepositoryEvent::REGISTER, $callback);
+		$app['dispatcher'] = $app->share($app->extend('dispatcher', function(EventDispatcherInterface $dispatcher) use($app) {
+			$dispatcher->addListener(ManagedRepositoryEvent::REGISTER, function(ManagedRepositoryEvent $event) use($app) {
+				$baseRepository = $event->getRepository();
+				$repository = new CmsRepository($baseRepository, $app['cms.repository_node_factory']);
+				$event->setRepository($repository);
+			});
 			return $dispatcher;
 		}));
 
@@ -190,15 +192,9 @@ class CmsPlugin extends Plugin {
 
 	}
 
-	public function boot() {
-		$fragment = $this->app['cms.url_fragment'];
-		$this->app->mount("/{$fragment}", $this->app['cms.controllers']);
-	}
-
-	public function onRegisterRepository(ManagedRepositoryEvent $event) {
-		$baseRepository = $event->getRepository();
-		$repository = new CmsRepository($baseRepository, $this->app['cms.repository_node_factory']);
-		$event->setRepository($repository);
+	public function boot(Application $app) {
+		$fragment = $app['cms.url_fragment'];
+		$app->mount("/{$fragment}", $app['cms.controllers']);
 	}
 
 }

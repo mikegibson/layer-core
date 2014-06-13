@@ -4,6 +4,7 @@ namespace Layer\Users;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Layer\Plugin\Plugin;
+use Silex\Application;
 
 class UsersPlugin extends Plugin {
 
@@ -11,32 +12,32 @@ class UsersPlugin extends Plugin {
 		return 'users';
 	}
 
-	public function register() {
+	public function register(Application $app) {
 
-		$this->app['users.entity_class'] = 'Layer\\Users\\User';
+		$app['users.entity_class'] = 'Layer\\Users\\User';
 
-		$this->app['users.repository'] = $this->app->share(function() {
-			return $this->app['orm.rm']->loadRepository($this->app['orm.em'], $this->app['users.entity_class']);
+		$app['users.repository'] = $app->share(function() use($app) {
+			return $app['orm.rm']->loadRepository($app['orm.em'], $app['users.entity_class']);
 		});
 
-		$this->app['users.security_provider'] = $this->app->share(function() {
-			return new UserSecurityProvider($this->app['users.repository']);
+		$app['users.security_provider'] = $app->share(function() use($app) {
+			return new UserSecurityProvider($app['users.repository']);
 		});
 
-		$this->app['users.listener'] = $this->app->share(function() {
-			return new UserListener($this->app['security.encoder_factory']);
+		$app['users.listener'] = $app->share(function() use($app) {
+			return new UserListener($app['security.encoder_factory']);
 		});
 
-		$this->app->extend('orm.em', function(EntityManagerInterface $entityManager) {
-			$entityManager->getEventManager()->addEventSubscriber($this->app['users.listener']);
+		$app->extend('orm.em', function(EntityManagerInterface $entityManager) use($app) {
+			$entityManager->getEventManager()->addEventSubscriber($app['users.listener']);
 			return $entityManager;
 		});
 
 	}
 
-	public function boot() {
+	public function boot(Application $app) {
 
-		$this->app['users.repository'];
+		$app['users.repository'];
 
 	}
 

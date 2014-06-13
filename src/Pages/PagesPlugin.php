@@ -17,9 +17,7 @@ class PagesPlugin extends Plugin {
 		return 'pages';
 	}
 
-	public function register() {
-
-		$app = $this->app;
+	public function register(Application $app) {
 
 		$app['pages.entity_class'] = 'Layer\\Pages\\Page';
 
@@ -38,9 +36,9 @@ class PagesPlugin extends Plugin {
 
 	}
 
-	public function boot() {
+	public function boot(Application $app) {
 
-		$this->app['pages.repository'];
+		$app['pages.repository'];
 
 	}
 
