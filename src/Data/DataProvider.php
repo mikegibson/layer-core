@@ -517,19 +517,19 @@ class DataProvider implements ServiceProviderInterface {
 			return $managerRegistry;
 		});
 
-		$app->extend('form.extensions', function ($extensions) use($app) {
+		$app['form.extensions'] = $app->share($app->extend('form.extensions', function ($extensions) use($app) {
 			$extensions[] = new DoctrineOrmExtension($app['orm.manager_registry']);
 			return $extensions;
-		});
+		}));
 
 		$app['console.commands.schema'] = $app->share(function() {
 			return new SchemaCommand();
 		});
 
-		$app->extend('console', function(\Knp\Console\Application $consoleApp) use($app) {
+		$app['console'] = $app->share($app->extend('console', function(\Knp\Console\Application $consoleApp) use($app) {
 			$consoleApp->add($app['console.commands.schema']);
 			return $consoleApp;
-		});
+		}));
 
 	}
 

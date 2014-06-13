@@ -141,17 +141,17 @@ class CmsPlugin extends Plugin {
 		});
 
 		$callback = [$this, 'onRegisterRepository'];
-		$app->extend('dispatcher', function(EventDispatcherInterface $dispatcher) use($callback) {
+		$app['dispatcher'] = $app->share($app->extend('dispatcher', function(EventDispatcherInterface $dispatcher) use($callback) {
 			$dispatcher->addListener(ManagedRepositoryEvent::REGISTER, $callback);
 			return $dispatcher;
-		});
+		}));
 
-		$app->extend('twig', function(\Twig_Environment $twig) use($app) {
+		$app['twig'] = $app->share($app->extend('twig', function(\Twig_Environment $twig) use($app) {
 			$twig->addExtension(new TwigCmsExtension($app['cms.helper']));
 			return $twig;
-		});
+		}));
 
-		$app->extend('security.firewalls', function(array $firewalls) use($app) {
+		$app['security.firewalls'] = $app->share($app->extend('security.firewalls', function(array $firewalls) use($app) {
 
 			$fragment = $app['cms.url_fragment'];
 
@@ -186,7 +186,7 @@ class CmsPlugin extends Plugin {
 
 			return $firewalls;
 
-		});
+		}));
 
 	}
 
