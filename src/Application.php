@@ -210,6 +210,7 @@ class Application extends \Silex\Application {
 	 * @param ServiceProviderInterface $serviceProvider
 	 * @param array $values
 	 * @return \Silex\Application
+	 * @throws \RuntimeException If plugin is already loaded
 	 */
 	public function register(ServiceProviderInterface $serviceProvider, array $values = []) {
 		if($serviceProvider instanceof Plugin) {
