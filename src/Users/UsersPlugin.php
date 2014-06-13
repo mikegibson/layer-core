@@ -28,10 +28,10 @@ class UsersPlugin extends Plugin {
 			return new UserListener($app['security.encoder_factory']);
 		});
 
-		$app->extend('orm.em', function(EntityManagerInterface $entityManager) use($app) {
+		$app['orm.em'] = $app->share($app->extend('orm.em', function(EntityManagerInterface $entityManager) use($app) {
 			$entityManager->getEventManager()->addEventSubscriber($app['users.listener']);
 			return $entityManager;
-		});
+		}));
 
 	}
 
