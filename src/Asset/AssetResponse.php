@@ -8,11 +8,20 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AssetResponse extends StreamedResponse {
 
+	/**
+	 * @var array
+	 */
 	protected $mimeTypes = [
 		'css' => 'text/css',
 		'js' => 'text/javascript'
 	];
 
+	/**
+	 * @param AssetInterface $asset
+	 * @param AssetWriter $writer
+	 * @param array $cachePath
+	 * @param array $headers
+	 */
 	public function __construct(AssetInterface $asset, AssetWriter $writer, $cachePath, array $headers = []) {
 
 		$file = $asset->getTargetPath();
