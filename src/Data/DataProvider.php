@@ -483,7 +483,7 @@ class DataProvider implements ServiceProviderInterface {
 			return new GetEntityHumanNameQuery($app['annotations.reader'], $app['inflector']);
 		});
 
-		$app['metadata.queries_collection'] = $app->share(function() use($app) {
+		$app['metadata.queries'] = $app->share(function() use($app) {
 			$collection = new QueryCollection();
 			$collection
 				->registerQuery($app['metadata.queries.getEntityName'])
@@ -502,7 +502,7 @@ class DataProvider implements ServiceProviderInterface {
 		});
 
 		$app['orm.rm'] = $app->share(function() use($app) {
-			return new RepositoryManager($app['dispatcher'], $app['metadata.queries_collection']);
+			return new RepositoryManager($app['dispatcher'], $app['metadata.queries']);
 		});
 
 		$app->register(new ValidatorServiceProvider());

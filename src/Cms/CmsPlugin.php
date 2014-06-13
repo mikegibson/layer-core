@@ -92,8 +92,7 @@ class CmsPlugin extends Plugin {
 			);
 		});
 
-		$app->extend(
-			'metadata.queries_collection',
+		$app['metadata.queries'] = $app->share($app->extend('metadata.queries',
 			function(QueryCollection $collection) use($app) {
 				$collection
 					->registerQuery($app['metadata.queries.getCmsEntity'])
@@ -102,7 +101,7 @@ class CmsPlugin extends Plugin {
 					->registerQuery($app['metadata.queries.getCmsFormFields']);
 				return $collection;
 			}
-		);
+		));
 
 		$app['cms.actions.dashboard'] = $app->share(function() {
 			return new DashboardAction();
