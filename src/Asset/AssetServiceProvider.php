@@ -105,6 +105,7 @@ class AssetServiceProvider implements ServiceProviderInterface {
 				->assert('asset', '.+')
 				->convert('asset', function ($file) use ($app) {
 
+					// @todo Fix debug assets
 					/*     if(0 === strpos($file, 'debug/')) {
 								$target = substr($file, 6);
 								$debug = true;
