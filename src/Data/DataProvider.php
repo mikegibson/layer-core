@@ -30,7 +30,6 @@ use Doctrine\ORM\Mapping\Driver\YamlDriver;
 use Gedmo\Sluggable\SluggableListener;
 use Gedmo\Timestampable\TimestampableListener;
 use Gedmo\Tree\TreeListener;
-use Layer\Console\Command\SchemaCommand;
 use Layer\Data\Metadata\Query\GetEditablePropertiesQuery;
 use Layer\Data\Metadata\Query\GetEntityCrudQuery;
 use Layer\Data\Metadata\Query\GetEntityHumanNameQuery;

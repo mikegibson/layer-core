@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Console\Command;
+namespace Layer\Console;
 
 class Command extends \Knp\Command\Command {
 
