@@ -2,8 +2,6 @@
 
 namespace Layer\Cms\View;
 
-use Layer\Cms\Node\CmsRepositoryNavigationNode;
-use Layer\Node\ControllerNodeInterface;
 use Layer\View\Twig\Extension;
 
 /**
