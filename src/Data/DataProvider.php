@@ -496,7 +496,8 @@ class DataProvider implements ServiceProviderInterface {
 				->registerQuery($app['metadata.queries.getEditableProperties'])
 				->registerQuery($app['metadata.queries.isTitleProperty'])
 				->registerQuery($app['metadata.queries.getTitleProperty'])
-				->registerQuery($app['metadata.queries.getEntityHumanName']);
+				->registerQuery($app['metadata.queries.getEntityHumanName'])
+			;
 			return $collection;
 		});
 
