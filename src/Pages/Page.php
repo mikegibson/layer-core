@@ -45,7 +45,7 @@ class Page {
 	protected $slug;
 
 	/**
-	 * @var text $content
+	 * @var string $content
 	 *
 	 * @ORM\Column(type="text")
 	 * @Layer\HtmlContent
