@@ -98,7 +98,7 @@ class AssetServiceProvider implements ServiceProviderInterface {
 
 			$controllers->get('/{asset}', function ($asset) use ($app) {
 
-				return new AssetResponse($app, $asset);
+				return new AssetResponse($asset, $app['assetic.asset_writer'], $app['paths.cache_assets']);
 
 			})
 				->bind('asset')

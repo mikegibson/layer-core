@@ -3,7 +3,7 @@
 namespace Layer\Asset;
 
 use Assetic\Asset\AssetInterface;
-use Layer\Application;
+use Assetic\AssetWriter;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AssetResponse extends StreamedResponse {
@@ -13,11 +13,11 @@ class AssetResponse extends StreamedResponse {
 		'js' => 'text/javascript'
 	];
 
-	public function __construct(Application $app, AssetInterface $asset, array $headers = []) {
+	public function __construct(AssetInterface $asset, AssetWriter $writer, $cachePath, array $headers = []) {
 
 		$file = $asset->getTargetPath();
 
-		$cachePath = $app['paths.cache_assets'] . '/' . $file;
+		$cachePath = $cachePath . '/' . $file;
 
 		$cached = false;
 
@@ -35,7 +35,7 @@ class AssetResponse extends StreamedResponse {
 		}
 
 		if (!$cached) {
-			$app['assetic.asset_writer']->writeAsset($asset);
+			$writer->writeAsset($asset);
 		}
 
 		$stream = function () use ($cachePath) {
