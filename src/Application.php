@@ -214,6 +214,9 @@ class Application extends \Silex\Application {
 	public function register(ServiceProviderInterface $serviceProvider, array $values = []) {
 		if($serviceProvider instanceof Plugin) {
 			$name = $serviceProvider->getName();
+			if($this->hasPlugin($name)) {
+				throw new \RuntimeException(sprintf('Plugin %s is already loaded.', $name));
+			}
 			$this->plugins[$name] = $serviceProvider;
 		}
 		return parent::register($serviceProvider, $values);
