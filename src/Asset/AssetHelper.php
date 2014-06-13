@@ -2,23 +2,29 @@
 
 namespace Layer\Asset;
 
-use Layer\Application;
+use Assetic\AssetManager;
 use Layer\Route\UrlGeneratorTrait;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class AssetHelper {
 
-	use UrlGeneratorTrait;
+	/**
+	 * @var \Assetic\AssetManager
+	 */
+	protected $assetManager;
 
 	/**
-	 * @var \Layer\Application
+	 * @var \Symfony\Component\Routing\Generator\UrlGeneratorInterface
 	 */
-	protected $app;
+	protected $urlGenerator;
 
 	/**
-	 * @param Application $app
+	 * @param AssetManager $assetManager
+	 * @param UrlGeneratorInterface $urlGenerator
 	 */
-	public function __construct(Application $app) {
-		$this->app = $app;
+	public function __construct(AssetManager $assetManager, UrlGeneratorInterface $urlGenerator) {
+		$this->assetManager = $assetManager;
+		$this->urlGenerator = $urlGenerator;
 	}
 
 	/**
@@ -27,12 +33,12 @@ class AssetHelper {
 	 * @return mixed
 	 */
 	public function url($name, $timestamp = true) {
-		$asset = $this->app['assetic.asset_manager']->get($name);
+		$asset = $this->assetManager->get($name);
 		$params = ['asset' => $asset->getTargetPath()];
 		if ($timestamp) {
 			$params['v'] = $asset->getLastModified();
 		}
-		return $this->generateUrl($this->app, 'asset', $params);
+		return $this->urlGenerator->generate('asset', $params);
 	}
 
 }

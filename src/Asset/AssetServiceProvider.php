@@ -136,7 +136,7 @@ class AssetServiceProvider implements ServiceProviderInterface {
 		});
 
 		$app['asset_helper'] = $app->share(function () use ($app) {
-			return new AssetHelper($app);
+			return new AssetHelper($app['assetic.asset_manager'], $app['url_generator']);
 		});
 
 		$app['twig'] = $app->share(
