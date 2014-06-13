@@ -3,6 +3,7 @@
 namespace Layer\Cms\Node;
 
 use Layer\Action\ActionInterface;
+use Layer\Action\PaginationAction;
 use Layer\Application;
 use Layer\Cms\Action\AddAction;
 use Layer\Cms\Action\EditAction;
@@ -47,7 +48,7 @@ class RepositoryCmsNodeFactory implements RepositoryCmsNodeFactoryInterface {
 	 * @return ControllerNode
 	 */
 	protected function createIndexNode(CmsRepositoryInterface $repository) {
-		$action = new IndexAction($repository);
+		$action = new PaginationAction($repository, '@cms/view/index');
 		return $this->createNodeFromAction($action);
 	}
 
