@@ -192,13 +192,10 @@ class Application extends \Silex\Application {
 
 			$this->setTimezone();
 			$this->initializeSecurity();
+			$this->mountControllers();
 
 			foreach($this->assets as $name => $appKey) {
 				$this['assetic.asset_manager']->set($name, $this[$appKey]);
-			}
-
-			if(!$this->isCli()) {
-				$this->mountControllers();
 			}
 
 		}
