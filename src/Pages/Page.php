@@ -133,7 +133,7 @@ class Page {
 	}
 
 	/**
-	 * @return text
+	 * @return string
 	 */
 	public function getContent() {
 		return $this->content;
