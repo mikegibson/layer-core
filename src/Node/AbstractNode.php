@@ -6,15 +6,20 @@ abstract class AbstractNode implements NodeInterface {
 
 	protected $childNodes = [];
 
+	private $adopteeNodes = [];
+
 	public function getChildNodes() {
+		$this->registerAdopters();
 		return $this->childNodes;
 	}
 
 	public function hasChildNode($name) {
+		$this->registerAdopters();
 		return isset($this->childNodes[$name]);
 	}
 
 	public function getChildNode($name) {
+		$this->registerAdopters();
 		if(!$this->hasChildNode($name)) {
 			throw new \InvalidArgumentException(sprintf('Child node %s does not exist.', $name));
 		}
@@ -54,11 +59,18 @@ abstract class AbstractNode implements NodeInterface {
 	}
 
 	public function adoptChildNodes(NodeInterface $node, $overwrite = false) {
-		foreach($node->getChildNodes() as $childNode) {
-			if($overwrite || !$this->hasChildNode($childNode->getName())) {
-				$this->wrapChildNode($childNode, null, null, true, $overwrite);
+		$this->adopteeNodes[] = compact('node', 'overwrite');
+	}
+
+	protected function registerAdopters() {
+		foreach($this->adopteeNodes as $info) {
+			foreach($info['node']->getChildNodes() as $childNode) {
+				if($info['overwrite'] || !$this->hasChildNode($childNode->getName())) {
+					$this->wrapChildNode($childNode, null, null, true, $info['overwrite']);
+				}
 			}
 		}
+		$this->adopteeNodes = [];
 	}
 
 	public function getPath() {
