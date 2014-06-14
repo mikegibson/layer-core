@@ -12,13 +12,16 @@ class PaginationAction implements ActionInterface {
 
 	protected $template;
 
+	protected $result;
+
 	/**
 	 * @var \Layer\Cms\Data\CmsRepositoryInterface|\Layer\Data\ManagedRepositoryInterface
 	 */
 	private $repository;
 
 	/**
-	 * @param CmsRepositoryInterface $repository
+	 * @param ManagedRepositoryInterface $repository
+	 * @param $template
 	 */
 	public function __construct(ManagedRepositoryInterface $repository, $template) {
 		$this->repository = $repository;
@@ -55,31 +58,34 @@ class PaginationAction implements ActionInterface {
 
 		return [
 			'repository' => $this->getRepository(),
-			'paginator' => $this->getPaginator($request)
+			'paginator' => $this->createPaginator($request)
 		];
 
 	}
 
-	protected function getPaginator(Request $request) {
-		return new Paginator($this->getPaginatorResult(), $this->getPaginatorRequest($request));
+	protected function createPaginator(Request $request) {
+		return new Paginator($this->getPaginatorResult(), $this->createPaginatorRequest($request));
 	}
 
 	/**
 	 * @return \Layer\Data\|ManagedRepositoryInterface
 	 */
-	protected function getRepository() {
+	public function getRepository() {
 		return $this->repository;
 	}
 
-	protected function getQueryBuilder() {
+	public function getPaginatorResult() {
+		if($this->result === null) {
+			$this->result = new PaginatorResult($this->getRepository(), $this->createQueryBuilder());
+		}
+		return $this->result;
+	}
+
+	protected function createQueryBuilder() {
 		return $this->getRepository()->createQueryBuilder($this->getRepository()->getName());
 	}
 
-	protected function getPaginatorResult() {
-		return new PaginatorResult($this->getRepository(), $this->getQueryBuilder());
-	}
-
-	protected function getPaginatorRequest(Request $request) {
+	protected function createPaginatorRequest(Request $request) {
 		return new PaginatorRequest($request);
 	}
 
