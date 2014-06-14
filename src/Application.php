@@ -32,6 +32,7 @@ use Silex\Provider\SessionServiceProvider;
 use Silex\Provider\SwiftmailerServiceProvider;
 use Silex\Provider\TranslationServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
+use Silex\Provider\ValidatorServiceProvider;
 use Silex\ServiceProviderInterface;
 use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\Debug\ExceptionHandler;
@@ -377,6 +378,7 @@ class Application extends \Silex\Application {
 		$this->register(new MonologServiceProvider(), [
 			'monolog.logfile' => $this['paths.log'] . '/development.log',
 		]);
+		$this->register(new ValidatorServiceProvider());
 		$this->register(new DataProvider());
 	}
 

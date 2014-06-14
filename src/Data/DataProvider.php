@@ -45,7 +45,6 @@ use Layer\Data\Metadata\Query\IsTitlePropertyQuery;
 use Layer\Data\Metadata\QueryCollection;
 use Silex\Application;
 use Silex\Provider\DoctrineServiceProvider;
-use Silex\Provider\ValidatorServiceProvider;
 use Silex\ServiceProviderInterface;
 use Symfony\Bridge\Doctrine\Form\DoctrineOrmExtension;
 use Symfony\Component\Validator\Mapping\Factory\LazyLoadingMetadataFactory;
@@ -508,8 +507,6 @@ class DataProvider implements ServiceProviderInterface {
 		$app['orm.rm'] = $app->share(function() use($app) {
 			return new RepositoryManager($app['dispatcher'], $app['metadata.queries']);
 		});
-
-		$app->register(new ValidatorServiceProvider());
 
 		$app['validator.mapping.class_metadata_factory'] = $app->share(function() use($app) {
 			return new LazyLoadingMetadataFactory($app['annotations.loader']);
