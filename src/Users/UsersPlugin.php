@@ -4,6 +4,7 @@ namespace Layer\Users;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Layer\Plugin\Plugin;
+use Layer\Users\Command\AddUserCommand;
 use Silex\Application;
 
 class UsersPlugin extends Plugin {
@@ -31,6 +32,15 @@ class UsersPlugin extends Plugin {
 		$app['orm.em'] = $app->share($app->extend('orm.em', function(EntityManagerInterface $entityManager) use($app) {
 			$entityManager->getEventManager()->addEventSubscriber($app['users.listener']);
 			return $entityManager;
+		}));
+
+		$app['console.commands.add_user'] = $app->share(function() {
+			return new AddUserCommand();
+		});
+
+		$app['console'] = $app->share($app->extend('console', function(\Knp\Console\Application $consoleApp) use($app) {
+			$consoleApp->add($app['console.commands.add_user']);
+			return $consoleApp;
 		}));
 
 	}
