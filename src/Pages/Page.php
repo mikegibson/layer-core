@@ -98,6 +98,8 @@ class Page {
 	protected $children;
 
 	/**
+	 * @var \DateTime $created
+	 *
 	 * @ORM\Column(type="datetime")
 	 * @Behavior\Timestampable(on="create")
 	 * @Layer\InvisibleProperty
@@ -105,6 +107,8 @@ class Page {
 	protected $created;
 
 	/**
+	 * @var \DateTime $updated
+	 *
 	 * @ORM\Column(type="datetime")
 	 * @Behavior\Timestampable(on="update")
 	 * @Layer\InvisibleProperty
@@ -178,10 +182,16 @@ class Page {
 		return $this->level;
 	}
 
+	/**
+	 * @return \DateTime
+	 */
 	public function getCreated() {
 		return $this->created;
 	}
 
+	/**
+	 * @return \DateTime
+	 */
 	public function getUpdated() {
 		return $this->updated;
 	}
