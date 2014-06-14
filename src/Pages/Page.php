@@ -48,7 +48,7 @@ class Page {
 	 * @var string $content
 	 *
 	 * @ORM\Column(type="text")
-	 * @Layer\HtmlContent
+	 * @Layer\HtmlProperty
 	 */
 	protected $content;
 
