@@ -140,4 +140,15 @@ class Paginator implements PaginatorInterface {
 		return $this->result;
 	}
 
+	/**
+	 * @param null $page
+	 * @param null $limit
+	 * @param null $sortKey
+	 * @param null $direction
+	 * @return array
+	 */
+	public function getUrlParameters($page = null, $limit = null, $sortKey = null, $direction = null) {
+		return $this->request->getUrlParameters($page, $limit, $sortKey, $direction);
+	}
+
 }

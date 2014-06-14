@@ -95,4 +95,25 @@ class PaginatorRequest implements PaginatorRequestInterface {
 		}
 	}
 
+	/**
+	 * @param null $page
+	 * @param null $limit
+	 * @param null $sortKey
+	 * @param null $direction
+	 * @return array
+	 */
+	public function getUrlParameters($page = null, $limit = null, $sortKey = null, $direction = null) {
+		$params = [];
+		if($page === null) {
+			$page = $this->getCurrentPage();
+		}
+		if($page == 1) {
+			$params[$this->pageKey] = $page;
+		}
+		$params[$this->limitKey] = $limit !== null ? $limit : $this->getPerPage();
+		$params[$this->sortKeyKey] = $sortKey !== null ? $sortKey : $this->getSortKey();
+		$params[$this->directionKey] = $direction !== null ? $direction : $this->getDirection();
+		return $params;
+	}
+
 }

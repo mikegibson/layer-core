@@ -44,4 +44,13 @@ interface PaginatorInterface extends TableDataInterface {
 	 */
 	public function getDirection();
 
+	/**
+	 * @param null $page
+	 * @param null $limit
+	 * @param null $sortKey
+	 * @param null $direction
+	 * @return array
+	 */
+	public function getUrlParameters($page = null, $limit = null, $sortKey = null, $direction = null);
+
 }
