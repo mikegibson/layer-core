@@ -1,0 +1,23 @@
+{% extends layout|default(default_layout) %}
+
+{% block content %}
+
+	{% for post in paginator.data %}
+
+		<h1><a href="{{ url('app', {node: node.getDescendent(post.slug).path}) }}">{{ post.title }}</a></h1>
+
+		<div class="content">
+
+			{% block post_content %}
+
+				{{ post.content|raw }}
+
+			{% endblock %}
+
+		</div>
+
+	{% endfor %}
+
+	{{ paginator_links(paginator) }}
+
+{% endblock content %}
