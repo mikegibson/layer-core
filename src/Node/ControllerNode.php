@@ -5,7 +5,7 @@ namespace Layer\Node;
 use Layer\Action\ActionInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class ControllerNode extends OrphanControllerNode implements ControllerNodeInterface, ActionInterface {
+class ControllerNode extends AbstractNode implements ControllerNodeInterface, ActionInterface {
 
 	private $routeName;
 
@@ -16,9 +16,15 @@ class ControllerNode extends OrphanControllerNode implements ControllerNodeInter
 
 	private $name;
 
-	public function __construct($routeName, ActionInterface $action, $name = null) {
+	public function __construct(
+		$routeName,
+		ActionInterface $action,
+		ControllerNodeInterface $parentNode = null,
+		$name = null
+	) {
 		$this->routeName = $routeName;
 		$this->action = $action;
+		$this->parentNode = $parentNode;
 		$this->name = $name;
 	}
 
@@ -71,8 +77,19 @@ class ControllerNode extends OrphanControllerNode implements ControllerNodeInter
 		return $nodes;
 	}
 
+	public function registerChildNode(NodeInterface $childNode) {
+		if(!$childNode instanceof ControllerNodeInterface) {
+			throw new \InvalidArgumentException('Child nodes must implement ControllerNodeInterface.');
+		}
+		parent::registerChildNode($childNode);
+	}
+
 	protected function getAction() {
 		return $this->action;
+	}
+
+	protected function createWrappedNode(NodeInterface $baseNode, $name = null, $label = null, $baseChildrenAccessible = true) {
+		return new WrappedControllerNode($baseNode, $this, $name, $label, $baseChildrenAccessible);
 	}
 
 }

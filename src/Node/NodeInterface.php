@@ -26,7 +26,14 @@ interface NodeInterface {
 
 	public function registerChildNode(NodeInterface $childNode);
 
-	public function wrapChildNode(NodeInterface $baseNode);
+	public function wrapChildNode(
+		NodeInterface $baseNode,
+		$name = null,
+		$label = null,
+		$baseChildrenAccessible = true,
+		$overwrite = false,
+		$prepend = false
+	);
 
 	public function adoptChildNodes(NodeInterface $node);
 

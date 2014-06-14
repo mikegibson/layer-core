@@ -3,17 +3,15 @@
 namespace Layer\Pages;
 
 use Layer\Data\ManagedRepositoryInterface;
+use Layer\Node\ControllerNode;
 use Layer\Node\ControllerNodeInterface;
-use Layer\Node\OrphanControllerNode;
 use Symfony\Component\HttpFoundation\Request;
 
-class PageNode extends OrphanControllerNode {
+class PageNode extends ControllerNode {
 
 	private $repository;
 
 	private $page;
-
-	private $parentNode;
 
 	public function __construct(
 		ManagedRepositoryInterface $repository,
@@ -41,10 +39,6 @@ class PageNode extends OrphanControllerNode {
 	protected function getChildPage($slug) {
 		$result = $this->getChildPages(['slug' => $slug]);
 		return isset($result[0]) ? $result[0] : null;
-	}
-
-	public function getParentNode() {
-		return $this->parentNode;
 	}
 
 	public function getChildNode($key) {

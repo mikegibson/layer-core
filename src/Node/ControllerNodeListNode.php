@@ -16,11 +16,6 @@ class ControllerNodeListNode extends ListNode {
 	 */
 	private $urlGenerator;
 
-	/**
-	 * @var ListNodeInterface|null
-	 */
-	private $parentNode;
-
 	private $controllerNodeChildrenAccessible;
 
 	/**

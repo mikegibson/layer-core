@@ -8,6 +8,8 @@ abstract class AbstractNode implements NodeInterface {
 
 	private $adopteeNodes = [];
 
+	protected $parentNode = null;
+
 	public function getChildNodes() {
 		$this->registerAdopters();
 		return $this->childNodes;
@@ -20,7 +22,7 @@ abstract class AbstractNode implements NodeInterface {
 
 	public function getChildNode($name) {
 		$this->registerAdopters();
-		if(!$this->hasChildNode($name)) {
+		if(!isset($this->childNodes[$name])) {
 			throw new \InvalidArgumentException(sprintf('Child node %s does not exist.', $name));
 		}
 		return $this->childNodes[$name];
@@ -48,8 +50,8 @@ abstract class AbstractNode implements NodeInterface {
 			throw new \RuntimeException('Nodes being registered must return this node from their getParentNode method.');
 		}
 		$name = $node->getName();
-		if(!$overwrite && $this->hasChildNode($name)) {
-			throw new \InvalidArgumentException(sprintf('Node name %s is already registered.', $name));
+		if(!$overwrite && isset($this->childNodes[$name])) {
+			throw new \RuntimeException(sprintf('Node name %s is already registered.', $name));
 		}
 		if($prepend) {
 			$this->childNodes = array_merge([$name => null], $this->getChildNodes(), [$name => $node]);
@@ -90,6 +92,10 @@ abstract class AbstractNode implements NodeInterface {
 			$node = $node->getChildNode($name);
 		}
 		return $node;
+	}
+
+	public function getParentNode() {
+		return $this->parentNode;
 	}
 
 	public function getRootNode() {

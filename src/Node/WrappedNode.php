@@ -6,8 +6,6 @@ class WrappedNode extends AbstractNode {
 
 	private $baseNode;
 
-	private $parentNode;
-
 	private $name;
 
 	private $label;
@@ -44,10 +42,6 @@ class WrappedNode extends AbstractNode {
 
 	public function getBaseNode() {
 		return $this->baseNode;
-	}
-
-	public function getParentNode() {
-		return $this->parentNode;
 	}
 
 	public function getChildNodes() {
