@@ -3,7 +3,6 @@
 namespace Layer\Asset;
 
 use Assetic\AssetManager;
-use Layer\Route\UrlGeneratorTrait;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class AssetHelper {
