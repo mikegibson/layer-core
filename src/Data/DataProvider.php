@@ -39,6 +39,7 @@ use Layer\Data\Metadata\Query\GetPropertyOrmQuery;
 use Layer\Data\Metadata\Query\GetTitlePropertyQuery;
 use Layer\Data\Metadata\Query\GetVisiblePropertiesQuery;
 use Layer\Data\Metadata\Query\GetVisiblePropertyLabelsQuery;
+use Layer\Data\Metadata\Query\IsHtmlPropertyQuery;
 use Layer\Data\Metadata\Query\IsPropertyEditableQuery;
 use Layer\Data\Metadata\Query\IsPropertyVisibleQuery;
 use Layer\Data\Metadata\Query\IsTitlePropertyQuery;
@@ -481,6 +482,10 @@ class DataProvider implements ServiceProviderInterface {
 			return new GetTitlePropertyQuery($app['metadata.queries.isTitleProperty']);
 		});
 
+		$app['metadata.queries.isHtmlProperty'] = $app->share(function() use($app) {
+			return new IsHtmlPropertyQuery($app['annotations.reader']);
+		});
+
 		$app['metadata.queries.getEntityHumanName'] = $app->share(function() use($app) {
 			return new GetEntityHumanNameQuery($app['annotations.reader'], $app['inflector']);
 		});
@@ -499,6 +504,7 @@ class DataProvider implements ServiceProviderInterface {
 				->registerQuery($app['metadata.queries.getEditableProperties'])
 				->registerQuery($app['metadata.queries.isTitleProperty'])
 				->registerQuery($app['metadata.queries.getTitleProperty'])
+				->registerQuery($app['metadata.queries.isHtmlProperty'])
 				->registerQuery($app['metadata.queries.getEntityHumanName'])
 			;
 			return $collection;

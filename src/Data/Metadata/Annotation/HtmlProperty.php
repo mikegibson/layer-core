@@ -9,6 +9,6 @@ use Doctrine\Common\Annotations\Annotation;
  * @package Layer\Data\Metadata\Annotation
  * @Annotation
  */
-class HtmlContent extends Annotation {
+class HtmlProperty extends Annotation {
 
 }
