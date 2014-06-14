@@ -32,6 +32,7 @@ class User implements UserInterface {
 	 *
 	 * @ORM\Column(type="string")
 	 * @Assert\NotBlank
+	 * @Layer\TitleProperty
 	 */
 	protected $username;
 
