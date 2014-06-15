@@ -83,9 +83,15 @@ class AssetServiceProvider implements ServiceProviderInterface {
 		 * @return \Assetic\Factory\AssetFactory
 		 */
 		$app['assetic.factory'] = $app->share(function () use ($app) {
-			$factory = new AssetFactory($app);
+			$factory = new AssetFactory($app['paths.resources'], $app->config('debug'));
 			$factory->setAssetManager($app['assetic.asset_manager']);
 			$factory->setFilterManager($app['assetic.filter_manager']);
+			$factory->addPath('layer', $app['paths.templates'] . '/layer');
+			$factory->addPath('layer', $app['paths.layer'] . '/Resource');
+			foreach($app->getPlugins() as $name => $plugin) {
+				$factory->addPath($name, $app['paths.resources'] . '/plugin/' . $name);
+				$factory->addPath($name, $plugin->getPath() . '/Resource');
+			}
 			return $factory;
 		});
 
