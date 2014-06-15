@@ -21,7 +21,11 @@ class FormFieldProperty extends Annotation {
 	}
 
 	public function __set($name, $value) {
-		$this->options[$name] = $value;
+		if($name === 'type') {
+			$this->value = $value;
+			return;
+		}
+		return parent::__set($name, $value);
 	}
 
 }
