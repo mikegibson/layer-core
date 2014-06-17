@@ -4,17 +4,17 @@ namespace Layer\Data;
 
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Selectable;
+use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Layer\Data\Metadata\QueryCollection;
 
 class ManagedRepository implements ManagedRepositoryInterface, Selectable {
 
 	/**
-	 * @var \Doctrine\ORM\EntityManagerInterface
+	 * @var \Doctrine\Common\Persistence\ObjectManager
 	 */
-	private $entityManager;
+	private $objectManager;
 
 	/**
 	 * @var \Doctrine\ORM\EntityRepository
@@ -32,17 +32,18 @@ class ManagedRepository implements ManagedRepositoryInterface, Selectable {
 	private $queryCollection;
 
 	/**
+	 * @param ObjectManager $objectManager
 	 * @param ObjectRepository $baseRepository
 	 * @param ClassMetadata $classMetadata
 	 * @param QueryCollection $queryCollection
 	 */
 	public function __construct(
-		EntityManagerInterface $entityManager,
+		ObjectManager $objectManager,
 		ObjectRepository $baseRepository,
 		ClassMetadata $classMetadata,
 		QueryCollection $queryCollection
 	) {
-		$this->entityManager = $entityManager;
+		$this->objectManager = $objectManager;
 		$this->baseRepository = $baseRepository;
 		$this->classMetadata = $classMetadata;
 		$this->queryCollection = $queryCollection;
@@ -54,10 +55,6 @@ class ManagedRepository implements ManagedRepositoryInterface, Selectable {
 
 	public function getClassName() {
 		return $this->getClassMetadata()->name;
-	}
-
-	public function getEntityManager() {
-		return $this->entityManager;
 	}
 
 	public function createEntity() {
@@ -82,14 +79,7 @@ class ManagedRepository implements ManagedRepositoryInterface, Selectable {
 	public function createNativeNamedQuery($queryName) {
 		return $this->baseRepository->createNativeNamedQuery($queryName);
 	}
-/*
-	public function createFormType(MetadataDriverInterface $driver = null) {
-		if($driver === null) {
-			$driver = $this->app['form.metadata_drivers.annotations'];
-		}
-		return new EntityFormType($this, $driver);
-	}
-*/
+
 	public function clear() {
 		$this->baseRepository->clear();
 	}
@@ -141,9 +131,19 @@ class ManagedRepository implements ManagedRepositoryInterface, Selectable {
 		return $query->getResult($this->getClassMetadata(), $options);
 	}
 
+	public function save($entity) {
+		$entityManager = $this->getEntityManager();
+		$entityManager->persist($entity);
+		$entityManager->flush();
+	}
+
 	public function __call($method, $args) {
 		$options = isset($args[0]) ? $args[0] : [];
 		return $this->queryMetadata($method, $options);
+	}
+
+	protected function getEntityManager() {
+		return $this->objectManager;
 	}
 
 }
