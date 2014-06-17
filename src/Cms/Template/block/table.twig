@@ -1,20 +1,3 @@
 {% extends 'block/table' %}
 
-{% block table_value %}
-{% spaceless %}
-
-	{% set escape = true %}
-	{% set link_url = null %}
-
-	{% if(repository.hasCmsNode('edit') and repository.isTitleProperty({'property':columnKey})) %}
-		{% set link_url = cms_url( repository.getCmsNode('edit').getPath(), {'id': row.id} ) %}
-	{% endif %}
-
-	{% if(escape) %}
-		{% set value = value|escape %}
-	{% endif %}
-
-	{% if link_url is not null %}<a href="{{ link_url }}">{% endif %}{{ value|raw }}{% if link_url is not null %}</a>{% endif %}
-
-{% endspaceless %}
-{% endblock table_value %}
+{% block table_value %}{{ value|raw }}{% endblock table_value %}

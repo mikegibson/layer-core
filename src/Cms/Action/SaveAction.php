@@ -54,9 +54,7 @@ abstract class SaveAction implements ActionInterface {
 			if($form->isValid()) {
 				$postData = $form->getData();
 				$record = $postData->record;
-				$entityManager = $this->getEntityManager();
-				$entityManager->persist($record);
-				$entityManager->flush();
+				$this->getRepository()->save($record);
 				$message = sprintf('The %s was saved', $singularName);
 				$flashBag->add('message', $message);
 				if($repository->hasCmsNode('add') && $form->has('save_and_add') && $form->get('save_and_add')->isClicked()) {
@@ -104,10 +102,6 @@ abstract class SaveAction implements ActionInterface {
 	 */
 	protected function getRepository() {
 		return $this->repository;
-	}
-
-	protected function getEntityManager() {
-		return $this->getRepository()->getEntityManager();
 	}
 
 	/**
