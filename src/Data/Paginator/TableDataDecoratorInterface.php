@@ -5,9 +5,10 @@ namespace Layer\Data\Paginator;
 interface TableDataDecoratorInterface {
 
 	/**
-	 * @param $key
 	 * @param $value
-	 * @return string
+	 * @param $key
+	 * @param $object
+	 * @return mixed
 	 */
 	public function decorate($value, $key, $object);
 
