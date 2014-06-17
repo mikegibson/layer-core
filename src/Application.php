@@ -9,6 +9,7 @@ use Layer\Asset\AssetServiceProvider;
 use Layer\Config\ConfigServiceProvider;
 use Layer\Data\DataProvider;
 use Layer\Form\FormServiceProvider;
+use Layer\Media\MediaProvider;
 use Layer\Node\ControllerNode;
 use Layer\Node\ControllerNodeInterface;
 use Layer\Plugin\Plugin;
@@ -380,6 +381,7 @@ class Application extends \Silex\Application {
 		]);
 		$this->register(new ValidatorServiceProvider());
 		$this->register(new DataProvider());
+		$this->register(new MediaProvider());
 	}
 
 	protected function setTimezone() {
