@@ -115,10 +115,6 @@ class DataProvider implements ServiceProviderInterface {
 			return new TreeListener();
 		});
 
-		$app['orm.em.listeners.datetime'] = $app->share(function() {
-			return new DateTimeListener();
-		});
-
 		$app['orm.ems.options.initializer'] = $app->protect(function () use ($app) {
 			static $initialized = false;
 			if ($initialized) {
@@ -559,7 +555,7 @@ class DataProvider implements ServiceProviderInterface {
 					]
 				]
 			],
-			'orm.em.listeners' => ['sluggable', 'timestampable', 'tree', 'datetime']
+			'orm.em.listeners' => ['sluggable', 'timestampable', 'tree']
 		];
 	}
 
