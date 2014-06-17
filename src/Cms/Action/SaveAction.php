@@ -9,7 +9,6 @@ use Layer\Cms\Data\EntityFormType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 abstract class SaveAction implements ActionInterface {
@@ -32,7 +31,6 @@ abstract class SaveAction implements ActionInterface {
 	/**
 	 * @param CmsRepositoryInterface $repository
 	 * @param FormFactoryInterface $formFactory
-	 * @param Session $session
 	 * @param UrlGeneratorInterface $urlGenerator
 	 */
 	public function __construct(
