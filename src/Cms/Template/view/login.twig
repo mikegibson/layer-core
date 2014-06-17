@@ -1,3 +1,13 @@
-{% extends '@users/view/login' %}
+{% extends '@cms/layout/panel' %}
 
-{% set layout = '@cms/layout/cms' %}
+{% if title is not defined %}
+	{% set title = 'Login' %}
+{% endif %}
+
+{% block panel_class %}{{ parent() }} login{% endblock %}
+
+{% block panel_content %}
+
+	{{ form( form ) }}
+
+{% endblock panel_content %}

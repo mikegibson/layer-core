@@ -1,0 +1,15 @@
+{% extends "@cms/layout/panel" %}
+
+{% block panel_class %}{{ parent() }} repository-{{ repository.cmsSlug }}{% endblock %}
+
+{% if title is not defined %}
+	{% set title = repository.getEntityHumanName({'plural': true, 'capitalize': true}) %}
+{% endif %}
+
+{% block panel_header %}
+
+	{{ parent() }}
+
+	{% include '@cms/element/nav_repository' %}
+
+{% endblock panel_header %}

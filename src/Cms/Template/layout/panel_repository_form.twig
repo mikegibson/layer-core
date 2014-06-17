@@ -1,0 +1,11 @@
+{% extends "@cms/layout/panel_repository" %}
+
+{% form_theme form "@cms/form/cms" %}
+
+{% block panel_class %}{{ parent() }} form{% endblock %}
+
+{% block panel_content %}
+
+	{{ form( form, {'attr': {'novalidate': 'novalidate'} } ) }}
+
+{% endblock panel_content %}

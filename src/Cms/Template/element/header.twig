@@ -1,0 +1,19 @@
+<header id="cms-header">
+
+	{% block cms_header %}
+
+		<h1>{% block cms_header_title %}{{ app.name }} CMS{% endblock %}</h1>
+
+		<nav role="navigation">
+
+			{% block cms_header_nav %}
+
+			{{ list( app['cms.navigation_list'] ) }}
+
+			{% endblock cms_header_nav %}
+
+		</nav>
+
+	{% endblock cms_header %}
+
+</header>

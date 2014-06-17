@@ -58,15 +58,15 @@ class CmsPlugin extends Plugin {
 		});
 
 		$app[$app->assets['css_cms'] = 'assets.css_cms'] = $app->share(function() use($app) {
-			$asset = $app['assetic.factory']->createAsset([
-				'@cms/scss/cms.scss'
+			return $app['assetic.factory']->createAsset([
+				'@cms/scss/cms.scss',
+				'@cms/scss/cms_header.scss'
 			], [
 				'compass',
 				'?uglifycss'
 			], [
 				'output' => 'css/cms/cms.css'
 			]);
-			return $asset;
 		});
 
 		$app['metadata.queries.getCmsEntity'] = $app->share(function() use($app) {

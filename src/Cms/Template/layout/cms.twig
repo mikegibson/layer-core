@@ -1,8 +1,5 @@
 {% extends "layout/standard" %}
 
-{% table_theme '@cms/block/table' %}
-{% paginator_theme '@cms/block/paginator' %}
-
 {% block title %}{% if title is defined %}{{ title }} | {% endif %}CMS | {{ parent() }}{% endblock %}
 
 {% block stylesheets %}
@@ -13,31 +10,33 @@
 
 {% endblock stylesheets %}
 
-{% block header %}
+{% block header %}{% endblock %}
 
-	<h1>{{ app.name }} CMS</h1>
+{% block container %}
 
-	{% include "@cms/element/nav_main" %}
+	{% include '@cms/element/header' %}
 
-{% endblock header %}
+	{{ flash() }}
 
-{% block content %}
+	<section id="main">
 
-	{% if block('content_header') is not empty %}
-	<header>
+		{% block main %}
 
-		{% block content_header %}{% endblock %}
+		{% block content %}{% endblock %}
 
-	</header>
+		{% endblock main %}
+
+	</section>
+
+	{% if block('footer') is not empty %}
+	<footer>
+
+		{% block footer %}{% endblock %}
+
+	</footer>
 	{% endif %}
 
-	<div class="inner">
-
-		{% block content_inner %}{% endblock %}
-
-	</div>
-
-{% endblock content %}
+{% endblock container %}
 
 {% block javascripts %}
 

@@ -1,5 +1,11 @@
-{% extends "@cms/layout/cms" %}
+{% extends "@cms/layout/panel" %}
 
-{% block content %}
-Dashboard!
-{% endblock content %}
+{% if title is not defined %}
+	{% set title = 'Dashboard' %}
+{% endif %}
+
+{% block panel_class %}{{ parent() }} dashboard{% endblock %}
+
+{% block panel_content %}
+<p>This is the dashboard.</p>
+{% endblock panel_content %}

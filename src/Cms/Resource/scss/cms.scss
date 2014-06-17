@@ -1,10 +1,175 @@
+@import "cms_base";
+
+@include global-reset;
+
 body {
-	background:#ccc;
-	h1 {
-		color:red;
+	background:$color-body-background;
+}
+
+#container {
+	font-family: $font-body;
+	color:$color-body-text;
+	font-size:0.9rem;
+	h1, h2, h3, h4, h5, h6 {
+		font-family: $font-heading;
+		color: $color-header-title;
+		font-weight:bold;
+	}
+	a {
+		color:$color-link;
+	}
+	button, input[type=submit] {
+		@include button;
+	}
+	#main {
+		@include display-box;
+		padding:0.5rem;
+	}
+	section, article, aside {
+		&.panel {
+			@include box-flex(1);
+			@include border-radius(0.2rem);
+			@include box-shadow(0.1rem 0.1rem 0.05rem rgba(#000, 0.2));
+			position:relative;
+			background:$color-panel-background;
+			> header {
+				@include box-sizing('border-box');
+				@include border-radius(0.2rem 0.2rem 0 0);
+				height:1.8rem;
+				position:relative;
+				background:$color-header-background;
+				color:$color-header-title;
+				padding:0.2rem 1rem 0;
+				border-bottom:0.2rem solid rgba(#fff, 0.1);
+				h1 {
+					float:left;
+					line-height:1.4rem;
+					font-size:1rem;
+				}
+				nav {
+					position:absolute;
+					right:0.5rem;
+					top:0.3rem;
+					ul, li {
+						display:inline;
+					}
+					a {
+						@include button;
+						float:left;
+					}
+				}
+			}
+			> .content {
+				position:relative;
+				padding:0.5rem 1rem;
+			}
+			&.table, &.form {
+				> .content {
+					padding:0;
+				}
+			}
+		}
+	}
+	aside.panel {
+		@include box-flex(0.3);
 	}
 	table {
-	background:#030;
-	color:#eee;
+		@include border-radius(0 0 0.2rem 0.2rem);
+		width:100%;
+		&, thead, tbody, tfoot, tr, th, td {
+			@include box-sizing('border-box');
+		}
+		th, td {
+			padding:0.3rem 0.4rem;
+			&:first-child {
+				padding-left:1rem;
+			}
+			&:last-child {
+				padding-right:1rem;
+			}
+		}
+		th {
+			background:$color-header-background;
+			color:$color-header-title;
+			font-weight:bold;
+		}
+		td {
+			@include transition-property('background-color');
+			@include transition-duration(0.1s);
+			background: rgba(#000, 0);
+		}
+		tbody {
+			tr {
+				&:nth-child(even) {
+					td {
+						background:rgba(#000, 0.075);
+					}
+				}
+				&:hover {
+					td {
+						background:rgba(#000, 0.1);
+					}
+				}
+			}
+		}
+		tfoot {
+			font-style:italic;
+		}
+	}
+	form {
+		@include pie-clearfix;
+		padding-bottom:0.4rem;
+		.form_row {
+			@include pie-clearfix;
+			@include transition-property('background-color');
+			@include transition-duration(0.1s);
+			border-bottom:0.1rem solid rgba(#000, 0.05);
+			padding:0.3rem 1rem;
+			> label, > .widget {
+				float:left;
+			}
+			> label {
+				width:30%;
+				min-width:5rem;
+				max-width:10rem;
+				padding-top:0.2rem;
+			}
+			> .widget {
+				width:70%;
+				min-width:15rem;
+				max-width:30rem;
+			}
+			&:hover {
+				background:rgba(#000, 0.02);
+			}
+		}
+		.button_row {
+			padding:0.3rem 0 0.3rem;
+			display:inline-block;
+			margin-left:1rem;
+			+ .form_row {
+				margin-top:0.4rem;
+			}
+		}
+		label {
+			color:#666;
+		}
+		input, select, textarea {
+			outline:none;
+		}
+		input[type=text], input[type=number], input[type=password], textarea {
+			@include box-sizing('border-box');
+			@include transition-property('border-color');
+			@include transition-duration(0.2s);
+			width:100%;
+			padding:0.3rem 0.6rem;
+			border:0.1rem solid #aaa;
+			&:focus {
+				border-color:#888;
+			}
+		}
+		textarea {
+			height:6rem;
+		}
 	}
 }

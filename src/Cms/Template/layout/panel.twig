@@ -1,0 +1,28 @@
+{% extends layout|default('@cms/layout/cms') %}
+
+{% table_theme '@cms/block/table' %}
+{% paginator_theme '@cms/block/paginator' %}
+
+{% if panel_title is not defined and title is not empty %}
+	{% set panel_title = title %}
+{% endif %}
+
+{% block content %}
+<section class="{% block panel_class %}panel{% endblock %}">
+
+	{% if block('panel_header') is not empty %}
+	<header>
+
+		{% block panel_header %}{% if panel_title is not empty %}<h1>{{ panel_title }}</h1>{% endif %}{% endblock %}
+
+	</header>
+	{% endif %}
+
+	<div class="content">
+
+		{% block panel_content %}{% endblock %}
+
+	</div>
+
+</section>
+{% endblock %}

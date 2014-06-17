@@ -1,4 +1,4 @@
-{% extends '@cms/layout/cms_repository' %}
+{% extends '@cms/layout/panel_repository' %}
 
 {% if pluralName is not defined %}
 	{% set pluralName = repository.getEntityHumanName({plural: true}) %}
@@ -8,10 +8,12 @@
 	{% set title = 'List ' ~ pluralName %}
 {% endif %}
 
-{% block content_inner %}
+{% block panel_class %}{{ parent() }} index table{% endblock %}
+
+{% block panel_content %}
 
 	{{ table( paginator ) }}
 
 	{{ paginator_links( paginator ) }}
 
-{% endblock content_inner %}
+{% endblock panel_content %}

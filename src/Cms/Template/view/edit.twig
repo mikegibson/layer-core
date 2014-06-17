@@ -1,4 +1,4 @@
-{% extends "@cms/layout/cms_repository_form" %}
+{% extends "@cms/layout/panel_repository_form" %}
 
 {% if singularName is not defined %}
 	{% set singularName = repository.getEntityHumanName() %}
@@ -7,3 +7,5 @@
 {% if title is not defined %}
 	{% set title = 'Edit ' ~ singularName %}
 {% endif %}
+
+{% block panel_class %}{{ parent() }} edit{% endblock %}
