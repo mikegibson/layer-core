@@ -7,8 +7,6 @@ use Silex\ServiceProviderInterface;
 
 abstract class Plugin implements ServiceProviderInterface {
 
-	protected $depends = [];
-
 	private $path;
 
 	public function register(Application $app) {
