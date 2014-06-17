@@ -2,7 +2,6 @@
 
 namespace Layer\Data\Paginator;
 
-use Layer\Utility\SetPropertiesTrait;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

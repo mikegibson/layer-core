@@ -5,7 +5,6 @@ namespace Layer\Data\Paginator;
 use Doctrine\ORM\QueryBuilder;
 use Layer\Data\ManagedRepositoryInterface;
 use Layer\Data\Metadata\Annotation\FieldLabel;
-use Layer\Utility\SetPropertiesTrait;
 
 /**
  * Class PaginatorQuery
