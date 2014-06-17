@@ -5,6 +5,7 @@ namespace Layer\Cms\Data\Metadata\Query;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Layer\Data\Metadata\Query\GetPropertyLabelQuery;
+use Layer\Data\Metadata\Query\IsHtmlPropertyQuery;
 use Layer\Data\Metadata\Query\PropertyAnnotationQuery;
 
 class GetCmsFormFieldPropertyQuery extends PropertyAnnotationQuery {
@@ -15,15 +16,22 @@ class GetCmsFormFieldPropertyQuery extends PropertyAnnotationQuery {
 	protected $propertyLabelQuery;
 
 	/**
+	 * @var \Layer\Data\Metadata\Query\IsHtmlPropertyQuery
+	 */
+	protected $htmlPropertyQuery;
+
+	/**
 	 * @param Reader $reader
 	 * @param GetPropertyLabelQuery $propertyLabelQuery
 	 */
 	public function __construct(
 		Reader $reader,
-		GetPropertyLabelQuery $propertyLabelQuery)
-	{
+		GetPropertyLabelQuery $propertyLabelQuery,
+		IsHtmlPropertyQuery $htmlPropertyQuery
+	) {
 		parent::__construct($reader);
 		$this->propertyLabelQuery = $propertyLabelQuery;
+		$this->htmlPropertyQuery = $htmlPropertyQuery;
 	}
 
 	public function getName() {
@@ -40,6 +48,11 @@ class GetCmsFormFieldPropertyQuery extends PropertyAnnotationQuery {
 			$annotation = new $class([]);
 		}
 		$type = $annotation->type;
+		if(empty($type)) {
+			if($this->htmlPropertyQuery->getResult($classMetadata, ['property' => $options['property']])) {
+				$type = 'html';
+			}
+		}
 		$fieldOptions = $annotation->options;
 		if(!isset($fieldOptions['label'])) {
 			$fieldOptions['label'] = $this->propertyLabelQuery->getResult($classMetadata, ['property' => $options['property']]);
