@@ -13,7 +13,7 @@ interface CmsRepositoryInterface extends ManagedRepositoryInterface {
 	public function getCmsSlug();
 
 	/**
-	 * @return CmsRepositoryInterface
+	 * @return ControllerNodeInterface
 	 */
 	public function getRootCmsNode();
 
@@ -25,7 +25,7 @@ interface CmsRepositoryInterface extends ManagedRepositoryInterface {
 
 	/**
 	 * @param $name
-	 * @return CmsRepositoryInterface
+	 * @return ControllerNodeInterface
 	 * @throws \InvalidArgumentException
 	 */
 	public function getCmsNode($name);
