@@ -12,8 +12,6 @@ interface ManagedRepositoryInterface extends ObjectRepository {
 
 	public function getName();
 
-	public function getEntityManager();
-
 	public function createEntity();
 
 	public function createQueryBuilder($alias = null, $indexBy = null);
@@ -35,5 +33,7 @@ interface ManagedRepositoryInterface extends ObjectRepository {
 	public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null);
 
 	public function findOneBy(array $criteria, array $orderBy = null);
+
+	public function save($entity);
 
 }
