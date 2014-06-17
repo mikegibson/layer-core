@@ -88,9 +88,9 @@ class AssetServiceProvider implements ServiceProviderInterface {
 			$factory->setFilterManager($app['assetic.filter_manager']);
 			$factory->addPath('layer', $app['paths.templates'] . '/layer');
 			$factory->addPath('layer', $app['paths.layer'] . '/Resource');
-			foreach($app->getPlugins() as $name => $plugin) {
+			foreach($app->getPluginNames() as $name) {
 				$factory->addPath($name, $app['paths.resources'] . '/plugin/' . $name);
-				$factory->addPath($name, $plugin->getPath() . '/Resource');
+				$factory->addPath($name, $app->getPlugin($name)->getPath() . '/Resource');
 			}
 			return $factory;
 		});

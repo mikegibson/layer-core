@@ -3,9 +3,8 @@
 namespace Layer\Plugin;
 
 use Silex\Application;
-use Silex\ServiceProviderInterface;
 
-abstract class Plugin implements ServiceProviderInterface {
+abstract class Plugin implements PluginInterface {
 
 	private $path;
 

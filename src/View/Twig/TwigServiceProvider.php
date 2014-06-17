@@ -26,11 +26,10 @@ class TwigServiceProvider extends \Silex\Provider\TwigServiceProvider {
 
 				$loader->prependPath($app['paths.templates']);
 				$loader->addPath($app['paths.layer'] . '/Template');
-				foreach($app->getPlugins() as $plugin) {
-					$name = $plugin->getName();
+				foreach($app->getPluginNames() as $name) {
 					foreach([
 						$app['paths.app'] . '/Template/plugin/' . $name,
-						$plugin->getPath() . '/Template'
+						$app->getPlugin($name)->getPath() . '/Template'
 					] as $path) {
 						if (is_dir($path)) {
 							$loader->addPath($path, $name);

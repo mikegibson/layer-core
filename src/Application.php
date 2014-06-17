@@ -248,8 +248,8 @@ class Application extends \Silex\Application {
 	/**
 	 * @return array
 	 */
-	public function getPlugins() {
-		return $this->plugins;
+	public function getPluginNames() {
+		return array_keys($this->plugins);
 	}
 
 	/**
