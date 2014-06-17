@@ -4,7 +4,6 @@ namespace Layer\Blog;
 
 use Layer\Action\PaginationAction;
 use Layer\Blog\Node\BlogPostListNode;
-use Layer\Node\ControllerNode;
 use Layer\Node\ControllerNodeInterface;
 use Layer\Plugin\Plugin;
 use Silex\Application;
