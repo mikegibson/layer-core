@@ -8,7 +8,7 @@ interface TableDataDecoratorInterface {
 	 * @param $value
 	 * @param $key
 	 * @param $object
-	 * @return mixed
+	 * @return string
 	 */
 	public function decorate($value, $key, $object);
 
