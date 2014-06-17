@@ -13,7 +13,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Entity
  * @ORM\Table(name="users")
- * @ORM\HasLifecycleCallbacks
  * @Layer\CrudEntity
  * @Layer\EntityName("users")
  */
@@ -143,15 +142,6 @@ class User implements UserInterface {
 
 	public function eraseCredentials() {
 		$this->plainPassword = null;
-	}
-
-	/**
-	 * @ORM\PreUpdate
-	 */
-	public function preUpdate() {
-		if(!$this->getSalt()) {
-			$this->refreshSalt();
-		}
 	}
 
 	public function __toString() {
