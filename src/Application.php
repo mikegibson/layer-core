@@ -17,7 +17,6 @@ use Layer\Route\UrlMatcher;
 use Layer\View\Twig\TwigServiceProvider;
 use Layer\Utility\ArrayHelper;
 use Layer\Utility\Inflector;
-use Layer\Utility\StringHelper;
 use Silex\Application\MonologTrait;
 use Silex\Application\SecurityTrait;
 use Silex\Application\SwiftmailerTrait;
@@ -41,6 +40,7 @@ use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 /**
  * Class Application
@@ -107,8 +107,8 @@ class Application extends \Silex\Application {
 		$app['array_helper'] = $app->share(function () use ($app) {
 			return new ArrayHelper($app);
 		});
-		$app['string_helper'] = $app->share(function () use ($app) {
-			return new StringHelper($app);
+		$app['property_accessor'] = $app->share(function() use($app) {
+			return new PropertyAccessor();
 		});
 
 		$app['route_class'] = 'Layer\\Route\\Route';
