@@ -72,14 +72,14 @@ class UserListener implements EventSubscriber {
 	 * @param User $user
 	 */
 	protected function updateUser(User $user) {
+		if(!$user->getSalt()) {
+			$user->refreshSalt();
+		}
 		$plainPassword = $user->getPlainPassword();
 		if (!empty($plainPassword)) {
 			$encoder = $this->getEncoder($user);
 			$user->setPassword($encoder->encodePassword($plainPassword, $user->getSalt()));
 			$user->eraseCredentials();
-		}
-		if(!$user->getSalt()) {
-			$user->refreshSalt();
 		}
 	}
 
