@@ -9,7 +9,7 @@ abstract class Plugin implements ServiceProviderInterface {
 
 	protected $depends = [];
 
-	private $__path;
+	private $path;
 
 	public function register(Application $app) {
 
@@ -21,12 +21,12 @@ abstract class Plugin implements ServiceProviderInterface {
 
 	public function getPath() {
 
-		if ($this->__path === null) {
+		if ($this->path === null) {
 			$reflection = new \ReflectionClass($this);
-			$this->__path = dirname($reflection->getFileName());
+			$this->path = dirname($reflection->getFileName());
 		}
 
-		return $this->__path;
+		return $this->path;
 	}
 
 }
