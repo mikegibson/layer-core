@@ -32,10 +32,6 @@ class WrappedManagedRepository implements ManagedRepositoryInterface {
 		return $this->getBaseRepository()->getName();
 	}
 
-	public function getEntityManager() {
-		return $this->getBaseRepository()->getEntityManager();
-	}
-
 	public function createEntity() {
 		return $this->getBaseRepository()->createEntity();
 	}
@@ -74,6 +70,10 @@ class WrappedManagedRepository implements ManagedRepositoryInterface {
 
 	public function findOneBy(array $criteria, array $orderBy = null) {
 		return $this->getBaseRepository()->findOneBy($criteria, $orderBy);
+	}
+
+	public function save($entity) {
+		$this->getBaseRepository()->save($entity);
 	}
 
 	/**
