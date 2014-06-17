@@ -12,7 +12,7 @@ use Layer\Form\FormServiceProvider;
 use Layer\Media\MediaProvider;
 use Layer\Node\ControllerNode;
 use Layer\Node\ControllerNodeInterface;
-use Layer\Plugin\Plugin;
+use Layer\Plugin\PluginInterface;
 use Layer\Route\UrlMatcher;
 use Layer\View\Twig\TwigServiceProvider;
 use Layer\Utility\ArrayHelper;
@@ -215,7 +215,7 @@ class Application extends \Silex\Application {
 	 * @throws \RuntimeException If plugin is already loaded
 	 */
 	public function register(ServiceProviderInterface $serviceProvider, array $values = []) {
-		if($serviceProvider instanceof Plugin) {
+		if($serviceProvider instanceof PluginInterface) {
 			$name = $serviceProvider->getName();
 			if($this->hasPlugin($name)) {
 				throw new \RuntimeException(sprintf('Plugin %s is already loaded.', $name));
@@ -235,7 +235,7 @@ class Application extends \Silex\Application {
 
 	/**
 	 * @param $name
-	 * @return \Layer\Plugin\Plugin
+	 * @return \Layer\Plugin\PluginInterface
 	 * @throws \InvalidArgumentException
 	 */
 	public function getPlugin($name) {

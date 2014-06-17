@@ -19,8 +19,6 @@ abstract class Plugin implements ServiceProviderInterface {
 
 	}
 
-	abstract public function getName();
-
 	public function getPath() {
 
 		if ($this->__path === null) {
