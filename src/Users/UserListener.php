@@ -2,12 +2,12 @@
 
 namespace Layer\Users;
 
+use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-use Gedmo\Mapping\MappedEventSubscriber;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
-class UserListener extends MappedEventSubscriber {
+class UserListener implements EventSubscriber {
 
 	/**
 	 * @var \Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface
