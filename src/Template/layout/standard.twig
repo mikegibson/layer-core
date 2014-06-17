@@ -19,34 +19,16 @@
 
 {% block body %}
 
-<div id="container">
+	<div id="container">
 
-	{% block container %}
-
-		<header>
-
-			{% block header %}<h1>{{ app.name }}</h1>{% endblock %}
-
-		</header>
-
-		{{ flash() }}
-
-		<section id="content">
+		{% block container %}
 
 			{% block content %}{% endblock %}
 
-		</section>
+		{% endblock container %}
 
-		{% if block('footer') is not empty %}
-		<footer>
+	</div>
 
-			{% block footer %}{% endblock %}
-
-		</footer>
-		{% endif %}
-
-	{% endblock container %}
-
-</div>
+	{% block javascripts %}{% endblock %}
 
 {% endblock body %}
