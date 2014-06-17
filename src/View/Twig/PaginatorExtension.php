@@ -2,9 +2,7 @@
 
 namespace Layer\View\Twig;
 
-use Layer\Data\Paginator\Paginator;
 use Layer\Data\Paginator\PaginatorInterface;
-use Layer\Data\Paginator\PaginatorResult;
 
 class PaginatorExtension extends TemplateBlockFunctionExtension {
 
@@ -41,12 +39,6 @@ class PaginatorExtension extends TemplateBlockFunctionExtension {
 	public function beforeRender($block, array $context) {
 		if(!isset($context['paginator']) || !($context['paginator'] instanceof PaginatorInterface)) {
 			throw new \InvalidArgumentException('Paginators must implement PaginatorInterface');
-		}
-		if($context['paginator'] instanceof Paginator) {
-			$result = $context['paginator']->getResult();
-			if($result instanceof PaginatorResult) {
-				$context['repository'] = $result->getRepository();
-			}
 		}
 		return parent::beforeRender($block, $context);
 	}
