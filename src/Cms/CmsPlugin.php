@@ -15,7 +15,6 @@ use Layer\Cms\View\TwigCmsExtension;
 use Layer\Data\ManagedRepositoryEvent;
 use Layer\Data\Metadata\QueryCollection;
 use Layer\Node\ControllerNode;
-use Layer\Node\ControllerNodeListNode;
 use Layer\Node\WrappedControllerNode;
 use Layer\Plugin\Plugin;
 use Layer\Users\Action\LoginAction;
@@ -35,7 +34,9 @@ class CmsPlugin extends Plugin {
 
 	public function register(Application $app) {
 
-		$app['cms.url_fragment'] = 'cms';
+		if(!isset($app['cms.url_fragment'])) {
+			$app['cms.url_fragment'] = 'cms';
+		}
 
 		$app['cms.controllers'] = $app->share(function() use($app) {
 			return $app['nodes.controllers_factory']($app['cms.root_node'], 'node', false);
@@ -118,7 +119,7 @@ class CmsPlugin extends Plugin {
 		$app['cms.login_action'] = $app->share(function() use($app) {
 			return new LoginAction(
 				$app['form.factory'],
-				$app['security.firewalls']['cms']['form']['check_path'],
+				$app['security.firewalls']['default']['form']['check_path'],
 				'@cms/view/login'
 			);
 		});
@@ -135,8 +136,6 @@ class CmsPlugin extends Plugin {
 
 		$app['cms.navigation_list'] = $app->share(function() use($app) {
 			$node = new CmsNavigationNode($app['cms.root_node'], $app['url_generator']);
-			$dashboardNode = new ControllerNodeListNode($app['cms.dashboard_node'], $app['url_generator'], $node);
-			$node->registerChildNode($dashboardNode, false, true);
 			return $node;
 		});
 
@@ -149,46 +148,13 @@ class CmsPlugin extends Plugin {
 			return $dispatcher;
 		}));
 
+		if(!isset($app['cms.access_rule'])) {
+			$app['cms.access_rule'] = ['^/' . $app['cms.url_fragment'] . '/.*$', 'ROLE_ADMIN'];
+		}
+
 		$app['twig'] = $app->share($app->extend('twig', function(\Twig_Environment $twig) use($app) {
 			$twig->addExtension(new TwigCmsExtension($app['cms.helper']));
 			return $twig;
-		}));
-
-		$app['security.firewalls'] = $app->share($app->extend('security.firewalls', function(array $firewalls) use($app) {
-
-			$fragment = $app['cms.url_fragment'];
-
-			$firewalls['cms_login'] = [
-				'pattern' => "^/{$fragment}/login(/?)$"
-			];
-
-			$firewalls['cms'] = [
-				'pattern' => "^/{$fragment}(/.*)?$",
-				'form' => [
-					'login_path' => "/{$fragment}/login",
-					'check_path' => "/{$fragment}/login-check",
-					'username_parameter' => 'login[username]',
-					'password_parameter' => 'login[password]',
-					'default_target_path' => "/{$fragment}"
-				],
-				'remember_me' => [
-					'key' => $app->share(function() use($app) {
-							$string = 'remember_me' . $app['config']->read('salt');
-							return md5($string);
-						}),
-					'remember_me_property' => 'login[remember_me]',
-					'path' => '/'
-				],
-				'logout' => [
-					'logout_path' => "/{$fragment}/logout"
-				],
-				'users' => $app->share(function() use($app) {
-						return $app['users.security_provider'];
-					})
-			];
-
-			return $firewalls;
-
 		}));
 
 	}
@@ -196,6 +162,9 @@ class CmsPlugin extends Plugin {
 	public function boot(Application $app) {
 		$fragment = $app['cms.url_fragment'];
 		$app->mount("/{$fragment}", $app['cms.controllers']);
+		$rules = $app['security.access_rules'];
+		$rules[] = $app['cms.access_rule'];
+		$app['security.access_rules'] = $rules;
 	}
 
 }
