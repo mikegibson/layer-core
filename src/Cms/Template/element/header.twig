@@ -3,9 +3,7 @@
 	{% block cms_header %}
 
 		<h1>
-			<a href="{{ url('cms') }}">
-			{% block cms_header_title %}{{ app.name }} CMS{% endblock %}
-			</a>
+			<a class="home" href="{{ url('app') }}">{{ app.name }}</a>
 		</h1>
 
 		<nav role="navigation">
