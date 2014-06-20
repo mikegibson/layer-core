@@ -140,6 +140,9 @@ class Application extends \Silex\Application {
 						if($nodePath !== '') {
 							$node = $node->getDescendent($nodePath);;
 						}
+						if($rejectNotFound && !$node->isAccessible()) {
+							return false;
+						}
 						$attrs[$key] = $node;
 					} catch(\InvalidArgumentException $e) {
 						if($rejectNotFound) {
@@ -154,7 +157,7 @@ class Application extends \Silex\Application {
 		$app['nodes.dispatcher'] = $app->protect(function($key = 'node') use($app) {
 			return function(Request $request) use($app, $key) {
 				$node = $request->get($key);
-				if(!$node instanceof ControllerNodeInterface) {
+				if(!$node instanceof ControllerNodeInterface || !$node->isAccessible()) {
 					$app->abort(404);
 				}
 				return $app['actions.dispatcher']->dispatch($node, $request);

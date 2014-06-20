@@ -16,16 +16,32 @@ class ControllerNode extends AbstractNode implements ControllerNodeInterface, Ac
 
 	private $name;
 
+	private $label;
+
+	private $template;
+
+	private $visible;
+
+	private $accessible;
+
 	public function __construct(
 		$routeName,
-		ActionInterface $action,
+		ActionInterface $action = null,
 		ControllerNodeInterface $parentNode = null,
-		$name = null
+		$name = null,
+		$label = null,
+		$template = null,
+		$visible = null,
+		$accessible = null
 	) {
 		$this->routeName = $routeName;
 		$this->action = $action;
 		$this->parentNode = $parentNode;
 		$this->name = $name;
+		$this->label = $label;
+		$this->template = $template;
+		$this->visible = $visible;
+		$this->accessible = $accessible;
 	}
 
 	public function getRouteName() {
@@ -33,11 +49,11 @@ class ControllerNode extends AbstractNode implements ControllerNodeInterface, Ac
 	}
 
 	public function getActionName() {
-		return $this->getAction()->getName();
+		return $this->isAccessible() ? $this->getAction()->getName() : null;
 	}
 
 	public function getActionLabel() {
-		return $this->getAction()->getLabel();
+		return $this->isAccessible() ? $this->getAction()->getLabel() : null;
 	}
 
 	public function getName() {
@@ -48,23 +64,45 @@ class ControllerNode extends AbstractNode implements ControllerNodeInterface, Ac
 	}
 
 	public function getLabel() {
+		if($this->label !== null) {
+			return $this->label;
+		}
 		return $this->getActionLabel();
 	}
 
 	public function getTemplate() {
-		return $this->getAction()->getTemplate();
+		if($this->template !== null) {
+			return $this->template;
+		}
+		return $this->isAccessible() ? $this->getAction()->getTemplate() : null;
 	}
 
 	public function invoke(Request $request) {
-		$ret = $this->getAction()->invoke($request);
+		if(!$this->isAccessible()) {
+			throw new \BadMethodCallException('This node is not accessible.');
+		}
+		$ret = null;
+		if($action = $this->getAction()) {
+			$ret = $action->invoke($request);
+		}
 		if(is_array($ret)) {
 			$ret['node'] = $this;
 		}
 		return $ret;
 	}
 
+	public function isAccessible() {
+		if($this->accessible !== null) {
+			return !!$this->accessible;
+		}
+		return !!$this->getAction();
+	}
+
 	public function isVisible() {
-		return $this->getAction()->isVisible();
+		if($this->visible !== null) {
+			return !!$this->visible;
+		}
+		return $this->isAccessible() && $this->getAction()->isVisible();
 	}
 
 	public function getVisibleChildNodes() {
