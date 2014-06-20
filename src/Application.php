@@ -165,6 +165,7 @@ class Application extends \Silex\Application {
 			function(ControllerNodeInterface $rootNode, $key = 'node', $rejectNotFound = true) use($app) {
 				$controllers = $app['controllers_factory'];
 				$controllers->match('/{' . $key . '}', $app['nodes.dispatcher']($key))
+					->value($key, '')
 					->assert($key, '.*')
 					->beforeMatch($app['nodes.matcher']($rootNode, $key, $rejectNotFound))
 					->bind($rootNode->getRouteName());
