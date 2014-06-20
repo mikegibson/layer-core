@@ -23,7 +23,7 @@ class LoginAction implements ActionInterface {
 	/**
 	 * @var string
 	 */
-	protected $template;
+	protected $template = '@users/view/login';
 
 	/**
 	 * @var \Symfony\Component\Security\Core\SecurityContextInterface
