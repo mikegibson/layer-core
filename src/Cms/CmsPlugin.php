@@ -104,10 +104,6 @@ class CmsPlugin extends Plugin {
 			}
 		));
 
-		$app['cms.actions.dashboard'] = $app->share(function() {
-			return new DashboardAction();
-		});
-
 		$app['cms.repository_node_factory'] = $app->share(function() use($app) {
 			return new RepositoryCmsNodeFactory($app);
 		});
@@ -125,7 +121,7 @@ class CmsPlugin extends Plugin {
 		});
 
 		$app['cms.root_node'] = $app->share(function() use($app) {
-			$node = new WrappedControllerNode($app['cms.dashboard_node']);
+			$node = new ControllerNode('cms');
 			$node->wrapChildNode($app['cms.login_node']);
 			return $node;
 		});
