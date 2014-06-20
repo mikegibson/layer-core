@@ -16,7 +16,7 @@ class CmsHelper {
 		$this->urlGenerator = $urlGenerator;
 	}
 
-	public function url($nodePath, array $params = [])  {
+	public function url($nodePath = '', array $params = [])  {
 		$params['node'] = $nodePath;
 		return $this->urlGenerator->generate('cms', $params);
 	}
