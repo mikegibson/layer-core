@@ -6,6 +6,7 @@ use Layer\Action\ActionInterface;
 use Layer\Users\Form\LoginFormType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 
 class LoginAction implements ActionInterface {
 
@@ -25,9 +26,14 @@ class LoginAction implements ActionInterface {
 	protected $template;
 
 	/**
+	 * @var \Symfony\Component\Security\Core\SecurityContextInterface
+	 */
+	protected $securityContext;
+
+	/**
 	 * @param FormFactoryInterface $formFactory
-	 * @param null|string $checkPath
-	 * @param null|string $template
+	 * @param null $checkPath
+	 * @param null $template
 	 */
 	public function __construct(
 		FormFactoryInterface $formFactory,
@@ -65,11 +71,18 @@ class LoginAction implements ActionInterface {
 	}
 
 	public function isVisible() {
-		return true;
+		if($this->securityContext === null) {
+			return true;
+		}
+		return !$this->securityContext->getToken();
 	}
 
 	public function getTemplate() {
 		return $this->template;
+	}
+
+	public function setSecurityContext(SecurityContextInterface $securityContext) {
+		$this->securityContext = $securityContext;
 	}
 
 }
