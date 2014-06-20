@@ -16,6 +16,8 @@ interface ControllerNodeInterface extends NodeInterface {
 
 	public function getTemplate();
 
+	public function isAccessible();
+
 	public function isVisible();
 
 	public function getVisibleChildNodes();
