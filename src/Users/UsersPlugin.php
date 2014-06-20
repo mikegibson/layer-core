@@ -47,11 +47,14 @@ class UsersPlugin extends Plugin {
 		}));
 
 		$app['users.login_action'] = $app->share(function() use($app) {
-			return new LoginAction(
+			$action = new LoginAction(
 				$app['form.factory'],
-				$app['security.firewalls']['default']['form']['check_path'],
-				'@users/view/login'
+				$app['security.firewalls']['default']['form']['check_path']
 			);
+			$app->before(function() use($app, $action) {
+				$action->setSecurityContext($app['security']);
+			});
+			return $action;
 		});
 
 		$app['users.login_node'] = $app->share(function() use($app) {
