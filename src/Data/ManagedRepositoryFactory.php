@@ -14,11 +14,6 @@ class ManagedRepositoryFactory implements RepositoryFactory {
 	 */
 	const REPOSITORY_CLASS = 'Layer\\Data\\ManagedRepository';
 
-	/**
-	 * @var RepositoryManager
-	 */
-	private $repositoryManager;
-
 	private $queryCollection;
 
 	private $repositories = [];
@@ -26,8 +21,7 @@ class ManagedRepositoryFactory implements RepositoryFactory {
 	/**
 	 * @param RepositoryManagerInterface $repositoryManager
 	 */
-	public function __construct(RepositoryManagerInterface $repositoryManager, QueryCollection $queryCollection) {
-		$this->repositoryManager = $repositoryManager;
+	public function __construct(QueryCollection $queryCollection) {
 		$this->queryCollection = $queryCollection;
 	}
 

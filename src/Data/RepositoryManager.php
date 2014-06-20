@@ -4,7 +4,7 @@ namespace Layer\Data;
 
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManagerInterface;
-use Layer\Data\Metadata\QueryCollection;
+use Doctrine\ORM\Repository\RepositoryFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class RepositoryManager implements RepositoryManagerInterface {
@@ -30,9 +30,9 @@ class RepositoryManager implements RepositoryManagerInterface {
 	 * Constructor
 	 * Create the repository factory
 	 */
-	public function __construct(EventDispatcherInterface $eventDispatcher, QueryCollection $queryCollection) {
+	public function __construct(RepositoryFactory $factory, EventDispatcherInterface $eventDispatcher) {
+		$this->factory = $factory;
 		$this->eventDispatcher = $eventDispatcher;
-		$this->factory = new ManagedRepositoryFactory($this, $queryCollection);
 	}
 
 	/**

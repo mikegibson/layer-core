@@ -506,8 +506,12 @@ class DataProvider implements ServiceProviderInterface {
 			return $collection;
 		});
 
+		$app['orm.repository_factory'] = $app->share(function() use($app) {
+			return new ManagedRepositoryFactory($app['metadata.queries']);
+		});
+
 		$app['orm.rm'] = $app->share(function() use($app) {
-			return new RepositoryManager($app['dispatcher'], $app['metadata.queries']);
+			return new RepositoryManager($app['orm.repository_factory'], $app['dispatcher']);
 		});
 
 		$app['validator.mapping.class_metadata_factory'] = $app->share(function() use($app) {
