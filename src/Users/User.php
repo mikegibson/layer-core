@@ -114,7 +114,7 @@ class User implements UserInterface {
 	}
 
 	public function getRoles() {
-		return ['ROLE_ADMINISTRATOR'];
+		return ['ROLE_ADMIN'];
 	}
 
 	public function setUsername($username) {
