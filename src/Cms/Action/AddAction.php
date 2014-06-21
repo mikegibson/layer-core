@@ -28,7 +28,7 @@ class AddAction extends SaveAction {
 
 	protected function getFormData(Request $request) {
 		$formData = new \stdClass();
-		$formData->record = $this->getRepository()->createEntity();
+		$formData->entity = $this->getRepository()->createEntity();
 		return $formData;
 	}
 

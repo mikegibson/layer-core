@@ -3,7 +3,7 @@
 namespace Layer\Cms\Action;
 
 use Layer\Action\ActionInterface;
-use Layer\Cms\Data\CmsRecordFormType;
+use Layer\Cms\Data\CmsEntityFormType;
 use Layer\Cms\Data\CmsRepositoryInterface;
 use Layer\Cms\Data\EntityFormType;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -53,8 +53,8 @@ abstract class SaveAction implements ActionInterface {
 			$flashBag = $request->getSession()->getFlashBag();
 			if($form->isValid()) {
 				$postData = $form->getData();
-				$record = $postData->record;
-				$this->getRepository()->save($record);
+				$entity = $postData->entity;
+				$this->getRepository()->save($entity);
 				$message = sprintf('The %s was saved', $singularName);
 				$flashBag->add('message', $message);
 				if($repository->hasCmsNode('add') && $form->has('save_and_add') && $form->get('save_and_add')->isClicked()) {
@@ -62,7 +62,7 @@ abstract class SaveAction implements ActionInterface {
 					$redirect = $this->getUrlGenerator()->generate('cms', ['node' => $nodePath]);
 				} elseif($repository->hasCmsNode('edit')) {
 					$nodePath = $repository->getCmsNode('edit')->getPath();
-					$redirect = $this->getUrlGenerator()->generate('cms', ['node' => $nodePath, 'id' => $record->getId()]);
+					$redirect = $this->getUrlGenerator()->generate('cms', ['node' => $nodePath, 'id' => $entity->getId()]);
 				}
 				return new RedirectResponse($redirect);
 			} else {
@@ -72,6 +72,7 @@ abstract class SaveAction implements ActionInterface {
 
 		$data = [
 			'repository' => $repository,
+			'entity' => $form->getData()->entity,
 			'form' => $form->createView()
 		];
 
@@ -86,7 +87,7 @@ abstract class SaveAction implements ActionInterface {
 	protected function getForm(Request $request) {
 		$formData = $this->getFormData($request);
 		$entityForm = new EntityFormType($this->getRepository(), $this->isCreate());
-		$cmsForm = new CmsRecordFormType('edit', $entityForm);
+		$cmsForm = new CmsEntityFormType('edit', $entityForm);
 		$name = $cmsForm->getName();
 		$options = [
 			'action' => $request->getRequestUri()

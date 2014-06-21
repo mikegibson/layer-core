@@ -2,12 +2,11 @@
 
 namespace Layer\Cms\Data;
 
-use Layer\Data\ManagedRepositoryInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormTypeInterface as BaseForm;
 
-class CmsRecordFormType extends AbstractType {
+class CmsEntityFormType extends AbstractType {
 
 	/**
 	 * @var string
@@ -22,7 +21,6 @@ class CmsRecordFormType extends AbstractType {
 	/**
 	 * @param $name
 	 * @param BaseForm $baseForm
-	 * @param bool $isCreate
 	 */
 	public function __construct($name, BaseForm $baseForm) {
 		$this->name = $name;
@@ -41,7 +39,7 @@ class CmsRecordFormType extends AbstractType {
 	 * @param array $options
 	 */
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		$builder->add('record', $this->baseForm, ['label' => false]);
+		$builder->add('entity', $this->baseForm, ['label' => false]);
 		$builder->add('save', 'submit', ['label' => 'Save and edit']);
 		$builder->add('save_and_add', 'submit', ['label' => 'Save and add another']);
 	}

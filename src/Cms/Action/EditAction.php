@@ -31,13 +31,13 @@ class EditAction extends SaveAction {
 		if(!$id = $request->get('id')) {
 			throw new HttpException(404, 'No ID was specified.');
 		}
-		if(!$record = $this->getRepository()->find($id)) {
+		if(!$entity = $this->getRepository()->find($id)) {
 			$humanName = $this->getRepository()->queryMetadata('getEntityHumanName');
 			$message = sprintf('No %s exists with ID %d.', $humanName, $id);
 			throw new HttpException(404, $message);
 		}
 		$formData = new \stdClass();
-		$formData->record = $record;
+		$formData->entity = $entity;
 		return $formData;
 	}
 
