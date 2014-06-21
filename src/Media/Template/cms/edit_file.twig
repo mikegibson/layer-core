@@ -1,0 +1,11 @@
+{% extends '@cms/view/edit' %}
+
+{% block panel_content %}
+
+	{% if entity.isImage %}
+		<img alt="{{ entity }}" src="{{ url('image', {'filename': entity.filename, 'filter': 'cms-thumbnail'}) }}" />
+	{% endif %}
+
+	{{ parent() }}
+
+{% endblock panel_content %}

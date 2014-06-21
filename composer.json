@@ -28,6 +28,7 @@
 		"doctrine/orm": "=v2.4.2",
 		"gedmo/doctrine-extensions": "2.3.*@dev",
 		"kriswallsmith/assetic": "1.2.*@dev",
+		"imagine/imagine": "~0.5.0",
 		"knplabs/console-service-provider": "dev-master"
 	},
 	"autoload": {
