@@ -3,7 +3,6 @@
 namespace Layer\Cms;
 
 use Layer\Action\ReskinnedAction;
-use Layer\Cms\Action\DashboardAction;
 use Layer\Cms\Data\CmsRepository;
 use Layer\Cms\Data\Metadata\Query\GetCmsFormFieldPropertyQuery;
 use Layer\Cms\Data\Metadata\Query\GetCmsFormFieldsQuery;
@@ -16,7 +15,6 @@ use Layer\Cms\View\TwigCmsExtension;
 use Layer\Data\ManagedRepositoryEvent;
 use Layer\Data\Metadata\QueryCollection;
 use Layer\Node\ControllerNode;
-use Layer\Node\WrappedControllerNode;
 use Layer\Plugin\Plugin;
 use Silex\Application;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
