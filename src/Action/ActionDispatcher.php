@@ -3,6 +3,7 @@
 namespace Layer\Action;
 
 use Layer\View\ViewInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -13,14 +14,21 @@ use Symfony\Component\HttpFoundation\Response;
 class ActionDispatcher {
 
 	/**
+	 * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+	 */
+	protected $eventDispatcher;
+
+	/**
 	 * @var \Layer\View\ViewInterface
 	 */
 	protected $view;
 
 	/**
+	 * @param EventDispatcherInterface $eventDispatcher
 	 * @param ViewInterface $view
 	 */
-	public function __construct(ViewInterface $view) {
+	public function __construct(EventDispatcherInterface $eventDispatcher, ViewInterface $view) {
+		$this->eventDispatcher = $eventDispatcher;
 		$this->view = $view;
 	}
 
@@ -30,13 +38,30 @@ class ActionDispatcher {
 	 * @return array
 	 */
 	public function dispatch(ActionInterface $action, Request $request) {
-		$template = $action->getTemplate();
-		$data = $action->invoke($request) ?: [];
-		if($data instanceof Response) {
-			return $data;
+		$event = new ActionEvent($action, $request, $this->view);
+		$this->eventDispatcher->dispatch(ActionEvent::BEFORE_DISPATCH, $event);
+		$result = $event->getResult();
+		if($result === null) {
+			$result = $event->getAction()->invoke($request) ?: [];
 		}
-		$data['action'] = $action;
-		return $this->view->render($template, $data);
+		$event->setResult($result);
+		if($result instanceof Response) {
+			$event->setResponse($result);
+		} else {
+			if(!is_array($result)) {
+				$result = [];
+			}
+			$result['action'] = $action;
+			$this->eventDispatcher->dispatch(ActionEvent::BEFORE_RENDER, $event);
+			$result = $event->getResult();
+			if($result instanceof Response) {
+				$event->setResponse($result);
+			} else {
+				$event->setResponse($event->getView()->render($event->getTemplate(), $result));
+			}
+		}
+		$this->eventDispatcher->dispatch(ActionEvent::AFTER_DISPATCH, $event);
+		return $event->getResponse();
 	}
 
 }
