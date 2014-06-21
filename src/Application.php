@@ -18,7 +18,6 @@ use Layer\View\Twig\TwigServiceProvider;
 use Layer\Utility\ArrayHelper;
 use Layer\Utility\Inflector;
 use Silex\Provider\HttpFragmentServiceProvider;
-use Silex\Provider\MonologServiceProvider;
 use Silex\Provider\RememberMeServiceProvider;
 use Silex\Provider\SecurityServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
@@ -372,9 +371,6 @@ class Application extends \Silex\Application {
 		]);
 		$this->register(new FormServiceProvider());
 		// @todo set $this->app['form.secret'] to something better
-		$this->register(new MonologServiceProvider(), [
-			'monolog.logfile' => $this['paths.log'] . '/development.log',
-		]);
 		$this->register(new ValidatorServiceProvider());
 		$this->register(new DataProvider());
 		$this->register(new MediaPlugin());
