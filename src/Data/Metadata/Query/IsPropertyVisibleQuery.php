@@ -2,11 +2,27 @@
 
 namespace Layer\Data\Metadata\Query;
 
+use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class IsPropertyVisibleQuery extends PropertyAnnotationQuery {
 
 	private $namespace = 'Layer\\Data\\Metadata\\Annotation\\';
+
+	/**
+	 * @var \Symfony\Component\PropertyAccess\PropertyAccessorInterface
+	 */
+	protected $propertyAccessor;
+
+	/**
+	 * @param Reader $reader
+	 * @param PropertyAccessorInterface $propertyAccessor
+	 */
+	public function __construct(Reader $reader, PropertyAccessorInterface $propertyAccessor) {
+		parent::__construct($reader);
+		$this->propertyAccessor = $propertyAccessor;
+	}
 
 	protected function getAnnotationClass() {
 		return $this->namespace . 'CrudEntity';
@@ -42,6 +58,9 @@ class IsPropertyVisibleQuery extends PropertyAnnotationQuery {
 		}
 		if($crudProperty = $this->getReader()->getPropertyAnnotation($property, $this->namespace . 'CrudProperty')) {
 			return $crudProperty->visible;
+		}
+		if(!$this->propertyAccessor->isReadable($classMetadata->newInstance(), $options['property'])) {
+			return false;
 		}
 		return true;
 	}

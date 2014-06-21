@@ -6,6 +6,7 @@ use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Layer\Data\Metadata\Annotation\CrudProperty;
 use Layer\Data\Metadata\QueryInterface;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class IsPropertyEditableQuery implements QueryInterface {
 
@@ -22,10 +23,17 @@ class IsPropertyEditableQuery implements QueryInterface {
 	protected $reader;
 
 	/**
-	 * @param Reader $reader
+	 * @var \Symfony\Component\PropertyAccess\PropertyAccessorInterface
 	 */
-	public function __construct(Reader $reader) {
+	protected $propertyAccessor;
+
+	/**
+	 * @param Reader $reader
+	 * @param PropertyAccessorInterface $propertyAccessor
+	 */
+	public function __construct(Reader $reader, PropertyAccessorInterface $propertyAccessor) {
 		$this->reader = $reader;
+		$this->propertyAccessor = $propertyAccessor;
 	}
 
 	public function getName() {
@@ -41,9 +49,11 @@ class IsPropertyEditableQuery implements QueryInterface {
 		}
 		$create = !isset($options['create']) || $options['create'];
 		$reflection = $classMetadata->getReflectionClass();
-		$setter = 'set' . ucfirst($options['property']);
-		$getter = 'get' . ucfirst($options['property']);
-		if(!$reflection->hasMethod($setter) || !$reflection->hasMethod($getter)) {
+		$instance = $classMetadata->newInstance();
+		if(
+			!$this->propertyAccessor->isWritable($instance, $options['property']) ||
+			!$this->propertyAccessor->isReadable($instance, $options['property'])
+		) {
 			return false;
 		}
 		$property = $reflection->getProperty($options['property']);

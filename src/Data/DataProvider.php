@@ -448,7 +448,7 @@ class DataProvider implements ServiceProviderInterface {
 		});
 
 		$app['metadata.queries.isPropertyVisible'] = $app->share(function() use($app) {
-			return new IsPropertyVisibleQuery($app['annotations.reader']);
+			return new IsPropertyVisibleQuery($app['annotations.reader'], $app['property_accessor']);
 		});
 
 		$app['metadata.queries.getVisibleProperties'] = $app->share(function() use($app) {
@@ -463,7 +463,7 @@ class DataProvider implements ServiceProviderInterface {
 		});
 
 		$app['metadata.queries.isPropertyEditable'] = $app->share(function() use($app) {
-			return new IsPropertyEditableQuery($app['annotations.reader']);
+			return new IsPropertyEditableQuery($app['annotations.reader'], $app['property_accessor']);
 		});
 
 		$app['metadata.queries.getEditableProperties'] = $app->share(function() use($app) {
