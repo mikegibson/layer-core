@@ -97,7 +97,7 @@ class ManagedRepository implements ManagedRepositoryInterface, Selectable {
 	}
 
 	public function findOneBy(array $criteria, array $orderBy = null) {
-		return $this->baseRepository->findBy($criteria, $orderBy);
+		return $this->baseRepository->findOneBy($criteria, $orderBy);
 	}
 
 	/**
