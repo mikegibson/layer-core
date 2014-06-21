@@ -2,6 +2,8 @@
 
 namespace Layer\Cms;
 
+use Imagine\Image\Box;
+use Imagine\Image\ImageInterface;
 use Layer\Action\ReskinnedAction;
 use Layer\Cms\Data\CmsRepository;
 use Layer\Cms\Data\Metadata\Query\GetCmsFormFieldPropertyQuery;
@@ -14,6 +16,8 @@ use Layer\Cms\View\CmsHelper;
 use Layer\Cms\View\TwigCmsExtension;
 use Layer\Data\ManagedRepositoryEvent;
 use Layer\Data\Metadata\QueryCollection;
+use Layer\Media\Image\FilterRegistry;
+use Layer\Media\Image\ImageTransformer;
 use Layer\Node\ControllerNode;
 use Layer\Plugin\Plugin;
 use Silex\Application;
@@ -145,6 +149,17 @@ class CmsPlugin extends Plugin {
 		$app['twig'] = $app->share($app->extend('twig', function(\Twig_Environment $twig) use($app) {
 			$twig->addExtension(new TwigCmsExtension($app['cms.helper']));
 			return $twig;
+		}));
+
+		$app['images.filters.cms_thumbnail'] = $app->share(function() use($app) {
+			$filter = new ImageTransformer('cms-thumbnail');
+			$filter->getTransformation()->thumbnail(new Box(60, 60), ImageInterface::THUMBNAIL_OUTBOUND);
+			return $filter;
+		});
+
+		$app['images.filters'] = $app->share($app->extend('images.filters', function(FilterRegistry $filters) use($app) {
+			$filters->addFilter($app['images.filters.cms_thumbnail']);
+			return $filters;
 		}));
 
 	}
