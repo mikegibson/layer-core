@@ -118,7 +118,7 @@ class Application extends \Silex\Application {
 		});
 
 		$app['actions.dispatcher'] = $app->share(function() use($app) {
-			return new ActionDispatcher($app['twig.view']);
+			return new ActionDispatcher($app['dispatcher'], $app['twig.view']);
 		});
 
 		$app[$this->assets['js_modernizr'] = 'assets.js.modernizr'] = $app->share(function () use ($app) {
