@@ -9,7 +9,7 @@ use Layer\Asset\AssetServiceProvider;
 use Layer\Config\ConfigServiceProvider;
 use Layer\Data\DataProvider;
 use Layer\Form\FormServiceProvider;
-use Layer\Media\MediaProvider;
+use Layer\Media\MediaPlugin;
 use Layer\Node\ControllerNode;
 use Layer\Node\ControllerNodeInterface;
 use Layer\Plugin\PluginInterface;
@@ -17,12 +17,6 @@ use Layer\Route\UrlMatcher;
 use Layer\View\Twig\TwigServiceProvider;
 use Layer\Utility\ArrayHelper;
 use Layer\Utility\Inflector;
-use Silex\Application\MonologTrait;
-use Silex\Application\SecurityTrait;
-use Silex\Application\SwiftmailerTrait;
-use Silex\Application\TranslationTrait;
-use Silex\Application\TwigTrait;
-use Silex\Application\UrlGeneratorTrait;
 use Silex\Provider\HttpFragmentServiceProvider;
 use Silex\Provider\MonologServiceProvider;
 use Silex\Provider\RememberMeServiceProvider;
@@ -48,8 +42,6 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  * @package Layer
  */
 class Application extends \Silex\Application {
-
-	use MonologTrait, SecurityTrait, SwiftmailerTrait, TranslationTrait, TwigTrait, UrlGeneratorTrait;
 
 	public $assets = [];
 
@@ -385,7 +377,7 @@ class Application extends \Silex\Application {
 		]);
 		$this->register(new ValidatorServiceProvider());
 		$this->register(new DataProvider());
-		$this->register(new MediaProvider());
+		$this->register(new MediaPlugin());
 	}
 
 	protected function setTimezone() {
