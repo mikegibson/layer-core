@@ -52,6 +52,7 @@ class AssetServiceProvider implements ServiceProviderInterface {
 		$app['assetic.filters.compass'] = $app->share(function () use ($app) {
 			$filter = new CompassFilter();
 			$filter->setCacheLocation($app['paths.cache'] . '/compass');
+			$filter->addLoadPath($app['paths.layer'] . '/Resource/scss');
 			return $filter;
 		});
 
