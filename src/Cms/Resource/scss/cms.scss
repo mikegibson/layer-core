@@ -28,10 +28,12 @@ body {
 	section, article, aside {
 		&.panel {
 			@include box-flex(1);
+			@include box-sizing('border-box');
 			@include border-radius(0.2rem);
 			@include box-shadow(0.1rem 0.1rem 0.05rem rgba(#000, 0.2));
 			position:relative;
 			background:$color-panel-background;
+			overflow:hidden;
 			> header {
 				@include box-sizing('border-box');
 				@include border-radius(0.2rem 0.2rem 0 0);
@@ -60,8 +62,17 @@ body {
 				}
 			}
 			> .content {
+				@include display-box;
+				@include box-sizing('border-box');
 				position:relative;
 				padding:0.5rem 1rem;
+				overflow: scroll;
+				> table, > form {
+					@include box-flex(1);
+				}
+				> aside {
+					@include box-flex(0.3)
+				}
 			}
 			&.table, &.form {
 				> .content {
@@ -72,6 +83,12 @@ body {
 	}
 	aside.panel {
 		@include box-flex(0.3);
+	}
+	.panel .panel > header, tbody th {
+		background:rgba($color-header-background, 0.4);
+	}
+	.panel .panel > header h1, tbody th {
+		color:$color-body-text;
 	}
 	table {
 		@include border-radius(0 0 0.2rem 0.2rem);
@@ -89,8 +106,6 @@ body {
 			}
 		}
 		th {
-			background:$color-header-background;
-			color:$color-header-title;
 			font-weight:bold;
 		}
 		td {
@@ -98,16 +113,22 @@ body {
 			@include transition-duration(0.1s);
 			background: rgba(#000, 0);
 		}
+		thead {
+			th {
+				background:$color-header-background;
+				color:$color-header-title;
+			}
+		}
 		tbody {
 			tr {
 				&:nth-child(even) {
 					td {
-						background:rgba(#000, 0.075);
+						background:rgba(#000, 0.02);
 					}
 				}
 				&:hover {
 					td {
-						background:rgba(#000, 0.1);
+						background:rgba(#000, 0.05);
 					}
 				}
 			}
