@@ -58,7 +58,7 @@ abstract class PaginatedNode extends ControllerNode {
 		if(!$result = $this->getRepository()->findOneBy($this->getCriteria($name))) {
 			return false;
 		}
-		return current($result);
+		return $result;
 	}
 
 	/**
