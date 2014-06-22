@@ -23,7 +23,7 @@ class EditAction extends SaveAction {
 		return false;
 	}
 
-	public function isCreate() {
+	protected function isCreate() {
 		return false;
 	}
 

@@ -22,7 +22,7 @@ class AddAction extends SaveAction {
 		return true;
 	}
 
-	public function isCreate() {
+	protected function isCreate() {
 		return true;
 	}
 
