@@ -29,7 +29,7 @@ class UserSecurityProvider implements UserProviderInterface {
 	 */
 	public function loadUserByUsername($username) {
 		if($result = $this->getRepository()->findOneBy(compact('username'))) {
-			return current($result);
+			return $result;
 		}
 		throw new UsernameNotFoundException(sprintf('User %s was not found.', $username));
 	}
