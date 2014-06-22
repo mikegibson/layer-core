@@ -64,6 +64,13 @@ class User implements UserInterface {
 	protected $password;
 
 	/**
+	 * @var \DateTime $birthDate
+	 *
+	 * @ORM\Column(type="date", nullable=true)
+	 */
+	protected $birthDate;
+
+	/**
 	 * @var string $salt
 	 *
 	 * @ORM\Column(type="string")
@@ -103,6 +110,10 @@ class User implements UserInterface {
 		return $this->password;
 	}
 
+	public function getBirthDate() {
+		return $this->birthDate;
+	}
+
 	public function getCreated() {
 		return $this->created;
 	}
@@ -136,6 +147,10 @@ class User implements UserInterface {
 	public function setPassword($password) {
 		$this->password = $password;
 		$this->plainPassword = null;
+	}
+
+	public function setBirthDate(\DateTime $birthDate) {
+		$this->birthDate = $birthDate;
 	}
 
 	public function refreshSalt() {
