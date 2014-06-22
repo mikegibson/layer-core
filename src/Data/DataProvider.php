@@ -37,7 +37,6 @@ use Layer\Data\Metadata\Query\GetEntityHumanNameQuery;
 use Layer\Data\Metadata\Query\GetEntityNameQuery;
 use Layer\Data\Metadata\Query\GetPropertyAnnotationQuery;
 use Layer\Data\Metadata\Query\GetPropertyLabelQuery;
-use Layer\Data\Metadata\Query\GetPropertyOrmQuery;
 use Layer\Data\Metadata\Query\GetTitlePropertyQuery;
 use Layer\Data\Metadata\Query\GetVisiblePropertiesQuery;
 use Layer\Data\Metadata\Query\GetVisiblePropertyLabelsQuery;
