@@ -30,7 +30,7 @@ class GetEntityCrudQuery implements QueryInterface {
 
 	protected function getFallbackResult(ClassMetadata $classMetadata, array $options) {
 		$reflClass = new \ReflectionClass($this->annotationClass);
-		return $reflClass->newInstance();
+		return $reflClass->newInstance([]);
 	}
 
 }
