@@ -27,6 +27,7 @@ use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\XmlDriver;
 use Doctrine\ORM\Mapping\Driver\YamlDriver;
+use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
 use Gedmo\Sluggable\SluggableListener;
 use Gedmo\Timestampable\TimestampableListener;
 use Gedmo\Tree\TreeListener;
@@ -173,6 +174,10 @@ class DataProvider implements ServiceProviderInterface {
 			return $ems;
 		});
 
+		$app['orm.naming_strategy'] = $app->share(function() use($app) {
+			return new UnderscoreNamingStrategy();
+		});
+
 		$app['orm.ems.config'] = $app->share(function($app) {
 			$app['orm.ems.options.initializer']();
 
@@ -185,8 +190,7 @@ class DataProvider implements ServiceProviderInterface {
 				$config->setProxyDir($app['orm.proxies_dir']);
 				$config->setProxyNamespace($app['orm.proxies_namespace']);
 				$config->setAutoGenerateProxyClasses($app['orm.auto_generate_proxies']);
-
-
+				$config->setNamingStrategy($app['orm.naming_strategy']);
 
 				$chain = $app['orm.mapping_driver_chain.locator']($name);
 				foreach ((array) $options['mappings'] as $entity) {
