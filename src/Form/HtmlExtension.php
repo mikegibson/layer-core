@@ -2,15 +2,17 @@
 
 namespace Layer\Form;
 
-use Doctrine\Common\Annotations\Reader;
 use Symfony\Component\Form\AbstractExtension;
 
 class HtmlExtension extends AbstractExtension {
 
-	private $reader;
+	private $htmlType;
 
-	public function __construct(Reader $reader) {
-		$this->reader = $reader;
+	private $htmlTypeGuesser;
+
+	public function __construct(HtmlType $htmlType, HtmlTypeGuesser $htmlTypeGuesser) {
+		$this->htmlType = $htmlType;
+		$this->htmlTypeGuesser = $htmlTypeGuesser;
 	}
 
 	/**
@@ -20,12 +22,12 @@ class HtmlExtension extends AbstractExtension {
 	 */
 	protected function loadTypes() {
 		return [
-			new HtmlType()
+			$this->htmlType
 		];
 	}
 
 	protected function loadTypeGuesser() {
-		return new HtmlTypeGuesser($this->reader);
+		return $this->htmlTypeGuesser;
 	}
 
 }

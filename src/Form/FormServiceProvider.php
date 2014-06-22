@@ -11,7 +11,7 @@ class FormServiceProvider extends \Silex\Provider\FormServiceProvider {
 		parent::register($app);
 
 		$app['form.extensions'] = $app->share($app->extend('form.extensions', function(array $extensions) use($app) {
-			$extensions[] = new HtmlExtension($app['annotations.reader']);
+			$extensions[] = new HtmlExtension(new HtmlType(), new HtmlTypeGuesser($app['annotations.reader']));
 			return $extensions;
 		}));
 
