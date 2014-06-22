@@ -17,7 +17,6 @@
 		"symfony/debug": "2.5.*@dev",
 		"symfony/doctrine-bridge": "2.5.*@dev",
 		"symfony/form": "2.5.*@dev",
-		"symfony/monolog-bridge": "2.5.*@dev",
 		"symfony/security": "2.5.*@dev",
 		"symfony/translation": "2.5.*@dev",
 		"symfony/twig-bridge": "2.5.*@dev",
