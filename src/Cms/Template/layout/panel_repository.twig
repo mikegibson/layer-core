@@ -3,7 +3,7 @@
 {% block panel_class %}{{ parent() }} repository-{{ repository.cmsSlug }}{% endblock %}
 
 {% if title is not defined %}
-	{% set title = repository.getEntityHumanName({'plural': true, 'capitalize': true}) %}
+	{% set title = repository.getEntityHumanName({plural: true, capitalize: true}) %}
 {% endif %}
 
 {% block panel_header %}
