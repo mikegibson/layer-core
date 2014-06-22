@@ -1,0 +1,29 @@
+{% extends layout|default(default_layout) %}
+
+{% if panel_title is not defined and title is not empty %}
+	{% set panel_title = title %}
+{% endif %}
+
+{% if panel_tag is not defined %}
+	{% set panel_tag = 'section' %}
+{% endif %}
+
+{% block content %}
+<{{ panel_tag }} class="{% block panel_class %}panel{% endblock %}">
+
+	{% if block('panel_header') is not empty %}
+	<header>
+
+		{% block panel_header %}{% if panel_title is not empty %}<h1>{{ panel_title }}</h1>{% endif %}{% endblock %}
+
+	</header>
+	{% endif %}
+
+	<div class="content">
+
+		{% block panel_content %}{% endblock %}
+
+	</div>
+
+</{{ panel_tag }}>
+{% endblock %}
