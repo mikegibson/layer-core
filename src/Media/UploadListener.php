@@ -77,12 +77,6 @@ class UploadListener implements EventSubscriber {
 		}
 		$file->__setRootDir($this->rootDir);
 		$file->__setRootWebPath($this->rootWebPath);
-		if(
-			in_array($file->getMimeType(), $this->imageMimeTypes) &&
-			$image = $this->getImageRepository()->findOneBy(compact('file'))
-		) {
-	//		$file->__setImage($image);
-		}
 	}
 
 	/**
@@ -92,10 +86,12 @@ class UploadListener implements EventSubscriber {
 		if(!$file = $this->getFile($event)) {
 			return;
 		}
+		if(!$uploadedFile = $file->getUploadedFile()) {
+			return;
+		}
 		if(!$file->getFilename()) {
 			$file->setFilename($this->generateFilename($file));
 		}
-		$uploadedFile = $file->getUploadedFile();
 		$mimeType = $uploadedFile->getClientMimeType();
 		if(!$file->getMimeType()) {
 			$file->setMimeType($mimeType);
@@ -121,7 +117,6 @@ class UploadListener implements EventSubscriber {
 			$image->__setHeight($size[1]);
 			$this->getImageRepository()->save($image);
 		}
-
 	}
 
 	/**
