@@ -9,9 +9,9 @@
 {% block list_item %}
 	<li>
 	{% if node.url is not empty %}
-		<a href="{{ node.url }}">{{ node.label }}</a>
+		<a href="{{ node.url }}">{{ node.label|default('') }}</a>
 	{% else %}
-		{{ node.label }}
+		{{ node.label|default('') }}
 	{% endif %}
 	{% if node.childNodes is not empty %}
 		{{ list( node ) }}
