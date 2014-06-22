@@ -21,6 +21,7 @@ class MediaPlugin extends Plugin {
 	public function register(Application $app) {
 
 		$app['media.entity_classes.files'] = 'Layer\\Media\\File\\File';
+		$app['media.entity_classes.images'] = 'Layer\\Media\\Image\\Image';
 
 		$app['paths.uploads'] = $app['paths.storage'] . '/uploads';
 
@@ -30,6 +31,10 @@ class MediaPlugin extends Plugin {
 
 		$app['media.repositories.files'] = $app->share(function() use($app) {
 			return $app['orm.rm']->loadRepository($app['orm.em'], $app['media.entity_classes.files']);
+		});
+
+		$app['media.repositories.images'] = $app->share(function() use($app) {
+			return $app['orm.rm']->loadRepository($app['orm.em'], $app['media.entity_classes.images']);
 		});
 
 		$app['media.controllers'] = $app->share(function() use($app) {
@@ -49,7 +54,7 @@ class MediaPlugin extends Plugin {
 					if(!$result) {
 						return false;
 					}
-					$attrs['file'] = current($result);
+					$attrs['file'] = $result;
 					return $attrs;
 				})->bind('media');
 
@@ -92,15 +97,18 @@ class MediaPlugin extends Plugin {
 					}
 					$attrs['filterName'] = $attrs['filter'];
 					$attrs['filter'] = $app['images.filters']->getFilter($attrs['filterName']);
-					$result = $app['media.repositories.files']->findOneBy([
-						'filename' => $attrs['filename'],
-						'isImage' => true,
-						'webAccessible' => true
-					]);
+					$result = $app['media.repositories.images']->createQueryBuilder()
+						->select('image')
+						->from($app['media.entity_classes.images'], 'image')
+						->innerJoin('image.file', 'file')
+						->where('file.filename = :filename')
+						->setParameter('filename', $attrs['filename'])
+						->setMaxResults(1)
+						->getQuery()->getResult();
 					if(!$result) {
 						return false;
 					}
-					$attrs['image'] = current($result)->getImage();
+					$attrs['image'] = current($result);
 					return $attrs;
 				})
 				->bind('image');
@@ -122,6 +130,7 @@ class MediaPlugin extends Plugin {
 	public function boot(Application $app) {
 		$app['orm.em']->getEventManager()->addEventSubscriber(new UploadListener(
 			$app['media.repositories.files'],
+			$app['media.repositories.images'],
 			$app['paths.uploads'],
 			'/' . $app['media.url_fragment'] . '/'
 		));

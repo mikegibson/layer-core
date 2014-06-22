@@ -28,14 +28,6 @@ class File implements FileInterface {
 	protected $id;
 
 	/**
-	 * @var UploadedFile $file
-	 * @Assert\File(maxSize="6000000")
-	 * @Layer\CrudProperty(editable="create")
-	 * @Layer\PropertyLabel("File")
-	 */
-	protected $uploadedFile;
-
-	/**
 	 * @var string $filename
 	 *
 	 * @ORM\Column(type="string", unique=true)
@@ -80,34 +72,6 @@ class File implements FileInterface {
 	protected $path;
 
 	/**
-	 * @var bool $isImage
-	 *
-	 * @ORM\Column(type="boolean")
-	 */
-	protected $isImage;
-
-	/**
-	 * @var Image $image
-	 */
-	protected $image;
-
-	/**
-	 * @var int $imageWidth
-	 *
-	 * @ORM\Column(type="integer", nullable=true)
-	 * @Layer\CrudProperty(editable=false)
-	 */
-	protected $imageWidth;
-
-	/**
-	 * @var int $imageHeight
-	 *
-	 * @ORM\Column(type="integer", nullable=true)
-	 * @Layer\CrudProperty(editable=false)
-	 */
-	protected $imageHeight;
-
-	/**
 	 * @var string $hash
 	 *
 	 * @ORM\Column(type="string")
@@ -142,6 +106,14 @@ class File implements FileInterface {
 	protected $updated;
 
 	/**
+	 * @var UploadedFile $file
+	 * @Assert\File(maxSize="6000000")
+	 * @Layer\CrudProperty(editable="create")
+	 * @Layer\PropertyLabel("File")
+	 */
+	protected $uploadedFile;
+
+	/**
 	 * @var string
 	 */
 	protected $rootDir;
@@ -150,6 +122,14 @@ class File implements FileInterface {
 	 * @var string
 	 */
 	protected $rootWebPath;
+
+	/**
+	 * @var Image $image
+	 *
+	 * @ORM\OneToOne(targetEntity="Layer\Media\Image\Image", mappedBy="file")
+	 * @Layer\InvisibleProperty
+	 */
+	protected $image;
 
 	/**
 	 * @return int
@@ -197,7 +177,7 @@ class File implements FileInterface {
 	 * @return bool
 	 */
 	public function isImage() {
-		return $this->isImage;
+		return $this->image instanceof Image;
 	}
 
 	/**
@@ -205,20 +185,6 @@ class File implements FileInterface {
 	 */
 	public function getImage() {
 		return $this->image;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getImageWidth() {
-		return $this->imageWidth;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getImageHeight() {
-		return $this->imageHeight;
 	}
 
 	/**
@@ -255,6 +221,8 @@ class File implements FileInterface {
 
 	/**
 	 * @return string
+	 *
+	 * @Layer\InvisibleProperty
 	 */
 	public function getAbsolutePath() {
 		return $this->rootDir . '/' . $this->getPath();
@@ -262,6 +230,8 @@ class File implements FileInterface {
 
 	/**
 	 * @return string
+	 *
+	 * @Layer\InvisibleProperty
 	 */
 	public function getWebPath() {
 		return $this->rootDir . '/' . $this->getFilename();
@@ -269,6 +239,8 @@ class File implements FileInterface {
 
 	/**
 	 * @return null|string
+	 *
+	 * @Layer\InvisibleProperty
 	 */
 	public function getExtension() {
 		$filename = $this->getFilename();
@@ -276,7 +248,7 @@ class File implements FileInterface {
 		if($pos === false || $pos <= 1) {
 			return null;
 		}
-		return substr($filename, - $pos + 1);
+		return substr($filename, $pos + 1);
 	}
 
 	/**
@@ -284,6 +256,14 @@ class File implements FileInterface {
 	 */
 	public function getUploadedFile() {
 		return $this->uploadedFile;
+	}
+
+	/**
+	 * @param UploadedFile $file
+	 */
+	public function setUploadedFile(UploadedFile $file) {
+		$this->ensureCreate();
+		$this->uploadedFile = $file;
 	}
 
 	/**
@@ -322,14 +302,6 @@ class File implements FileInterface {
 		$this->webAccessible = $webAccessible;
 	}
 
-	/**
-	 * @param UploadedFile $file
-	 */
-	public function setUploadedFile(UploadedFile $file) {
-		$this->ensureCreate();
-		$this->uploadedFile = $file;
-	}
-
 	public function __setPath($path) {
 		$this->ensureCreate();
 		$this->path = $path;
@@ -340,23 +312,8 @@ class File implements FileInterface {
 		$this->size = $size;
 	}
 
-	public function __setIsImage($isImage) {
-		$this->ensureCreate();
-		$this->isImage = $isImage;
-	}
-
 	public function __setImage(Image $image) {
 		$this->image = $image;
-	}
-
-	public function __setImageWidth($imageWidth) {
-		$this->ensureCreate();
-		$this->imageWidth = $imageWidth;
-	}
-
-	public function __setImageHeight($imageHeight) {
-		$this->ensureCreate();
-		$this->imageHeight = $imageHeight;
 	}
 
 	public function __setHash($hash) {

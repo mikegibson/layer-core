@@ -3,18 +3,21 @@
 namespace Layer\Media;
 
 use Doctrine\Common\EventSubscriber;
-use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Layer\Data\ManagedRepositoryInterface;
 use Layer\Media\File\File;
-use Layer\Media\Image\Image;
 
 class UploadListener implements EventSubscriber {
 
 	/**
-	 * @var \Doctrine\Common\Persistence\ManagerRegistry
+	 * @var \Layer\Data\ManagedRepositoryInterface
 	 */
-	private $repository;
+	private $fileRepository;
+
+	/**
+	 * @var \Layer\Data\ManagedRepositoryInterface
+	 */
+	private $imageRepository;
 
 	/**
 	 * @var string
@@ -36,12 +39,19 @@ class UploadListener implements EventSubscriber {
 	];
 
 	/**
-	 * @param ObjectRepository $repository
+	 * @param ManagedRepositoryInterface $fileRepository
+	 * @param ManagedRepositoryInterface $imageRepository
 	 * @param $rootDir
 	 * @param $rootWebPath
 	 */
-	public function __construct(ObjectRepository $repository, $rootDir, $rootWebPath) {
-		$this->repository = $repository;
+	public function __construct(
+		ManagedRepositoryInterface $fileRepository,
+		ManagedRepositoryInterface $imageRepository,
+		$rootDir,
+		$rootWebPath
+	) {
+		$this->fileRepository = $fileRepository;
+		$this->imageRepository = $imageRepository;
 		$this->rootDir = $rootDir;
 		$this->rootWebPath = $rootWebPath;
 	}
@@ -67,8 +77,11 @@ class UploadListener implements EventSubscriber {
 		}
 		$file->__setRootDir($this->rootDir);
 		$file->__setRootWebPath($this->rootWebPath);
-		if($file->isImage()) {
-			$file->__setImage(new Image($file));
+		if(
+			in_array($file->getMimeType(), $this->imageMimeTypes) &&
+			$image = $this->getImageRepository()->findOneBy(compact('file'))
+		) {
+	//		$file->__setImage($image);
 		}
 	}
 
@@ -83,29 +96,13 @@ class UploadListener implements EventSubscriber {
 			$file->setFilename($this->generateFilename($file));
 		}
 		$uploadedFile = $file->getUploadedFile();
-		$mimeType = $uploadedFile->getMimeType();
+		$mimeType = $uploadedFile->getClientMimeType();
 		if(!$file->getMimeType()) {
 			$file->setMimeType($mimeType);
-		}
-		$isImage = in_array($mimeType, $this->imageMimeTypes);
-		$file->__setIsImage($isImage);
-		if($isImage) {
-			$size = getimagesize($uploadedFile->getRealPath());
-			$file->__setImageWidth($size[0]);
-			$file->__setImageHeight($size[1]);
 		}
 		$file->__setSize($uploadedFile->getClientSize());
 		$file->__setPath($this->generatePath($file));
 		$file->__setHash($this->generateHash($file));
-	}
-
-	/**
-	 * @param PreUpdateEventArgs $event
-	 */
-	public function preUpdate(PreUpdateEventArgs $event) {
-		if(!$file = $this->getFile($event)) {
-			return;
-		}
 	}
 
 	/**
@@ -116,6 +113,15 @@ class UploadListener implements EventSubscriber {
 			return;
 		}
 		$file->getUploadedFile()->move($this->rootDir, $file->getPath());
+		if(in_array($file->getMimeType(), $this->imageMimeTypes)) {
+			$image = $this->imageRepository->createEntity();
+			$image->__setFile($file);
+			$size = getimagesize($this->rootDir . '/' . $file->getPath());
+			$image->__setWidth($size[0]);
+			$image->__setHeight($size[1]);
+			$this->getImageRepository()->save($image);
+		}
+
 	}
 
 	/**
@@ -146,7 +152,7 @@ class UploadListener implements EventSubscriber {
 	protected function generateFilename(File $file) {
 		$file = $file->getUploadedFile();
 		$filename = $file->getClientOriginalName();
-		if($this->fileExists($filename)) {
+		if($this->filenameExists($filename)) {
 			$ext = $file->getClientOriginalExtension();
 			if($ext) {
 				$basename = substr($filename, 0, - strlen($ext) - 1);
@@ -155,7 +161,7 @@ class UploadListener implements EventSubscriber {
 				$basename = $filename;
 			}
 			$i = 1;
-			while($this->fileExists($filename = $basename . '-' . $i . $ext)) {
+			while($this->filenameExists($filename = $basename . '-' . $i . $ext)) {
 				$i++;
 			}
 		}
@@ -184,15 +190,22 @@ class UploadListener implements EventSubscriber {
 	 * @param $filename
 	 * @return bool
 	 */
-	protected function fileExists($filename) {
-		return !!$this->getRepository()->findOneBy(compact('filename'));
+	protected function filenameExists($filename) {
+		return !!$this->getFileRepository()->findOneBy(compact('filename'));
 	}
 
 	/**
-	 * @return \Doctrine\Common\Persistence\ObjectRepository
+	 * @return ManagedRepositoryInterface
 	 */
-	protected function getRepository() {
-		return $this->repository;
+	protected function getFileRepository() {
+		return $this->fileRepository;
+	}
+
+	/**
+	 * @return ManagedRepositoryInterface
+	 */
+	protected function getImageRepository() {
+		return $this->imageRepository;
 	}
 
 }
