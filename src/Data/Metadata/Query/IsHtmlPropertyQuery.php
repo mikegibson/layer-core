@@ -3,19 +3,25 @@
 namespace Layer\Data\Metadata\Query;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Layer\Data\Metadata\QueryInterface;
 
-class IsHtmlPropertyQuery extends PropertyAnnotationQuery {
+class IsHtmlPropertyQuery implements QueryInterface {
+
+	private $annotationQuery;
+
+	protected $annotationClass = 'Layer\\Data\\Metadata\\Annotation\\HtmlProperty';
+
+	public function __construct(GetPropertyAnnotationQuery $annotationQuery) {
+		$this->annotationQuery = $annotationQuery;
+	}
 
 	public function getName() {
 		return 'isHtmlProperty';
 	}
 
-	protected function getAnnotationClass() {
-		return 'Layer\\Data\\Metadata\\Annotation\\HtmlProperty';
-	}
-
-	protected function getResultFromAnnotation(ClassMetadata $classMetadata, $annotation, array $options) {
-		return is_a($annotation, $this->getAnnotationClass());
+	public function getResult(ClassMetadata $classMetadata, array $options = []) {
+		$options['annotationClass'] = $this->annotationClass;
+		return !!$this->annotationQuery->getResult($classMetadata, $options);
 	}
 
 }

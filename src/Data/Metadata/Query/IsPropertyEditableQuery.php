@@ -2,7 +2,6 @@
 
 namespace Layer\Data\Metadata\Query;
 
-use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Layer\Data\Metadata\Annotation\CrudProperty;
 use Layer\Data\Metadata\QueryInterface;
@@ -20,7 +19,7 @@ class IsPropertyEditableQuery implements QueryInterface {
 	/**
 	 * @var \Doctrine\Common\Annotations\Reader
 	 */
-	protected $reader;
+	protected $annotationQuery;
 
 	/**
 	 * @var \Symfony\Component\PropertyAccess\PropertyAccessorInterface
@@ -28,11 +27,11 @@ class IsPropertyEditableQuery implements QueryInterface {
 	protected $propertyAccessor;
 
 	/**
-	 * @param Reader $reader
+	 * @param GetPropertyAnnotationQuery $annotationQuery
 	 * @param PropertyAccessorInterface $propertyAccessor
 	 */
-	public function __construct(Reader $reader, PropertyAccessorInterface $propertyAccessor) {
-		$this->reader = $reader;
+	public function __construct(GetPropertyAnnotationQuery $annotationQuery, PropertyAccessorInterface $propertyAccessor) {
+		$this->annotationQuery = $annotationQuery;
 		$this->propertyAccessor = $propertyAccessor;
 	}
 
@@ -45,10 +44,8 @@ class IsPropertyEditableQuery implements QueryInterface {
 	 */
 	public function getResult(ClassMetadata $classMetadata, array $options = []) {
 		if(!isset($options['property'])) {
-			throw new \InvalidArgumentException('The property option must be specified!');
+			throw new \InvalidArgumentException('The property option was not specified.');
 		}
-		$create = !isset($options['create']) || $options['create'];
-		$reflection = $classMetadata->getReflectionClass();
 		$instance = $classMetadata->newInstance();
 		if(
 			!$this->propertyAccessor->isWritable($instance, $options['property']) ||
@@ -56,13 +53,22 @@ class IsPropertyEditableQuery implements QueryInterface {
 		) {
 			return false;
 		}
-		$property = $reflection->getProperty($options['property']);
-		if($annotation = $this->reader->getPropertyAnnotation($property, 'Layer\\Data\\Metadata\\Annotation\\LockedProperty')) {
+		if(isset($options['create'])) {
+			$create = $options['create'];
+			unset($options['create']);
+		} else {
+			$create = true;
+		}
+		if($annotation = $this->annotationQuery->getResult($classMetadata, array_merge($options, [
+			'annotationClass' => 'Layer\\Data\\Metadata\\Annotation\\LockedProperty'
+		]))) {
 			if($create ? $annotation->onCreate : $annotation->onUpdate) {
 				return false;
 			}
 		}
-		if($annotation = $this->reader->getPropertyAnnotation($property, 'Layer\\Data\\Metadata\\Annotation\\CrudProperty')) {
+		if($annotation = $this->annotationQuery->getResult($classMetadata, array_merge($options, [
+			'annotationClass' => 'Layer\\Data\\Metadata\\Annotation\\CrudProperty'
+		]))) {
 			if($annotation->editable === CrudProperty::EDITABLE_ALWAYS) {
 				return true;
 			}
@@ -77,8 +83,8 @@ class IsPropertyEditableQuery implements QueryInterface {
 			}
 			throw new \RuntimeException('The editable property has an invalid value.');
 		}
-		foreach($this->bannedAnnotations as $annotationName) {
-			if($this->reader->getPropertyAnnotation($property, $annotationName)) {
+		foreach($this->bannedAnnotations as $annotationClass) {
+			if($this->annotationQuery->getResult($classMetadata, array_merge($options, compact('annotationClass')))) {
 				return false;
 			}
 		}

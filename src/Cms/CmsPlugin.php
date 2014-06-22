@@ -82,9 +82,8 @@ class CmsPlugin extends Plugin {
 
 		$app['metadata.queries.getCmsFormFieldProperty'] = $app->share(function() use($app) {
 			return new GetCmsFormFieldPropertyQuery(
-				$app['annotations.reader'],
-				$app['metadata.queries.getPropertyLabel'],
-				$app['metadata.queries.isHtmlProperty']
+				$app['metadata.queries.getPropertyAnnotation'],
+				$app['metadata.queries.getPropertyLabel']
 			);
 		});
 

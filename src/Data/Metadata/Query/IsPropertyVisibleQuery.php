@@ -2,65 +2,67 @@
 
 namespace Layer\Data\Metadata\Query;
 
-use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Layer\Data\Metadata\QueryInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
-class IsPropertyVisibleQuery extends PropertyAnnotationQuery {
+class IsPropertyVisibleQuery implements QueryInterface {
 
-	private $namespace = 'Layer\\Data\\Metadata\\Annotation\\';
+	/**
+	 * @var GetPropertyAnnotationQuery
+	 */
+	private $annotationQuery;
 
 	/**
 	 * @var \Symfony\Component\PropertyAccess\PropertyAccessorInterface
 	 */
-	protected $propertyAccessor;
+	private $propertyAccessor;
 
 	/**
-	 * @param Reader $reader
+	 * @param GetPropertyAnnotationQuery $annotationQuery
 	 * @param PropertyAccessorInterface $propertyAccessor
 	 */
-	public function __construct(Reader $reader, PropertyAccessorInterface $propertyAccessor) {
-		parent::__construct($reader);
+	public function __construct(GetPropertyAnnotationQuery $annotationQuery, PropertyAccessorInterface $propertyAccessor) {
+		$this->annotationQuery = $annotationQuery;
 		$this->propertyAccessor = $propertyAccessor;
 	}
 
-	protected function getAnnotationClass() {
-		return $this->namespace . 'CrudEntity';
-	}
-
+	/**
+	 * @return string
+	 */
 	public function getName() {
 		return 'isPropertyVisible';
 	}
 
+	/**
+	 * @param ClassMetadata $classMetadata
+	 * @param array $options
+	 * @return bool
+	 * @throws \InvalidArgumentException
+	 */
 	public function getResult(ClassMetadata $classMetadata, array $options = []) {
-		$this->checkProperty($options);
-		$getter = 'get' . ucfirst($options['property']);
-		if(!$classMetadata->getReflectionClass()->hasMethod($getter)) {
-			return false;
-		}
-		return parent::getResult($classMetadata, $options);
-	}
-
-	protected function getResultFromAnnotation(ClassMetadata $classMetadata, $annotation, array $options) {
-		if(is_a($annotation, $this->getAnnotationClass())) {
-			if(!empty($options['important'])) {
-				return !empty($annotation->important);
-			}
-			return true;
-		}
-		return $this->getFallbackResult($classMetadata, $options);
-	}
-
-	protected function getFallbackResult(ClassMetadata $classMetadata, array $options) {
-		$property = $classMetadata->getReflectionClass()->getProperty($options['property']);
-		if($this->getReader()->getPropertyAnnotation($property, $this->namespace . 'InvisibleProperty')) {
-			return false;
-		}
-		if($crudProperty = $this->getReader()->getPropertyAnnotation($property, $this->namespace . 'CrudProperty')) {
-			return $crudProperty->visible;
+		if(!isset($options['property'])) {
+			throw new \InvalidArgumentException('The property option must be specified!');
 		}
 		if(!$this->propertyAccessor->isReadable($classMetadata->newInstance(), $options['property'])) {
 			return false;
+		}
+		if($annotation = $this->annotationQuery->getResult($classMetadata, [
+			'property' => $options['property'],
+			'annotationClass' => 'Layer\\Data\\Metadata\\Annotation\\InvisibleProperty',
+			'checkSetter' => false
+		])) {
+			return false;
+		}
+		if($annotation = $this->annotationQuery->getResult($classMetadata, [
+			'property' => $options['property'],
+			'annotationClass' => 'Layer\\Data\\Metadata\\Annotation\\CrudProperty',
+			'checkSetter' => false
+		])) {
+			if(!empty($options['important'])) {
+				return !empty($annotation->important);
+			}
+			return !empty($annotation->visible);
 		}
 		return true;
 	}

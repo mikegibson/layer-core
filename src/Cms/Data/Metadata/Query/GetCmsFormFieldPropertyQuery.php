@@ -2,60 +2,64 @@
 
 namespace Layer\Cms\Data\Metadata\Query;
 
-use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Layer\Data\Metadata\Query\GetPropertyAnnotationQuery;
 use Layer\Data\Metadata\Query\GetPropertyLabelQuery;
-use Layer\Data\Metadata\Query\IsHtmlPropertyQuery;
-use Layer\Data\Metadata\Query\PropertyAnnotationQuery;
+use Layer\Data\Metadata\QueryInterface;
 
-class GetCmsFormFieldPropertyQuery extends PropertyAnnotationQuery {
+class GetCmsFormFieldPropertyQuery implements QueryInterface {
+
+	/**
+	 * @var \Layer\Data\Metadata\Query\GetPropertyAnnotationQuery
+	 */
+	private $annotationQuery;
 
 	/**
 	 * @var \Layer\Data\Metadata\Query\GetPropertyLabelQuery
 	 */
-	protected $propertyLabelQuery;
+	private $labelQuery;
+
+	protected $annotationClass = 'Layer\\Cms\\Data\\Metadata\\Annotation\\FormFieldProperty';
 
 	/**
-	 * @var \Layer\Data\Metadata\Query\IsHtmlPropertyQuery
-	 */
-	protected $htmlPropertyQuery;
-
-	/**
-	 * @param Reader $reader
+	 * @param GetPropertyAnnotationQuery $annotationQuery
 	 * @param GetPropertyLabelQuery $propertyLabelQuery
 	 */
 	public function __construct(
-		Reader $reader,
-		GetPropertyLabelQuery $propertyLabelQuery,
-		IsHtmlPropertyQuery $htmlPropertyQuery
+		GetPropertyAnnotationQuery $annotationQuery,
+		GetPropertyLabelQuery $propertyLabelQuery
 	) {
-		parent::__construct($reader);
-		$this->propertyLabelQuery = $propertyLabelQuery;
-		$this->htmlPropertyQuery = $htmlPropertyQuery;
+		$this->annotationQuery = $annotationQuery;
+		$this->labelQuery = $propertyLabelQuery;
 	}
 
 	public function getName() {
 		return 'getCmsFormFieldProperty';
 	}
 
-	protected function getAnnotationClass() {
-		return 'Layer\\Cms\\Data\\Metadata\\Annotation\\FormFieldProperty';
-	}
-
-	protected function getResultFromAnnotation(ClassMetadata $classMetadata, $annotation, array $options) {
-		$class = $this->getAnnotationClass();
-		if(!is_a($annotation, $class)) {
+	public function getResult(ClassMetadata $classMetadata, array $options = []) {
+		if(!isset($options['property'])) {
+			throw new \InvalidArgumentException('The property option was not specified.');
+		}
+		if(!$annotation = $this->annotationQuery->getResult($classMetadata, [
+			'property' => $options['property'],
+			'annotationClass' => $this->annotationClass
+		])) {
+			$class = $this->annotationClass;
 			$annotation = new $class([]);
 		}
 		$type = $annotation->type;
 		if(empty($type)) {
-			if($this->htmlPropertyQuery->getResult($classMetadata, ['property' => $options['property']])) {
+			if($this->annotationQuery->getResult($classMetadata, [
+				'property' => $options['property'],
+				'annotationClass' => 'Layer\\Data\\Metadata\\Annotation\\HtmlProperty'
+			])) {
 				$type = 'html';
 			}
 		}
 		$fieldOptions = $annotation->options;
 		if(!isset($fieldOptions['label'])) {
-			$fieldOptions['label'] = $this->propertyLabelQuery->getResult($classMetadata, ['property' => $options['property']]);
+			$fieldOptions['label'] = $this->labelQuery->getResult($classMetadata, ['property' => $options['property']]);
 		}
 		return [
 			'type' => $type,

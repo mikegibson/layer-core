@@ -3,23 +3,39 @@
 namespace Layer\Data\Metadata\Query;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Layer\Data\Metadata\QueryInterface;
 
-class IsTitlePropertyQuery extends PropertyAnnotationQuery {
+class IsTitlePropertyQuery implements QueryInterface {
+
+	/**
+	 * @var GetPropertyAnnotationQuery
+	 */
+	private $annotationQuery;
+
+	protected $annotationClass = 'Layer\\Data\\Metadata\\Annotation\\TitleProperty';
 
 	protected $titleProperties = [
 		'title', 'name'
 	];
 
+	/**
+	 * @param GetPropertyAnnotationQuery $annotationQuery
+	 */
+	public function __construct(GetPropertyAnnotationQuery $annotationQuery) {
+		$this->annotationQuery = $annotationQuery;
+	}
+
+	/**
+	 * @return string
+	 */
 	public function getName() {
 		return 'isTitleProperty';
 	}
 
-	protected function getAnnotationClass() {
-		return 'Layer\\Data\\Metadata\\Annotation\\TitleProperty';
-	}
-
-	protected function getResultFromAnnotation(ClassMetadata $classMetadata, $annotation, array $options) {
-		if(is_a($annotation, $this->getAnnotationClass())) {
+	public function getResult(ClassMetadata $classMetadata, array $options = []) {
+		if($annotation = $this->annotationQuery->getResult($classMetadata, array_merge($options, [
+			'annotationClass' => $this->annotationClass
+		]))) {
 			return true;
 		}
 		if(!empty($options['strict'])) {

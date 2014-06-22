@@ -35,6 +35,7 @@ use Layer\Data\Metadata\Query\GetEditablePropertiesQuery;
 use Layer\Data\Metadata\Query\GetEntityCrudQuery;
 use Layer\Data\Metadata\Query\GetEntityHumanNameQuery;
 use Layer\Data\Metadata\Query\GetEntityNameQuery;
+use Layer\Data\Metadata\Query\GetPropertyAnnotationQuery;
 use Layer\Data\Metadata\Query\GetPropertyLabelQuery;
 use Layer\Data\Metadata\Query\GetPropertyOrmQuery;
 use Layer\Data\Metadata\Query\GetTitlePropertyQuery;
@@ -443,16 +444,20 @@ class DataProvider implements ServiceProviderInterface {
 			return new GetEntityCrudQuery($app['annotations.reader']);
 		});
 
-		$app['metadata.queries.getPropertyLabel'] = $app->share(function() use($app) {
-			return new GetPropertyLabelQuery($app['annotations.reader'], $app['inflector']);
+		$app['metadata.queries.getPropertyAnnotation'] = $app->share(function() use($app) {
+			return new GetPropertyAnnotationQuery($app['annotations.reader']);
 		});
 
+		$app['metadata.queries.getPropertyLabel'] = $app->share(function() use($app) {
+			return new GetPropertyLabelQuery($app['metadata.queries.getPropertyAnnotation'], $app['inflector']);
+		});
+/*
 		$app['metadata.queries.getPropertyOrm'] = $app->share(function() use($app) {
 			return new GetPropertyOrmQuery($app['annotations.reader']);
 		});
-
+*/
 		$app['metadata.queries.isPropertyVisible'] = $app->share(function() use($app) {
-			return new IsPropertyVisibleQuery($app['annotations.reader'], $app['property_accessor']);
+			return new IsPropertyVisibleQuery($app['metadata.queries.getPropertyAnnotation'], $app['property_accessor']);
 		});
 
 		$app['metadata.queries.getVisibleProperties'] = $app->share(function() use($app) {
@@ -467,7 +472,7 @@ class DataProvider implements ServiceProviderInterface {
 		});
 
 		$app['metadata.queries.isPropertyEditable'] = $app->share(function() use($app) {
-			return new IsPropertyEditableQuery($app['annotations.reader'], $app['property_accessor']);
+			return new IsPropertyEditableQuery($app['metadata.queries.getPropertyAnnotation'], $app['property_accessor']);
 		});
 
 		$app['metadata.queries.getEditableProperties'] = $app->share(function() use($app) {
@@ -475,7 +480,7 @@ class DataProvider implements ServiceProviderInterface {
 		});
 
 		$app['metadata.queries.isTitleProperty'] = $app->share(function() use($app) {
-			return new IsTitlePropertyQuery($app['annotations.reader']);
+			return new IsTitlePropertyQuery($app['metadata.queries.getPropertyAnnotation']);
 		});
 
 		$app['metadata.queries.getTitleProperty'] = $app->share(function() use($app) {
@@ -483,7 +488,7 @@ class DataProvider implements ServiceProviderInterface {
 		});
 
 		$app['metadata.queries.isHtmlProperty'] = $app->share(function() use($app) {
-			return new IsHtmlPropertyQuery($app['annotations.reader']);
+			return new IsHtmlPropertyQuery($app['metadata.queries.getPropertyAnnotation']);
 		});
 
 		$app['metadata.queries.getEntityHumanName'] = $app->share(function() use($app) {
@@ -495,8 +500,9 @@ class DataProvider implements ServiceProviderInterface {
 			$collection
 				->registerQuery($app['metadata.queries.getEntityName'])
 				->registerQuery($app['metadata.queries.getEntityCrud'])
+				->registerQuery($app['metadata.queries.getPropertyAnnotation'])
 				->registerQuery($app['metadata.queries.getPropertyLabel'])
-				->registerQuery($app['metadata.queries.getPropertyOrm'])
+				//->registerQuery($app['metadata.queries.getPropertyOrm'])
 				->registerQuery($app['metadata.queries.isPropertyVisible'])
 				->registerQuery($app['metadata.queries.getVisibleProperties'])
 				->registerQuery($app['metadata.queries.getVisiblePropertyLabels'])
