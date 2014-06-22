@@ -1,0 +1,13 @@
+{% extends '@media/element/file_preview' %}
+
+{% block preview_tbody %}
+
+	<tr>
+		<td colspan="2">
+			<img alt="{{ file.image }}" src="{{ url('image', {'filename': file.filename, 'filter': 'cms-thumbnail'}) }}" />
+		</td>
+	</tr>
+
+	{{ parent() }}
+
+{% endblock preview_tbody %}

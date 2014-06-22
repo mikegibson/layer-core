@@ -1,11 +1,13 @@
 {% extends '@cms/view/edit' %}
 
+{% if preview_element is not defined %}
+	{% set preview_element = entity.isImage ? '@media/element/image_preview' : '@media/element/file_preview' %}
+{% endif %}
+
 {% block panel_content %}
 
-	{% if entity.isImage %}
-		<img alt="{{ entity }}" src="{{ url('image', {'filename': entity.filename, 'filter': 'cms-thumbnail'}) }}" />
-	{% endif %}
-
 	{{ parent() }}
+
+	{% include preview_element with {file: entity} only %}
 
 {% endblock panel_content %}

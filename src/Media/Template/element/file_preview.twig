@@ -1,0 +1,25 @@
+{% extends '@cms/layout/panel' %}
+
+{% set layout = 'layout/blank' %}
+
+{% set panel_tag = 'aside' %}
+
+{% set title = 'Preview' %}
+
+{% block panel_class %}{{ parent() }} file preview table{% endblock %}
+
+{% block panel_content %}
+
+<table>
+	<tbody>
+		{% block preview_tbody %}
+		<tr><th>Filename</th><td>{{ file.filename }}</td></tr>
+		<tr><th>Size</th><td>{{ file.size }}</td></tr>
+		<tr><th>Mime type</th><td>{{ file.mimeType }}</td></tr>
+		<tr><th>Created</th><td>{{ file.created|date }}</td></tr>
+		<tr><th>Updated</th><td>{{ file.updated|date }}</td></tr>
+		{% endblock preview_tbody %}
+	</tbody>
+</table>
+
+{% endblock panel_content %}
