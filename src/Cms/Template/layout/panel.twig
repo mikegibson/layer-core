@@ -7,8 +7,12 @@
 	{% set panel_title = title %}
 {% endif %}
 
+{% if panel_tag is not defined %}
+	{% set panel_tag = 'section' %}
+{% endif %}
+
 {% block content %}
-<section class="{% block panel_class %}panel{% endblock %}">
+<{{ panel_tag }} class="{% block panel_class %}panel{% endblock %}">
 
 	{% if block('panel_header') is not empty %}
 	<header>
@@ -24,5 +28,5 @@
 
 	</div>
 
-</section>
+</{{ panel_tag }}>
 {% endblock %}
