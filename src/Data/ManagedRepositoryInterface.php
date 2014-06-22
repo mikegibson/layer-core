@@ -36,24 +36,10 @@ interface ManagedRepositoryInterface extends ObjectRepository {
 	public function createQueryBuilder($alias = null, $indexBy = null);
 
 	/**
-	 * @param $alias
-	 * @return \Doctrine\ORM\ResultSetMappingBuilder
-	 */
-	public function createResultSetMappingBuilder($alias);
-
-	/**
 	 * @param $queryName
 	 * @return \Doctrine\ORM\Query
 	 */
 	public function createNamedQuery($queryName);
-
-	/**
-	 * @param $queryName
-	 * @return \Doctrine\ORM\NativeQuery
-	 */
-	public function createNativeNamedQuery($queryName);
-
-	public function clear();
 
 	/**
 	 * @param mixed $id
