@@ -20,8 +20,11 @@ class GetVisiblePropertiesQuery implements QueryInterface {
 	public function getResult(ClassMetadata $classMetadata, array $options = []) {
 		$important = !empty($options['important']);
 		$visibleProperties = [];
-		foreach($classMetadata->getReflectionProperties() as $reflProperty) {
-			$property = $reflProperty->getName();
+		foreach($classMetadata->getReflectionClass()->getMethods(\ReflectionMethod::IS_PUBLIC) as $reflMethod) {
+			if(!preg_match('/^get([A-Z][A-Za-z0-9]+)$/', $reflMethod->getName(), $matches)) {
+				continue;
+			}
+			$property = lcfirst($matches[1]);
 			if($this->isPropertyVisibleQuery->getResult($classMetadata, compact('property', 'important'))) {
 				$visibleProperties[] = $property;
 			}
