@@ -50,7 +50,7 @@ class User implements UserInterface {
 	 * @var string $plainPassword
 	 *
 	 * @Layer\CrudProperty(editable=true,visible=false)
-	 * @FormFieldProperty("password")
+	 * @Layer\FormFieldProperty("password")
 	 * @Layer\PropertyLabel("Password")
 	 */
 	protected $plainPassword;
