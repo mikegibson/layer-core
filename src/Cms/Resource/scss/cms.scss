@@ -178,7 +178,7 @@ body {
 		input, select, textarea {
 			outline:none;
 		}
-		input[type=text], input[type=number], input[type=password], textarea {
+		input[type=text], input[type=number], input[type=password], input[type=email], textarea {
 			@include box-sizing('border-box');
 			@include transition-property('border-color');
 			@include transition-duration(0.2s);
