@@ -17,7 +17,8 @@ class FormServiceProvider extends \Silex\Provider\FormServiceProvider {
 
 		$app['form.type.extensions'] = $app->share($app->extend('form.type.extensions', function(array $extensions) use($app) {
 			$extensions[] = new FormTypeLayerExtension();
-			$extensions[] = new DateTimeTypeExtension();
+			$extensions[] = new DateTypeExtension();
+			$extensions[] = new TimeTypeExtension();
 			return $extensions;
 		}));
 
