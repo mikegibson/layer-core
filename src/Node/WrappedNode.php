@@ -2,13 +2,9 @@
 
 namespace Layer\Node;
 
-class WrappedNode extends AbstractNode {
+class WrappedNode extends Node {
 
 	private $baseNode;
-
-	private $name;
-
-	private $label;
 
 	private $baseChildrenAccessible;
 

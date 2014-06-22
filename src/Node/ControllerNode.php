@@ -5,7 +5,7 @@ namespace Layer\Node;
 use Layer\Action\ActionInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class ControllerNode extends AbstractNode implements ControllerNodeInterface, ActionInterface {
+class ControllerNode extends Node implements ControllerNodeInterface, ActionInterface {
 
 	private $routeName;
 
@@ -13,10 +13,6 @@ class ControllerNode extends AbstractNode implements ControllerNodeInterface, Ac
 	 * @var ActionInterface
 	 */
 	private $action;
-
-	private $name;
-
-	private $label;
 
 	private $template;
 
@@ -34,9 +30,9 @@ class ControllerNode extends AbstractNode implements ControllerNodeInterface, Ac
 		$visible = null,
 		$accessible = null
 	) {
+		parent::__construct($parentNode);
 		$this->routeName = $routeName;
 		$this->action = $action;
-		$this->parentNode = $parentNode;
 		$this->name = $name;
 		$this->label = $label;
 		$this->template = $template;
