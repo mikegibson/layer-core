@@ -52,7 +52,6 @@ class UserListener implements EventSubscriber {
 		}
 
 		$this->updateUser($user);
-		$event->setNewValue('password', $user->getPassword());
 	}
 
 	/**
