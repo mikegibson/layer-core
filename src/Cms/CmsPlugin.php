@@ -6,8 +6,6 @@ use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
 use Layer\Action\ReskinnedAction;
 use Layer\Cms\Data\CmsRepository;
-use Layer\Cms\Data\Metadata\Query\GetCmsFormFieldPropertyQuery;
-use Layer\Cms\Data\Metadata\Query\GetCmsFormFieldsQuery;
 use Layer\Cms\Node\CmsNavigationNode;
 use Layer\Cms\Node\RepositoryCmsNodeFactory;
 use Layer\Cms\Data\Metadata\Query\GetCmsEntityQuery;
@@ -80,27 +78,12 @@ class CmsPlugin extends Plugin {
 			return new GetCmsEntitySlugQuery($app['metadata.queries.getCmsEntity'], $app['inflector']);
 		});
 
-		$app['metadata.queries.getCmsFormFieldProperty'] = $app->share(function() use($app) {
-			return new GetCmsFormFieldPropertyQuery(
-				$app['metadata.queries.getPropertyAnnotation'],
-				$app['metadata.queries.getPropertyLabel']
-			);
-		});
-
-		$app['metadata.queries.getCmsFormFields'] = $app->share(function() use($app) {
-			return new GetCmsFormFieldsQuery(
-				$app['metadata.queries.getEditableProperties'],
-				$app['metadata.queries.getCmsFormFieldProperty']
-			);
-		});
-
 		$app['metadata.queries'] = $app->share($app->extend('metadata.queries',
 			function(QueryCollection $collection) use($app) {
 				$collection
 					->registerQuery($app['metadata.queries.getCmsEntity'])
 					->registerQuery($app['metadata.queries.getCmsEntitySlug'])
-					->registerQuery($app['metadata.queries.getCmsFormFieldProperty'])
-					->registerQuery($app['metadata.queries.getCmsFormFields']);
+				;
 				return $collection;
 			}
 		));

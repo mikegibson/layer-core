@@ -31,9 +31,22 @@ class EntityFormType extends AbstractType {
 	}
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		$fields = $this->getRepository()->queryMetadata('getCmsFormFields', ['create' => $this->isCreate]);
-		foreach($fields as $field => $info) {
-			$builder->add($field, $info['type'], $info['options']);
+		$properties = $this->getRepository()->queryMetadata('getEditableProperties', ['create' => $this->isCreate]);
+		foreach($properties as $property) {
+			$type = null;
+			$builderOptions = [
+				'label' => $this->getRepository()->queryMetadata('getPropertyLabel', compact('property'))
+			];
+			if($annotation = $this->getRepository()->queryMetadata('getPropertyAnnotation', [
+				'property' => $property,
+				'annotationClass' => 'Layer\\Cms\\Data\\Metadata\\Annotation\\FormFieldProperty'
+			])) {
+				if(!empty($annotation->value)) {
+					$type = $annotation->value;
+				}
+				$builderOptions = array_merge($builderOptions, $annotation->options);
+			}
+			$builder->add($property, $type, $builderOptions);
 		}
 	}
 
