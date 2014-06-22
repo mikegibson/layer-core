@@ -48,15 +48,15 @@ class ActionDispatcher {
 		if($result instanceof Response) {
 			$event->setResponse($result);
 		} else {
-			if(!is_array($result)) {
-				$result = [];
-			}
-			$result['action'] = $action;
 			$this->eventDispatcher->dispatch(ActionEvent::BEFORE_RENDER, $event);
 			$result = $event->getResult();
 			if($result instanceof Response) {
 				$event->setResponse($result);
 			} else {
+				if(!is_array($result)) {
+					$result = [];
+				}
+				$result['action'] = $action;
 				$event->setResponse($event->getView()->render($event->getTemplate(), $result));
 			}
 		}
