@@ -4,7 +4,7 @@ namespace Layer\Users;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Behavior;
-use Layer\Cms\Data\Metadata\Annotation\FormFieldProperty;
+use Layer\Cms\Data\Metadata\Annotation as Cms;
 use Layer\Data\Metadata\Annotation as Layer;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -49,8 +49,8 @@ class User implements UserInterface {
 	/**
 	 * @var string $plainPassword
 	 *
+	 * @Cms\FormFieldProperty("password")
 	 * @Layer\CrudProperty(editable=true,visible=false)
-	 * @Layer\FormFieldProperty("password")
 	 * @Layer\PropertyLabel("Password")
 	 */
 	protected $plainPassword;
