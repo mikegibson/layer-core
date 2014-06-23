@@ -11,6 +11,7 @@ use Layer\Cms\Action\IndexActionFactory;
 use Layer\Cms\Data\CmsRepository;
 use Layer\Cms\Data\HtmlStripperDecorator;
 use Layer\Cms\Data\LinkerDecorator;
+use Layer\Cms\Data\Metadata\Query\GetCmsNodePathQuery;
 use Layer\Cms\Node\CmsNavigationNode;
 use Layer\Cms\Node\RepositoryCmsNodeFactory;
 use Layer\Cms\Data\Metadata\Query\GetCmsEntityQuery;
@@ -88,11 +89,16 @@ class CmsPlugin extends Plugin {
 			return new GetCmsEntitySlugQuery($app['metadata.queries.getCmsEntity'], $app['inflector']);
 		});
 
+		$app['metadata.queries.getCmsNodePath'] = $app->share(function() use($app) {
+			return new GetCmsNodePathQuery($app['annotations.reader']);
+		});
+
 		$app['metadata.queries'] = $app->share($app->extend('metadata.queries',
 			function(QueryCollection $collection) use($app) {
 				$collection
 					->registerQuery($app['metadata.queries.getCmsEntity'])
 					->registerQuery($app['metadata.queries.getCmsEntitySlug'])
+					->registerQuery($app['metadata.queries.getCmsNodePath'])
 				;
 				return $collection;
 			}
@@ -126,10 +132,6 @@ class CmsPlugin extends Plugin {
 			return new RepositoryCmsNodeFactory($app['cms.root_node'], $app['cms.action_factories']);
 		});
 
-		$app['cms.dashboard_node'] = $app->share(function() use($app) {
-			return new ControllerNode('cms', $app['cms.actions.dashboard']);
-		});
-
 		$app['cms.login_action'] = $app->share(function() use($app) {
 			return new ReskinnedAction($app['users.login_action'], '@cms/view/login');
 		});
@@ -138,9 +140,14 @@ class CmsPlugin extends Plugin {
 			return new ControllerNode('cms_login', $app['cms.login_action']);
 		});
 
+		$app['cms.content_node'] = $app->share(function() use($app) {
+			return new ControllerNode('cms', null, null, 'content', 'Content', null, true, false);
+		});
+
 		$app['cms.root_node'] = $app->share(function() use($app) {
 			$node = new ControllerNode('cms');
 			$node->wrapChildNode($app['cms.login_node']);
+			$node->wrapChildNode($app['cms.content_node']);
 			return $node;
 		});
 

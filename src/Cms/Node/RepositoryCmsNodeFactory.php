@@ -46,8 +46,6 @@ class RepositoryCmsNodeFactory implements RepositoryCmsNodeFactoryInterface {
 
 		$actions = $nodes = [];
 
-		$rootNode = null;
-
 		foreach($this->actionFactories as $factory) {
 			if($factory->isRepositoryEligible($repository)) {
 				$actions[] = $factory->createAction($repository);
@@ -59,9 +57,11 @@ class RepositoryCmsNodeFactory implements RepositoryCmsNodeFactoryInterface {
 			$label = $repository->queryMetadata('getEntityHumanName', ['plural' => true, 'capitalize' => true]);
 			$rootAction = array_shift($actions);
 			$repositoryBaseNode = $this->createNodeFromAction($rootAction);
-			$nodes[] = $repositoryRoot = $this->rootCmsNode->wrapChildNode($repositoryBaseNode, $name, $label);
+			$nodePath = $repository->queryMetadata('getCmsNodePath');
+			$parentNode = $nodePath ? $this->rootCmsNode->getDescendent($nodePath) : $this->rootCmsNode;
+			$nodes[] = $repositoryRoot = $parentNode->wrapChildNode($repositoryBaseNode, $name, $label);
 			foreach($actions as $action) {
-				$nodes[] = $repositoryRoot->wrapChildNode($this->createNodeFromAction($action));
+				$nodes[] = $repositoryRoot->wrapChildNode($this->createNodeFromAction($action), $action->getName());
 			}
 
 		}
