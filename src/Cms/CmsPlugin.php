@@ -169,21 +169,11 @@ class CmsPlugin extends Plugin {
 			$app['cms.access_rule'] = ['^/' . $app['cms.url_fragment'] . '/.*$', 'ROLE_ADMIN'];
 		}
 
-		$app['twig'] = $app->share($app->extend('twig', function(\Twig_Environment $twig) use($app) {
-			$twig->addExtension(new TwigCmsExtension($app['cms.helper']));
-			return $twig;
-		}));
-
 		$app['images.filters.cms_thumbnail'] = $app->share(function() use($app) {
 			$filter = new ImageTransformer('cms-thumbnail');
 			$filter->getTransformation()->thumbnail(new Box(60, 60), ImageInterface::THUMBNAIL_OUTBOUND);
 			return $filter;
 		});
-
-		$app['images.filters'] = $app->share($app->extend('images.filters', function(FilterRegistry $filters) use($app) {
-			$filters->addFilter($app['images.filters.cms_thumbnail']);
-			return $filters;
-		}));
 
 	}
 
@@ -193,6 +183,17 @@ class CmsPlugin extends Plugin {
 		$rules = $app['security.access_rules'];
 		$rules[] = $app['cms.access_rule'];
 		$app['security.access_rules'] = $rules;
+
+		$app['twig'] = $app->share($app->extend('twig', function(\Twig_Environment $twig) use($app) {
+			$twig->addExtension(new TwigCmsExtension($app['cms.helper']));
+			return $twig;
+		}));
+
+		$app['images.filters'] = $app->share($app->extend('images.filters', function(FilterRegistry $filters) use($app) {
+			$filters->addFilter($app['images.filters.cms_thumbnail']);
+			return $filters;
+		}));
+
 	}
 
 }
