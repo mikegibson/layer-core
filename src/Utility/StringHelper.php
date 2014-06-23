@@ -16,8 +16,6 @@
  */
 namespace Layer\Utility;
 
-use Layer\Application;
-
 /**
  * String handling methods.
  *
@@ -26,16 +24,15 @@ use Layer\Application;
 class StringHelper {
 
 	/**
-	 * @var Application
+	 * @var string
 	 */
-	protected $app;
+	protected $charset;
 
 	/**
-	 * @param Application $app
+	 * @param string $charset
 	 */
-	public function __construct(Application $app) {
-
-		$this->app = $app;
+	public function __construct($charset = 'UTF-8') {
+		$this->charset = $charset;
 	}
 
 	/**
@@ -479,7 +476,7 @@ class StringHelper {
 	public function truncate($text, $length = 100, $options = array()) {
 
 		$default = array(
-			'ellipsis' => '...', 'exact' => true, 'html' => false, 'encoding' => $this->app['charset']
+			'ellipsis' => '...', 'exact' => true, 'html' => false, 'encoding' => $this->charset
 		);
 		if (empty($options['html']) && (!isset($options['encoding']) || $options['encoding'] === 'UTF-8')) {
 			$default['ellipsis'] = "\xe2\x80\xa6";
@@ -595,7 +592,7 @@ class StringHelper {
 	public function excerpt($text, $phrase, $radius = 100, $ellipsis = '...', $charset = null) {
 
 		if ($charset === null) {
-			$charset = $this->app['charset'];
+			$charset = $this->charset;
 		}
 
 		if (empty($text) || empty($phrase)) {
