@@ -40,11 +40,15 @@ class FormServiceProvider extends \Silex\Provider\FormServiceProvider {
 			return new HtmlPurifier($app['html_purifier']);
 		});
 
-		$app['form.extensions'] = $app->share($app->extend('form.extensions', function(array $extensions) use($app) {
-			$extensions[] = new HtmlExtension(
+		$app['form.html_extension'] = $app->share(function() use($app) {
+			return new HtmlExtension(
 				new HtmlType($app['form.html_purifier']),
 				new HtmlTypeGuesser($app['annotations.reader'])
 			);
+		});
+
+		$app['form.extensions'] = $app->share($app->extend('form.extensions', function(array $extensions) use($app) {
+			$extensions[] = $app['form.html_extension'];
 			return $extensions;
 		}));
 
