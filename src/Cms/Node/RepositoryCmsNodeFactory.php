@@ -3,19 +3,39 @@
 namespace Layer\Cms\Node;
 
 use Layer\Action\ActionInterface;
-use Layer\Application;
-use Layer\Cms\Action\AddAction;
-use Layer\Cms\Action\EditAction;
-use Layer\Cms\Action\IndexAction;
+use Layer\Cms\Action\RepositoryCmsActionFactoryInterface;
 use Layer\Cms\Data\CmsRepositoryInterface;
 use Layer\Node\ControllerNode;
+use Layer\Node\ControllerNodeInterface;
 
 class RepositoryCmsNodeFactory implements RepositoryCmsNodeFactoryInterface {
 
-	protected $app;
+	/**
+	 * @var \Layer\Node\ControllerNodeInterface
+	 */
+	private $rootCmsNode;
 
-	public function __construct(Application $app) {
-		$this->app = $app;
+	/**
+	 * @var RepositoryCmsActionFactoryInterface[]
+	 */
+	private $actionFactories = [];
+
+	/**
+	 * @param ControllerNodeInterface $rootCmsNode
+	 * @param RepositoryCmsActionFactoryInterface[] $actionFactories
+	 */
+	public function __construct(ControllerNodeInterface $rootCmsNode, array $actionFactories = []) {
+		$this->rootCmsNode = $rootCmsNode;
+		foreach($actionFactories as $factory) {
+			$this->registerActionFactory($factory);
+		}
+	}
+
+	/**
+	 * @param RepositoryCmsActionFactoryInterface $actionFactory
+	 */
+	public function registerActionFactory(RepositoryCmsActionFactoryInterface $actionFactory) {
+		$this->actionFactories[] = $actionFactory;
 	}
 
 	/**
@@ -23,65 +43,38 @@ class RepositoryCmsNodeFactory implements RepositoryCmsNodeFactoryInterface {
 	 * @return array|null
 	 */
 	public function getRepositoryCmsNodes(CmsRepositoryInterface $repository) {
-		$crud = $repository->queryMetadata('getEntityCrud');
-		if(!$crud->read) {
-			return [];
+
+		$actions = $nodes = [];
+
+		$rootNode = null;
+
+		foreach($this->actionFactories as $factory) {
+			if($factory->isRepositoryEligible($repository)) {
+				$actions[] = $factory->createAction($repository);
+			}
 		}
-		$nodes = [];
-		$rootNode = $this->getRootCmsNode();
-		$indexNode = $this->createIndexNode($repository);
-		$name = $repository->getCmsSlug();
-		$label = $repository->queryMetadata('getEntityHumanName', ['plural' => true, 'capitalize' => true]);
-		$nodes[] = $repositoryRoot = $rootNode->wrapChildNode($indexNode, $name, $label);
-		if($crud->create) {
-			$nodes[] = $repositoryRoot->wrapChildNode($this->createAddNode($repository));
+
+		if($actions) {
+			$name = $repository->getCmsSlug();
+			$label = $repository->queryMetadata('getEntityHumanName', ['plural' => true, 'capitalize' => true]);
+			$rootAction = array_shift($actions);
+			$repositoryBaseNode = $this->createNodeFromAction($rootAction);
+			$nodes[] = $repositoryRoot = $this->rootCmsNode->wrapChildNode($repositoryBaseNode, $name, $label);
+			foreach($actions as $action) {
+				$nodes[] = $repositoryRoot->wrapChildNode($this->createNodeFromAction($action));
+			}
+
 		}
-		if($crud->update) {
-			$nodes[] = $repositoryRoot->wrapChildNode($this->createEditNode($repository));
-		}
+
 		return $nodes;
 	}
 
 	/**
-	 * @param CmsRepositoryInterface $repository
+	 * @param ActionInterface $action
 	 * @return ControllerNode
 	 */
-	protected function createIndexNode(CmsRepositoryInterface $repository) {
-		$action = new IndexAction($repository, $this->getPropertyAccessor(), $this->getUrlGenerator());
-		return $this->createNodeFromAction($action);
-	}
-
-	protected function createAddNode(CmsRepositoryInterface $repository) {
-		$action = new AddAction($repository, $this->getFormFactory(), $this->getUrlGenerator());
-		return $this->createNodeFromAction($action);
-	}
-
-	protected function createEditNode(CmsRepositoryInterface $repository) {
-		$action = new EditAction($repository, $this->getFormFactory(), $this->getUrlGenerator());
-		return $this->createNodeFromAction($action);
-	}
-
 	protected function createNodeFromAction(ActionInterface $action) {
 		return new ControllerNode('cms', $action);
-	}
-
-	/**
-	 * @return \Layer\Cms\Node\RootCmsNode
-	 */
-	protected function getRootCmsNode() {
-		return $this->app['cms.root_node'];
-	}
-
-	protected function getFormFactory() {
-		return $this->app['form.factory'];
-	}
-
-	protected function getUrlGenerator() {
-		return $this->app['url_generator'];
-	}
-
-	protected function getPropertyAccessor() {
-		return $this->app['property_accessor'];
 	}
 
 }

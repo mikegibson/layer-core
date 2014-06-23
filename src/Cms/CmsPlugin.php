@@ -5,7 +5,12 @@ namespace Layer\Cms;
 use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
 use Layer\Action\ReskinnedAction;
+use Layer\Cms\Action\AddActionFactory;
+use Layer\Cms\Action\EditActionFactory;
+use Layer\Cms\Action\IndexActionFactory;
 use Layer\Cms\Data\CmsRepository;
+use Layer\Cms\Data\HtmlStripperDecorator;
+use Layer\Cms\Data\LinkerDecorator;
 use Layer\Cms\Node\CmsNavigationNode;
 use Layer\Cms\Node\RepositoryCmsNodeFactory;
 use Layer\Cms\Data\Metadata\Query\GetCmsEntityQuery;
@@ -14,6 +19,10 @@ use Layer\Cms\View\CmsHelper;
 use Layer\Cms\View\TwigCmsExtension;
 use Layer\Data\ManagedRepositoryEvent;
 use Layer\Data\Metadata\QueryCollection;
+use Layer\Data\TableData\ChainedTableDataDecorator;
+use Layer\Data\TableData\EscaperDecorator;
+use Layer\Data\TableData\StringifierDecorator;
+use Layer\Data\TableData\TruncatorDecorator;
 use Layer\Media\Image\FilterRegistry;
 use Layer\Media\Image\ImageTransformer;
 use Layer\Node\ControllerNode;
@@ -49,7 +58,8 @@ class CmsPlugin extends Plugin {
 		$app[$app->assets['js_cms'] = 'assets.js_cms'] = $app->share(function() use($app) {
 			$asset = $app['assetic.factory']->createAsset([
 				'@layer/js/jquery.js',
-				'@cms/js/cms.js'
+				'@cms/js/CmsPanel.js',
+				'@cms/js/Cms.js'
 			], [
 				'?uglifyjs'
 			], [
@@ -88,8 +98,32 @@ class CmsPlugin extends Plugin {
 			}
 		));
 
+		$app['paginator.decorators.cmsTable'] = $app->share(function() use($app) {
+			return new ChainedTableDataDecorator([
+				new StringifierDecorator(),
+				new HtmlStripperDecorator($app['orm.rm']),
+				new TruncatorDecorator($app['string_helper']),
+				new EscaperDecorator()
+			]);
+		});
+
+		$app['paginator.decorators.cmsIndex'] = $app->share(function() use($app) {
+			return new ChainedTableDataDecorator([
+				$app['paginator.decorators.cmsTable'],
+				new LinkerDecorator($app['orm.rm'], $app['url_generator'])
+			]);
+		});
+
+		$app['cms.action_factories'] = $app->share(function() use($app) {
+			return [
+				new IndexActionFactory($app['paginator.decorators.cmsIndex'], $app['property_accessor']),
+				new AddActionFactory($app['form.factory'], $app['url_generator']),
+				new EditActionFactory($app['form.factory'], $app['url_generator'])
+			];
+		});
+
 		$app['cms.repository_node_factory'] = $app->share(function() use($app) {
-			return new RepositoryCmsNodeFactory($app);
+			return new RepositoryCmsNodeFactory($app['cms.root_node'], $app['cms.action_factories']);
 		});
 
 		$app['cms.dashboard_node'] = $app->share(function() use($app) {
