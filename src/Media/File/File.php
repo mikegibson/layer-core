@@ -4,6 +4,7 @@ namespace Layer\Media\File;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Behavior;
+use Layer\Cms\Data\Metadata\Annotation as Cms;
 use Layer\Data\Metadata\Annotation as Layer;
 use Layer\Media\Image\Image;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -14,6 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="files")
  * @Layer\CrudEntity
  * @Layer\EntityName("files")
+ * @Cms\RootNodePath("media/files")
  */
 class File implements FileInterface {
 

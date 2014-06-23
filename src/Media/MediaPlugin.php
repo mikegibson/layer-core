@@ -7,6 +7,7 @@ use Layer\Media\File\FileResponse;
 use Layer\Media\Image\FilteredImageResponse;
 use Layer\Media\Image\FilteredImageWriter;
 use Layer\Media\Image\FilterRegistry;
+use Layer\Node\ControllerNode;
 use Layer\Node\ControllerNodeInterface;
 use Layer\Plugin\Plugin;
 use Silex\Application;
@@ -124,6 +125,17 @@ class MediaPlugin extends Plugin {
 		$app['images.filter_writer'] = $app->share(function() use($app) {
 			return new FilteredImageWriter($app['imagine'], $app['paths.cache.images']);
 		});
+
+		$app['cms.media_node'] = $app->share(function() use($app) {
+			return new ControllerNode('cms', null, null, 'media', 'Media', null, true, false);
+		});
+
+		$app['cms.root_node'] = $app->share($app->extend('cms.root_node',
+			function(ControllerNodeInterface $rootNode) use($app) {
+				$rootNode->wrapChildNode($app['cms.media_node']);
+				return $rootNode;
+			}
+		));
 
 	}
 

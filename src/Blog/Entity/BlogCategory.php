@@ -4,6 +4,7 @@ namespace Layer\Blog\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Behavior;
+use Layer\Cms\Data\Metadata\Annotation as Cms;
 use Layer\Data\Metadata\Annotation as Layer;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -12,6 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="blog_categories")
  * @Layer\CrudEntity
  * @Layer\EntityName("blog_categories")
+ * @Cms\RootNodePath("content/blog/categories")
  */
 class BlogCategory {
 

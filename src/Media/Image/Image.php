@@ -4,6 +4,7 @@ namespace Layer\Media\Image;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Behavior;
+use Layer\Cms\Data\Metadata\Annotation as Cms;
 use Layer\Data\Metadata\Annotation as Layer;
 use Layer\Media\File\File;
 
@@ -12,6 +13,7 @@ use Layer\Media\File\File;
  * @ORM\Table(name="images")
  * @Layer\CrudEntity(create=false, update=false)
  * @Layer\EntityName("images")
+ * @Cms\RootNodePath("media/images")
  */
 class Image implements ImageInterface {
 
