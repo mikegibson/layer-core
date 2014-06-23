@@ -97,13 +97,13 @@ class ControllerNode extends Node implements ControllerNodeInterface, ActionInte
 		if($this->accessible !== null) {
 			return !!$this->accessible;
 		}
-		if($action = $this->getAction()) {
-			return $action->isDirectlyAccessible();
-		}
-		return false;
+		return !!$this->getAction();
 	}
 
 	public function isDirectlyAccessible() {
+		if($action = $this->getAction()) {
+			return $action->isDirectlyAccessible();
+		}
 		return $this->isAccessible();
 	}
 
