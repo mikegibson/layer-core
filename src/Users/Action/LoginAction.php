@@ -77,6 +77,10 @@ class LoginAction implements ActionInterface {
 		return !$this->securityContext->getToken();
 	}
 
+	public function isDirectlyAccessible() {
+		return true;
+	}
+
 	public function getTemplate() {
 		return $this->template;
 	}
