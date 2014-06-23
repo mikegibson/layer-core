@@ -25,7 +25,6 @@ class PaginatorResult implements PaginatorResultInterface {
 	/**
 	 * @param ManagedRepositoryInterface $repository
 	 * @param QueryBuilder $queryBuilder
-	 * @param array $config
 	 */
 	public function __construct(ManagedRepositoryInterface $repository, QueryBuilder $queryBuilder) {
 		$this->repository = $repository;
@@ -45,8 +44,7 @@ class PaginatorResult implements PaginatorResultInterface {
 	 * @param null $sortKey
 	 * @param null $direction
 	 * @param array $columns
-	 * @param QueryBuilder $builder
-	 * @return mixed
+	 * @return array
 	 */
 	public function getData(
 		$page = 1,
@@ -65,8 +63,7 @@ class PaginatorResult implements PaginatorResultInterface {
 	 * @param null $perPage
 	 * @param null $sortKey
 	 * @param null $direction
-	 * @param QueryBuilder $queryBuilder
-	 * @return QueryBuilder
+	 * @return \Doctrine\ORM\Query
 	 */
 	public function getQuery(
 		$page = 1,
@@ -82,8 +79,7 @@ class PaginatorResult implements PaginatorResultInterface {
 	}
 
 	/**
-	 * @param QueryBuilder $queryBuilder
-	 * @return int
+	 * @return int|mixed
 	 */
 	public function getCount() {
 
