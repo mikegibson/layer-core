@@ -44,8 +44,8 @@ class WrappedControllerNode extends WrappedNode implements ControllerNodeInterfa
 		return $this->getBaseNode()->isVisible();
 	}
 
-	public function isAccessible() {
-		return $this->getBaseNode()->isAccessible();
+	public function isDirectlyAccessible() {
+		return $this->getBaseNode()->isDirectlyAccessible();
 	}
 
 	public function getVisibleChildNodes() {

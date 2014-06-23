@@ -45,11 +45,15 @@ class ControllerNode extends Node implements ControllerNodeInterface, ActionInte
 	}
 
 	public function getActionName() {
-		return $this->isAccessible() ? $this->getAction()->getName() : null;
+		if($action = $this->getAction()) {
+			return $action->getName();
+		}
 	}
 
 	public function getActionLabel() {
-		return $this->isAccessible() ? $this->getAction()->getLabel() : null;
+		if($action = $this->getAction()) {
+			return $action->getLabel();
+		}
 	}
 
 	public function getName() {
@@ -70,7 +74,9 @@ class ControllerNode extends Node implements ControllerNodeInterface, ActionInte
 		if($this->template !== null) {
 			return $this->template;
 		}
-		return $this->isAccessible() ? $this->getAction()->getTemplate() : null;
+		if($action = $this->getAction()) {
+			return $action->getTemplate();
+		}
 	}
 
 	public function invoke(Request $request) {
@@ -91,14 +97,21 @@ class ControllerNode extends Node implements ControllerNodeInterface, ActionInte
 		if($this->accessible !== null) {
 			return !!$this->accessible;
 		}
-		return !!$this->getAction();
+		if($action = $this->getAction()) {
+			return $action->isDirectlyAccessible();
+		}
+		return false;
+	}
+
+	public function isDirectlyAccessible() {
+		return $this->isAccessible();
 	}
 
 	public function isVisible() {
 		if($this->visible !== null) {
 			return !!$this->visible;
 		}
-		return $this->isAccessible() && $this->getAction()->isVisible();
+		return $this->isDirectlyAccessible() && $this->getAction()->isVisible();
 	}
 
 	public function getVisibleChildNodes() {
