@@ -19,10 +19,6 @@ class EditAction extends SaveAction {
 		return sprintf('Edit %s', $this->getRepository()->queryMetadata('getEntityHumanName'));
 	}
 
-	public function isVisible() {
-		return false;
-	}
-
 	protected function isCreate() {
 		return false;
 	}

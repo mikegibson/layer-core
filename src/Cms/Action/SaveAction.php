@@ -80,6 +80,10 @@ abstract class SaveAction implements ActionInterface {
 
 	}
 
+	public function isVisible() {
+		return $this->isCreate();
+	}
+
 	/**
 	 * @param Request $request
 	 * @return \Symfony\Component\Form\Form

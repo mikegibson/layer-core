@@ -18,10 +18,6 @@ class AddAction extends SaveAction {
 		return sprintf('Add new %s', $this->getRepository()->queryMetadata('getEntityHumanName'));
 	}
 
-	public function isVisible() {
-		return true;
-	}
-
 	protected function isCreate() {
 		return true;
 	}
