@@ -2,6 +2,8 @@
 
 namespace Layer\Data\Paginator;
 
+use Layer\Data\TableData\DecoratedTableData;
+use Layer\Data\TableData\TableDataDecoratorInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class DecoratedPaginator extends DecoratedTableData implements PaginatorInterface {

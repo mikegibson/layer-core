@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Data\Paginator;
+namespace Layer\Data\TableData;
 
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
@@ -52,7 +52,7 @@ class DecoratedTableData implements TableDataInterface {
 			$row = [];
 			foreach($this->getColumns() as $column => $label) {
 				$value = $this->propertyAccessor->getValue($baseRow, $column);
-				$row[$column] = $this->decorator->decorate($value, $column, $baseRow);
+				$row[$column] = $this->decorator->decorateData($value, $column, $baseRow);
 			}
 			$data[] = $row;
 		}

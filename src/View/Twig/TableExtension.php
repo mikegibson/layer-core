@@ -4,7 +4,7 @@ namespace Layer\View\Twig;
 
 use Layer\Data\Paginator\Paginator;
 use Layer\Data\Paginator\PaginatorResult;
-use Layer\Data\Paginator\TableDataInterface;
+use Layer\Data\TableData\TableDataInterface;
 
 class TableExtension extends TemplateBlockFunctionExtension {
 

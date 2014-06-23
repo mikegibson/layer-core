@@ -2,6 +2,8 @@
 
 namespace Layer\Data\Paginator;
 
+use Layer\Data\TableData\TableDataInterface;
+
 /**
  * Interface PaginatorQueryInterface
  *
