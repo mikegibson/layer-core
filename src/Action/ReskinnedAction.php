@@ -54,6 +54,13 @@ class ReskinnedAction implements ActionInterface {
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function isDirectlyAccessible() {
+		return $this->getBaseAction()->isDirectlyAccessible();
+	}
+
+	/**
 	 * @param Request $request
 	 * @return array|null|\Symfony\Component\HttpFoundation\Response
 	 */

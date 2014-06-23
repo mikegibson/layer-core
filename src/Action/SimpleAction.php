@@ -16,7 +16,15 @@ class SimpleAction implements ActionInterface {
 
 	private $isVisible;
 
-	public function __construct($name, $label, $template = null, $callable = null, $isVisible = true) {
+	private $isDirectlyAccessible;
+
+	public function __construct(
+		$name, $label,
+		$template = null,
+		$callable = null,
+		$isVisible = true,
+		$isDirectlyAccessible = true
+	) {
 		if($callable !== null && !is_callable($callable)) {
 			throw new \InvalidArgumentException('The argument was not a callable.');
 		}
@@ -25,6 +33,7 @@ class SimpleAction implements ActionInterface {
 		$this->template = $template;
 		$this->callable = $callable;
 		$this->isVisible = $isVisible;
+		$this->isDirectlyAccessible = $isDirectlyAccessible;
 	}
 
 	public function getName() {
@@ -47,6 +56,10 @@ class SimpleAction implements ActionInterface {
 
 	public function isVisible() {
 		return $this->isVisible;
+	}
+
+	public function isDirectlyAccessible() {
+		return $this->isDirectlyAccessible;
 	}
 
 }

@@ -50,6 +50,10 @@ class PaginationAction implements ActionInterface {
 		return true;
 	}
 
+	public function isDirectlyAccessible() {
+		return true;
+	}
+
 	/**
 	 * @param Request $request
 	 * @return array
