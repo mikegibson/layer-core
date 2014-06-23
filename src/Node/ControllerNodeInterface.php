@@ -35,6 +35,11 @@ interface ControllerNodeInterface extends NodeInterface {
 	/**
 	 * @return bool
 	 */
+	public function isAccessible();
+
+	/**
+	 * @return bool
+	 */
 	public function isDirectlyAccessible();
 
 	/**
