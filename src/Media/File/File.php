@@ -245,7 +245,7 @@ class File implements FileInterface {
 	public function getExtension() {
 		$filename = $this->getFilename();
 		$pos = strrpos($filename, '.');
-		if($pos === false || $pos <= 1) {
+		if($pos === false || $pos === 0 || $pos >= strlen($filename) - 1) {
 			return null;
 		}
 		return substr($filename, $pos + 1);
