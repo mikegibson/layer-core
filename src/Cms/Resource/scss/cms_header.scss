@@ -67,6 +67,9 @@
 				background-color:rgba(#000, 0.1);
 			}
 		}
+		.label {
+			cursor: default;
+		}
 		li {
 			ul {
 				background:$color-main-header-background;
