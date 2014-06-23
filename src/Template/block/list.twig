@@ -8,13 +8,17 @@
 
 {% block list_item %}
 	<li>
+		{{ list_item_value( node ) }}
+	</li>
+{% endblock list_item %}
+
+{% block list_item_value %}
 	{% if node.url is not empty %}
-		<a href="{{ node.url }}">{{ node.label|default('') }}</a>
+		{% block list_item_value_link %}<a href="{{ node.url }}">{{ node.label|default('') }}</a>{% endblock %}
 	{% else %}
-		{{ node.label|default('') }}
+		{% block list_item_value_plain %}{{ node.label|default('') }}{% endblock %}
 	{% endif %}
 	{% if node.childNodes is not empty %}
 		{{ list( node ) }}
 	{% endif %}
-	</li>
-{% endblock list_item %}
+{% endblock list_item_value %}

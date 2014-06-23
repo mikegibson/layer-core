@@ -14,6 +14,9 @@ class ListExtension extends TemplateBlockFunctionExtension {
 		],
 		'list_item' => [
 			'args' => ['node']
+		],
+		'list_item_value' => [
+			'args' => ['node']
 		]
 	];
 
