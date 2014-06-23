@@ -38,4 +38,10 @@ interface RepositoryManagerInterface {
 	 */
 	public function hasRepository($name);
 
+	/**
+	 * @param $entity
+	 * @return ManagedRepositoryInterface
+	 */
+	public function getRepositoryForEntity($entity);
+
 }
