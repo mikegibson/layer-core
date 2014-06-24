@@ -5,6 +5,8 @@ namespace Layer\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Layer\Node\ControllerNode;
 use Layer\Node\ControllerNodeInterface;
+use Layer\Node\ListNode;
+use Layer\Node\ListNodeInterface;
 use Layer\Plugin\Plugin;
 use Layer\Users\Action\LoginAction;
 use Layer\Users\Command\AddUserCommand;
@@ -62,9 +64,16 @@ class UsersPlugin extends Plugin {
 		});
 
 		$app['app.home_node'] = $app->share($app->extend('app.home_node', function(ControllerNodeInterface $node) use($app) {
+			$node->getChildNodes();
 			$node->wrapChildNode($app['users.login_node']);
 			return $node;
 		}));
+
+		$app['users.logout_list_node'] = $app->share(function() use($app) {
+			$firewalls = $app['security.firewalls'];
+			$logoutPath = $firewalls['default']['logout']['logout_path'];
+			return new ListNode(null, 'logout', 'Logout', $logoutPath);
+		});
 
 		$app['security.firewalls'] = $app->share(function() use($app) {
 			return [
@@ -108,6 +117,12 @@ class UsersPlugin extends Plugin {
 	public function boot(Application $app) {
 
 		$app['users.repository'];
+
+		$app['cms.navigation_list'] = $app->share($app->extend('cms.navigation_list', function(ListNodeInterface $cmsNav) use($app) {
+			$cmsNav->getChildNodes();
+			$cmsNav->getChildNode('users')->wrapChildNode($app['users.logout_list_node']);
+			return $cmsNav;
+		}));
 
 	}
 
