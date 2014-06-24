@@ -23,10 +23,9 @@ abstract class Extension extends \Twig_Extension {
 
 	/**
 	 * Initializes the runtime environment.
-	 *
 	 * This is where you can load some file that contains filter functions for instance.
 	 *
-	 * @param Twig_Environment $environment The current Twig_Environment instance
+	 * @param \Twig_Environment $twig
 	 */
 	public function initRuntime(\Twig_Environment $twig) {
 		$this->twig = $twig;
