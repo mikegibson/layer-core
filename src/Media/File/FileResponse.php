@@ -21,7 +21,13 @@ class FileResponse extends StreamedResponse {
 
 		parent::__construct($stream, 200, $headers);
 
-		$this->setLastModified($file->getUpdated());
+		$mtime = $file->getUpdated();
+
+		$this->setCache([
+			'etag' => (string) $mtime->getTimestamp(),
+			'last_modified' => $mtime,
+			'public' => true
+		]);
 
 	}
 
