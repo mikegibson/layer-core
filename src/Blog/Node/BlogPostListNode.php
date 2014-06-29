@@ -7,6 +7,7 @@ use Layer\Blog\Entity\BlogPost;
 use Layer\Data\ManagedRepositoryInterface;
 use Layer\Data\Paginator\PaginatedNode;
 use Layer\Node\ControllerNode;
+use Layer\Node\ControllerNodeInterface;
 
 class BlogPostListNode extends PaginatedNode {
 
@@ -22,15 +23,25 @@ class BlogPostListNode extends PaginatedNode {
 
 	/**
 	 * @param ManagedRepositoryInterface $repository
+	 * @param string $routeName
+	 * @param ControllerNodeInterface $parentNode
+	 * @param null $name
+	 * @param null $label
+	 * @param string $template
 	 * @param array $criteria
 	 */
-	public function __construct(ManagedRepositoryInterface $repository, array $criteria = []) {
+	public function __construct(
+		ManagedRepositoryInterface $repository,
+		$routeName = 'app',
+		ControllerNodeInterface $parentNode = null,
+		$name = null,
+		$label = null,
+		$template = '@blog/view/list_posts',
+		array $criteria = []
+	) {
+		parent::__construct($routeName, null, $parentNode, $name, $label, $template, true, true);
 		$this->repository = $repository;
 		$this->criteria = $criteria;
-	}
-
-	public function getTemplate() {
-		return '@blog/view/list_posts';
 	}
 
 	/**
