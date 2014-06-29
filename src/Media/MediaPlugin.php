@@ -156,10 +156,10 @@ class MediaPlugin extends Plugin {
 			return $controllers;
 		});
 
-		$app['fontawesome.path'] = $app['paths.vendor'] . '/fortawesome/font-awesome/src/assets/font-awesome';
+		$app['paths.core_fonts'] = $app['paths.layer'] . '/Resource/fonts';
 
-		$app['fontawesome.controllers'] = $app->share(function() use($app) {
-			return $app['filesystem_controllers_factory']($app['fontawesome.path'], 'fontawesome');
+		$app['fonts.controllers'] = $app->share(function() use($app) {
+			return $app['filesystem_controllers_factory']($app['paths.core_fonts'], 'fonts');
 		});
 
 		$app['cms.root_node'] = $app->share($app->extend('cms.root_node',
@@ -180,7 +180,7 @@ class MediaPlugin extends Plugin {
 		));
 		$app->mount('/' . $app['media.url_fragment'], $app['media.controllers']);
 		$app->mount('/' . $app['images.url_fragment'], $app['images.controllers']);
-		$app->mount('/assets/font-awesome', $app['fontawesome.controllers']);
+		$app->mount('/assets/fonts', $app['fonts.controllers']);
 		$app['dispatcher']->addListener(ActionEvent::BEFORE_RENDER, function(ActionEvent $event) use($app) {
 			$result = $event->getResult();
 			if(
