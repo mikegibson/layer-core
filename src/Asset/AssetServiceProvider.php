@@ -5,8 +5,8 @@ namespace Layer\Asset;
 use Assetic\AssetManager;
 use Assetic\AssetWriter;
 use Assetic\Filter\CompassFilter;
-use Assetic\Filter\UglifyCssFilter;
-use Assetic\Filter\UglifyJs2Filter;
+use Assetic\Filter\Yui\CssCompressorFilter;
+use Assetic\Filter\Yui\JsCompressorFilter;
 use Assetic\FilterManager;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
@@ -41,12 +41,14 @@ class AssetServiceProvider implements ServiceProviderInterface {
 			return new AssetManager();
 		});
 
-		$app['assetic.filters.uglifyjs2'] = $app->share(function () {
-			return new UglifyJs2Filter();
+		$app['assetic.filters.yui.jar_path'] = $app['paths.vendor'] . '/packagist/yuicompressor-bin/bin/yuicompressor.jar';
+
+		$app['assetic.filters.yui_js'] = $app->share(function () use($app) {
+			return new JsCompressorFilter($app['assetic.filters.yui.jar_path']);
 		});
 
-		$app['assetic.filters.uglifycss'] = $app->share(function () {
-			return new UglifyCssFilter();
+		$app['assetic.filters.yui_css'] = $app->share(function () use($app) {
+			return new CssCompressorFilter($app['assetic.filters.yui.jar_path']);
 		});
 
 		$app['assetic.filters.compass'] = $app->share(function () use ($app) {
@@ -63,8 +65,8 @@ class AssetServiceProvider implements ServiceProviderInterface {
 		 */
 		$app['assetic.filter_manager'] = $app->share(function () use ($app) {
 			$manager = new FilterManager();
-			$manager->set('uglifyjs', $app['assetic.filters.uglifyjs2']);
-			$manager->set('uglifycss', $app['assetic.filters.uglifycss']);
+			$manager->set('yui_js', $app['assetic.filters.yui_js']);
+			$manager->set('yui_css', $app['assetic.filters.yui_css']);
 			$manager->set('compass', $app['assetic.filters.compass']);
 			return $manager;
 		});
