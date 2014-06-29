@@ -4,8 +4,11 @@ namespace Layer\Node;
 
 class ListNode extends Node implements ListNodeInterface {
 
-	public function __construct(ListNodeInterface $parentNode = null, $name = null, $label = null) {
+	private $url;
+
+	public function __construct(ListNodeInterface $parentNode = null, $name = null, $label = null, $url = null) {
 		parent::__construct($parentNode, $name, $label);
+		$this->url = $url;
 	}
 
 	public function areChildrenOrdered() {
@@ -13,7 +16,7 @@ class ListNode extends Node implements ListNodeInterface {
 	}
 
 	public function getUrl(array $params = null) {
-		return null;
+		return $this->url;
 	}
 
 	protected function createWrappedNode(NodeInterface $baseNode, $name = null, $label = null, $baseChildrenAccessible = true) {

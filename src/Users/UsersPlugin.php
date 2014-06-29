@@ -119,7 +119,6 @@ class UsersPlugin extends Plugin {
 		$app['users.repository'];
 
 		$app['cms.navigation_list'] = $app->share($app->extend('cms.navigation_list', function(ListNodeInterface $cmsNav) use($app) {
-			$cmsNav->getChildNodes();
 			$cmsNav->getChildNode('users')->wrapChildNode($app['users.logout_list_node']);
 			return $cmsNav;
 		}));

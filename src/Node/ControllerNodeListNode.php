@@ -34,7 +34,6 @@ class ControllerNodeListNode extends ListNode {
 		$this->urlGenerator = $urlGenerator;
 		$this->parentNode = $parentNode;
 		$this->controllerNodeChildrenAccessible = $controllerNodeChildrenAccessible;
-		$this->initialize();
 	}
 
 	public function getLabel() {
@@ -58,11 +57,34 @@ class ControllerNodeListNode extends ListNode {
 		return false;
 	}
 
-	protected function initialize() {
+	public function hasChildNode($name) {
+		return parent::hasChildNode($name) || $this->registerControllerChildNode($name);
+	}
+
+	public function getChildNode($name) {
+		$this->hasChildNode($name);
+		return parent::getChildNode($name);
+	}
+
+	protected function registerControllerChildNode($name) {
+		$this->initControllerNodeChildren();
+		if(
+			!parent::hasChildNode($name) &&
+			$this->areControllerNodeChildrenAccessible() &&
+			$this->getControllerNode()->hasChildNode($name) &&
+			$this->getControllerNode()->getChildNode($name)->isVisible()
+		) {
+			$listNode = $this->createListNode($this->getControllerNode()->getChildNode($name));
+			$this->registerChildNode($listNode);
+			return true;
+		}
+		return false;
+	}
+
+	protected function initControllerNodeChildren() {
 		if($this->areControllerNodeChildrenAccessible()) {
-			foreach($this->getControllerNode()->getVisibleChildNodes() as $controllerNode) {
-				$listNode = $this->createListNode($controllerNode);
-				$this->registerChildNode($listNode, true);
+			foreach($this->getControllerNode()->getChildNodes() as $key => $node) {
+				$this->registerControllerChildNode($key);
 			}
 		}
 	}

@@ -70,6 +70,7 @@ class Node implements NodeInterface {
 	}
 
 	public function registerChildNode(NodeInterface $node, $overwrite = false, $prepend = false) {
+		$this->registerAdopters();
 		if($node->getParentNode() !== $this) {
 			throw new \RuntimeException('Nodes being registered must return this node from their getParentNode method.');
 		}
