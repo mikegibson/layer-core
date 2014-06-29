@@ -1,6 +1,7 @@
 @import "compass/css3";
 @import "compass/reset/utilities";
 @import "compass/utilities";
+@import "../../../Resource/scss/font-awesome/font-awesome";
 
 $color-header-background: #666;
 $color-header-title: #ccc;
@@ -34,4 +35,15 @@ $color-panel-background:#f0f0f0;
 		background:#c8c8c8;
 		color:#444;
 	}
+}
+
+@mixin fa-icon($var) {
+	display: inline-block;
+	font-family: FontAwesome;
+	font-style: normal;
+	font-weight: normal;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	content: $var;
 }

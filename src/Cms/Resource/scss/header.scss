@@ -1,4 +1,4 @@
-@import "cms_base";
+@import "base";
 
 body {
 	padding-top:1.6rem !important;
@@ -26,7 +26,7 @@ body {
 		font-weight:bold;
 		line-height:1.6rem;
 		padding-right:2rem;
-		color:#888;
+		color:#666;
 		a {
 			text-decoration: none;
 			&, &:visited, &:hover, &:active {
@@ -34,6 +34,16 @@ body {
 			}
 			&:hover {
 				text-decoration: underline;
+				&:before {
+					text-decoration: none;
+				}
+			}
+			&:before {
+				@include fa-icon($fa-var-home);
+				width:1rem;
+				height:1rem;
+				line-height:1rem;
+				padding-right:0.2rem;
 			}
 		}
 	}

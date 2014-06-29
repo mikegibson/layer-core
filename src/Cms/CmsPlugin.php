@@ -169,7 +169,7 @@ class CmsPlugin extends Plugin {
 			return $filters;
 		}));
 
-		$app['assets.register_scss']('cms/main', '@cms/scss/cms.scss');
+		$app['assets.register_scss']('cms/main', '@cms/scss/main.scss');
 		$app['assets.register_scss']('cms/header', '@cms/scss/header.scss');
 		$app['assets.register_js']('cms/main', '@cms/js/cms.js');
 		$app['assets.register_js']('cms/header', '@cms/js/header.js');
