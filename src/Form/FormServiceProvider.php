@@ -10,6 +10,10 @@ class FormServiceProvider extends \Silex\Provider\FormServiceProvider {
 
 		parent::register($app);
 
+		$app['form.secret'] = $app->share(function() use($app) {
+			return md5('form_secret' . $app['config']->read('salt'));
+		});
+
 		$app['html_purifier.config'] = $app->share(function() use($app) {
 			$config = new \HTMLPurifier_Config(\HTMLPurifier_ConfigSchema::instance());
 			$config->set('HTML.Doctype', 'XHTML 1.0 Strict');
