@@ -46,17 +46,12 @@ class TwigServiceProvider extends \Silex\Provider\TwigServiceProvider {
 
 		$app['twig.default_layout'] = 'layout/app';
 
-		$app['twig.extensions.buffer'] = $app->share(function() {
-			return new BufferExtension(['css', 'script']);
-		});
-
 		$app['twig'] = $app->share($app->extend('twig', function(\Twig_Environment $twig) use($app) {
 			$twig->addGlobal('default_layout', $app['twig.default_layout']);
 			$twig->addExtension(new FlashExtension());
 			$twig->addExtension(new TableExtension());
 			$twig->addExtension(new PaginatorExtension());
 			$twig->addExtension(new ListExtension());
-			$twig->addExtension($app['twig.extensions.buffer']);
 			return $twig;
 		}));
 
