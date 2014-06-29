@@ -110,6 +110,14 @@ class PageNode extends ControllerNode {
 		return '@pages/view';
 	}
 
+	public function isAccessible() {
+		return !!$this->getPage();
+	}
+
+	public function isVisible() {
+		return !!$this->getPage();
+	}
+
 	public function invoke(Request $request) {
 		return ['page' => $this->getPage()];
 	}
