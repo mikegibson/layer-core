@@ -18,6 +18,8 @@ class ControllerNodeListNode extends ListNode {
 
 	private $controllerNodeChildrenAccessible;
 
+	private $initializing = false;
+
 	/**
 	 * @param ControllerNodeInterface $controllerNode
 	 * @param UrlGeneratorInterface $urlGenerator
@@ -58,16 +60,26 @@ class ControllerNodeListNode extends ListNode {
 	}
 
 	public function hasChildNode($name) {
-		return parent::hasChildNode($name) || $this->registerControllerChildNode($name);
+		$this->initControllerNodeChildren();
+		return parent::hasChildNode($name);
 	}
 
 	public function getChildNode($name) {
-		$this->hasChildNode($name);
+		$this->initControllerNodeChildren();
 		return parent::getChildNode($name);
 	}
 
-	protected function registerControllerChildNode($name) {
+	public function getChildNodes() {
 		$this->initControllerNodeChildren();
+		return parent::getChildNodes();
+	}
+
+	public function registerChildNode(NodeInterface $node, $overwrite = false, $prepend = false) {
+		$this->initControllerNodeChildren();
+		return parent::registerChildNode($node, $overwrite, $prepend);
+	}
+
+	protected function registerControllerChildNode($name) {
 		if(
 			!parent::hasChildNode($name) &&
 			$this->areControllerNodeChildrenAccessible() &&
@@ -82,11 +94,16 @@ class ControllerNodeListNode extends ListNode {
 	}
 
 	protected function initControllerNodeChildren() {
+		if($this->initializing) {
+			return;
+		}
+		$this->initializing = true;
 		if($this->areControllerNodeChildrenAccessible()) {
 			foreach($this->getControllerNode()->getChildNodes() as $key => $node) {
 				$this->registerControllerChildNode($key);
 			}
 		}
+		$this->initializing = false;
 	}
 
 	/**
