@@ -1,27 +1,17 @@
-{% extends layout|default(default_layout) %}
+{% extends 'layout/panel' %}
 
-{% block content %}
-<section class="page">
+{% set title = page.title %}
 
-	<header>
+{% block panel_class %}{{ parent() }} page{% endblock %}
 
-		{% block page_header %}
+{% block panel_header %}
 
-		<h1>{{ page.title }}</h1>
+	<h1>{{ page.title }}</h1>
 
-		{% endblock page_header %}
+{% endblock panel_header %}
 
-	</header>
+{% block panel_content %}
 
-	<div class="content">
+	{{ page.content|raw }}
 
-		{% block page_content %}
-
-		{{ page.content|raw }}
-
-		{% endblock page_content %}
-
-	</div>
-
-</section>
-{% endblock content %}
+{% endblock panel_content %}
