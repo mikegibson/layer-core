@@ -450,11 +450,7 @@ class DataProvider implements ServiceProviderInterface {
 		$app['metadata.queries.getPropertyLabel'] = $app->share(function() use($app) {
 			return new GetPropertyLabelQuery($app['metadata.queries.getPropertyAnnotation'], $app['inflector']);
 		});
-/*
-		$app['metadata.queries.getPropertyOrm'] = $app->share(function() use($app) {
-			return new GetPropertyOrmQuery($app['annotations.reader']);
-		});
-*/
+
 		$app['metadata.queries.isPropertyVisible'] = $app->share(function() use($app) {
 			return new IsPropertyVisibleQuery($app['metadata.queries.getPropertyAnnotation'], $app['property_accessor']);
 		});
@@ -501,7 +497,6 @@ class DataProvider implements ServiceProviderInterface {
 				->registerQuery($app['metadata.queries.getEntityCrud'])
 				->registerQuery($app['metadata.queries.getPropertyAnnotation'])
 				->registerQuery($app['metadata.queries.getPropertyLabel'])
-				//->registerQuery($app['metadata.queries.getPropertyOrm'])
 				->registerQuery($app['metadata.queries.isPropertyVisible'])
 				->registerQuery($app['metadata.queries.getVisibleProperties'])
 				->registerQuery($app['metadata.queries.getVisiblePropertyLabels'])
