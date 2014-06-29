@@ -4,6 +4,7 @@ namespace Layer\Media;
 
 use Layer\Action\ActionEvent;
 use Layer\Media\File\FileResponse;
+use Layer\Media\File\FilesystemFile;
 use Layer\Media\Image\FilteredImageResponse;
 use Layer\Media\Image\FilteredImageWriter;
 use Layer\Media\Image\FilterRegistry;
@@ -130,6 +131,37 @@ class MediaPlugin extends Plugin {
 			return new ControllerNode('cms', null, null, 'media', 'Media', null, true, false);
 		});
 
+		$app['filesystem_controllers_factory'] = $app->protect(function($basePath, $routeName = null) use($app) {
+			$controllers = $app['controllers_factory'];
+			$route = $controllers
+				->match('/{filename}', function(Request $request) {
+					$file = new FilesystemFile($request->get('path'));
+					return new FileResponse($file);
+				})
+				->beforeMatch(function(array $attrs) use($basePath) {
+					if(false !== strpos($attrs['filename'], '..')) {
+						return false;
+					}
+					$attrs['path'] = $basePath . '/' . $attrs['filename'];
+					if(!is_file($attrs['path'])) {
+						return false;
+					}
+					return $attrs;
+				})
+				->assert('filename', '.+')
+			;
+			if($routeName !== null) {
+				$route->bind($routeName);
+			}
+			return $controllers;
+		});
+
+		$app['fontawesome.path'] = $app['paths.vendor'] . '/fortawesome/font-awesome/src/assets/font-awesome';
+
+		$app['fontawesome.controllers'] = $app->share(function() use($app) {
+			return $app['filesystem_controllers_factory']($app['fontawesome.path'], 'fontawesome');
+		});
+
 		$app['cms.root_node'] = $app->share($app->extend('cms.root_node',
 			function(ControllerNodeInterface $rootNode) use($app) {
 				$rootNode->wrapChildNode($app['cms.media_node']);
@@ -148,6 +180,7 @@ class MediaPlugin extends Plugin {
 		));
 		$app->mount('/' . $app['media.url_fragment'], $app['media.controllers']);
 		$app->mount('/' . $app['images.url_fragment'], $app['images.controllers']);
+		$app->mount('/assets/font-awesome', $app['fontawesome.controllers']);
 		$app['dispatcher']->addListener(ActionEvent::BEFORE_RENDER, function(ActionEvent $event) use($app) {
 			$result = $event->getResult();
 			if(
