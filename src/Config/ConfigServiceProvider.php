@@ -43,6 +43,10 @@ class ConfigServiceProvider implements ServiceProviderInterface {
 
 		});
 
+		$app['debug'] = $app->share(function() use($app) {
+			return $app['config']->read('debug');
+		});
+
 	}
 
 	/**

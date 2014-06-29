@@ -96,19 +96,15 @@ class Application extends \Silex\Application {
 			return new PropertyAccessor();
 		});
 
-		$app['debug'] = $app->share(function() use($app) {
-			return $app['config']->read('debug');
-		});
-
 		$app['security.firewalls'] = $app->share(function() {
 			return [];
 		});
 
+		$app->register(new ConfigServiceProvider());
+
 		$app['route_class'] = 'Layer\\Route\\Route';
 
-		$this->registerServiceProviders();
-
-		$this->registerErrorHandlers();
+		$app->registerErrorHandlers();
 
 		$app['url_matcher'] = $app->share(function() use($app) {
 			return new UrlMatcher($app['routes'], $app['request_context']);
@@ -187,6 +183,8 @@ class Application extends \Silex\Application {
 			$rootNode->adoptChildNodes($app['app.home_list_node']);
 			return $rootNode;
 		});
+
+		$this->registerServiceProviders();
 
 	}
 
@@ -350,7 +348,6 @@ class Application extends \Silex\Application {
 
 	protected function registerServiceProviders() {
 		$this
-			->register(new ConfigServiceProvider())
 			->register(new ServiceControllerServiceProvider())
 			->register(new UrlGeneratorServiceProvider())
 			->register(new SessionServiceProvider(), [
