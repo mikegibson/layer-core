@@ -1,0 +1,19 @@
+{% extends 'layout/panel' %}
+
+{% if app.debug %}
+	{% set title = error.message %}
+{% elseif error.code == 404 %}
+	{% set title = 'Page not found' %}
+{% else %}
+	{% set title = 'Fatal error' %}
+{% endif %}
+
+{% block panel_content %}
+
+	{% if app.debug %}
+		{{ error.getTraceAsString()|nl2br }}
+	{% elseif error.code == 404 %}
+		<p>The page you were looking for could not be found.</p>
+	{% endif %}
+
+{% endblock panel_content %}
