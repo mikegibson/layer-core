@@ -6,14 +6,19 @@ use Knp\Provider\ConsoleServiceProvider;
 use Layer\Action\ActionDispatcher;
 use Layer\Action\SimpleAction;
 use Layer\Asset\AssetServiceProvider;
+use Layer\Cms\CmsPlugin;
 use Layer\Config\ConfigServiceProvider;
 use Layer\Data\DataProvider;
 use Layer\Form\FormServiceProvider;
 use Layer\Media\MediaPlugin;
 use Layer\Node\ControllerNode;
 use Layer\Node\ControllerNodeInterface;
+use Layer\Node\ControllerNodeListNode;
+use Layer\Node\ListNode;
 use Layer\Plugin\PluginInterface;
 use Layer\Route\UrlMatcher;
+use Layer\Users\UsersPlugin;
+use Layer\Utility\StringHelper;
 use Layer\View\Twig\TwigServiceProvider;
 use Layer\Utility\ArrayHelper;
 use Layer\Utility\Inflector;
@@ -31,7 +36,6 @@ use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\Debug\ExceptionHandler;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
@@ -76,19 +80,6 @@ class Application extends \Silex\Application {
 			return require $app['paths.vendor'] . '/autoload.php';
 		});
 
-		$app['debug'] = $app->protect(function() use($app) {
-			return $app['config']->read('debug');
-		});
-
-		$app['security.firewalls'] = $app->share(function() {
-			return [];
-		});
-
-		$this->registerServiceProviders();
-
-		$this->registerErrorHandlers();
-
-
 		/**
 		 * Share helpers and utility classes
 		 */
@@ -98,11 +89,26 @@ class Application extends \Silex\Application {
 		$app['array_helper'] = $app->share(function () use ($app) {
 			return new ArrayHelper($app);
 		});
+		$app['string_helper'] = $app->share(function() use($app) {
+			return new StringHelper($app['charset']);
+		});
 		$app['property_accessor'] = $app->share(function() use($app) {
 			return new PropertyAccessor();
 		});
 
+		$app['debug'] = $app->share(function() use($app) {
+			return $app['config']->read('debug');
+		});
+
+		$app['security.firewalls'] = $app->share(function() {
+			return [];
+		});
+
 		$app['route_class'] = 'Layer\\Route\\Route';
+
+		$this->registerServiceProviders();
+
+		$this->registerErrorHandlers();
 
 		$app['url_matcher'] = $app->share(function() use($app) {
 			return new UrlMatcher($app['routes'], $app['request_context']);
@@ -110,17 +116,6 @@ class Application extends \Silex\Application {
 
 		$app['actions.dispatcher'] = $app->share(function() use($app) {
 			return new ActionDispatcher($app['dispatcher'], $app['twig.view']);
-		});
-
-		$app[$this->assets['js_modernizr'] = 'assets.js.modernizr'] = $app->share(function () use ($app) {
-			$asset = $app['assetic.factory']->createAsset([
-				'@layer/js/modernizr.js'
-			], [
-				'uglifyjs'
-			], [
-				'output' => 'js/modernizr.js'
-			]);
-			return $asset;
 		});
 
 		$app['nodes.matcher'] = $app->protect(
@@ -181,6 +176,18 @@ class Application extends \Silex\Application {
 			return $app['nodes.controllers_factory']($app['app.home_node']);
 		});
 
+		$app['app.home_list_node'] = $app->share(function() use($app) {
+			return new ControllerNodeListNode($app['app.home_node'], $app['url_generator']);
+		});
+
+		$app['app.navigation'] = $app->share(function() use($app) {
+			$rootNode = new ListNode();
+			$homeNode = new ControllerNodeListNode($app['app.home_node'], $app['url_generator'], $rootNode, false);
+			$rootNode->registerChildNode($homeNode);
+			$rootNode->adoptChildNodes($app['app.home_list_node']);
+			return $rootNode;
+		});
+
 	}
 
 	/**
@@ -192,11 +199,8 @@ class Application extends \Silex\Application {
 
 			$this->setTimezone();
 			$this->initializeSecurity();
+			$this->initializeAssets();
 			$this->mountControllers();
-
-			foreach($this->assets as $name => $appKey) {
-				$this['assetic.asset_manager']->set($name, $this[$appKey]);
-			}
 
 		}
 
@@ -318,62 +322,64 @@ class Application extends \Silex\Application {
 
 	protected function registerErrorHandlers() {
 
+		$app = $this;
+
 		/**
 		 * Turn on some debugging features if in debug mode
 		 */
-		if ($this['debug']) {
+		if ($app['debug']) {
 
 			error_reporting(-1);
 
 			ErrorHandler::register();
 
 			// CLI - display errors only if they're not already logged to STDERR
-			if (!$this->isCli()) {
+			if (!$app->isCli()) {
 				ExceptionHandler::register();
 			} elseif (!ini_get('log_errors') || ini_get('error_log')) {
 				ini_set('display_errors', 1);
 			}
 
-			$this->error(function (\Exception $e) {
-				return new Response(
-					nl2br($e->getMessage() . PHP_EOL . $e->getTraceAsString())
-				);
-			});
-
 		}
+
+		$app->error(function (\Exception $error) use($app) {
+			return $app['twig']->render('view/error.twig', compact('error'));
+		});
 
 	}
 
 	protected function registerServiceProviders() {
-		$this->register(new ConfigServiceProvider());
-		$this->register(new ServiceControllerServiceProvider());
-		$this->register(new UrlGeneratorServiceProvider());
-		$this->register(new SessionServiceProvider(), [
-			'session.storage.save_path' => $this['paths.session']
-		]);
-
-		$this->register(new HttpFragmentServiceProvider());
-		$this->register(new SwiftmailerServiceProvider());
-		$this->register(new ConsoleServiceProvider(), [
-			'console.name' => 'Layer Console',
-			'console.version' => '1.0.0',
-			'console.project_directory' => $this['paths.root']
-		]);
-		$this->register(new TwigServiceProvider(), [
-			'twig.options' => [
-				'cache' => $this['paths.cache'] . '/twig',
-				'auto_reload' => true
-			]
-		]);
-		$this->register(new AssetServiceProvider());
-		$this->register(new TranslationServiceProvider(), [
-			'locale_fallbacks' => ['en'],
-		]);
-		$this->register(new FormServiceProvider());
-		// @todo set $this->app['form.secret'] to something better
-		$this->register(new ValidatorServiceProvider());
-		$this->register(new DataProvider());
-		$this->register(new MediaPlugin());
+		$this
+			->register(new ConfigServiceProvider())
+			->register(new ServiceControllerServiceProvider())
+			->register(new UrlGeneratorServiceProvider())
+			->register(new SessionServiceProvider(), [
+				'session.storage.save_path' => $this['paths.session']
+			])
+			->register(new HttpFragmentServiceProvider())
+			->register(new SwiftmailerServiceProvider())
+			->register(new ConsoleServiceProvider(), [
+				'console.name' => 'Layer Console',
+				'console.version' => '1.0.0',
+				'console.project_directory' => $this['paths.root']
+			])
+			->register(new TwigServiceProvider(), [
+				'twig.options' => [
+					'cache' => false,//$this['paths.cache'] . '/twig',
+					'auto_reload' => true
+				]
+			])
+			->register(new AssetServiceProvider())
+			->register(new TranslationServiceProvider(), [
+				'locale_fallbacks' => ['en'],
+			])
+			->register(new FormServiceProvider())
+			->register(new ValidatorServiceProvider())
+			->register(new DataProvider())
+			->register(new CmsPlugin())
+			->register(new UsersPlugin())
+			->register(new MediaPlugin())
+		;
 	}
 
 	protected function setTimezone() {
@@ -389,6 +395,19 @@ class Application extends \Silex\Application {
 			$this->register(new SecurityServiceProvider());
 			$this->register(new RememberMeServiceProvider());
 		}
+	}
+
+	protected function initializeAssets() {
+
+		foreach([
+			'modernizr',
+			'require',
+			'jquery',
+			'dropdown'
+		] as $script) {
+			$this['assets.register_js']($script, '@layer/js/' . $script . '.js');
+		}
+
 	}
 
 	protected function mountControllers() {
