@@ -22,7 +22,7 @@ class AssetServiceProvider implements ServiceProviderInterface {
 		 */
 		$app['assetic'] = $app->share(function () use ($app) {
 			$app['assetic.options'] = array_replace(array(
-				//   'debug'              => $debug,
+				'debug'              => false,
 				'formulae_cache_dir' => $app['paths.cache'] . '/assetic'
 			), $app['assetic.options']);
 
@@ -30,7 +30,6 @@ class AssetServiceProvider implements ServiceProviderInterface {
 		});
 
 		$app['paths.cache_assets'] = $app['paths.cache'] . '/assets';
-		$app['paths.cache_assets_debug'] = $app['paths.cache'] . '/assets_debug';
 
 		/**
 		 * Asset manager
@@ -86,7 +85,7 @@ class AssetServiceProvider implements ServiceProviderInterface {
 		 * @return \Assetic\Factory\AssetFactory
 		 */
 		$app['assetic.factory'] = $app->share(function () use ($app) {
-			$factory = new AssetFactory($app['paths.resources'], $app->config('debug'));
+			$factory = new AssetFactory($app['paths.resources'], false);
 			$factory->setAssetManager($app['assetic.asset_manager']);
 			$factory->setFilterManager($app['assetic.filter_manager']);
 			$factory->addPath('layer', $app['paths.templates'] . '/layer');
