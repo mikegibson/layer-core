@@ -46,8 +46,6 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  */
 class Application extends \Silex\Application {
 
-	public $assets = [];
-
 	private $plugins = [];
 
 	/**
