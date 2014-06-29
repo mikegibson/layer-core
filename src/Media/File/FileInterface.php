@@ -12,6 +12,9 @@ interface FileInterface {
 
 	public function getHash();
 
+	/**
+	 * @return \DateTime
+	 */
 	public function getUpdated();
 
 	public function getAbsolutePath();
