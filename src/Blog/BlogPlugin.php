@@ -16,6 +16,8 @@ class BlogPlugin extends Plugin {
 
 	public function register(Application $app) {
 
+		$app['blog.title'] = 'Blog';
+
 		$app['blog.entity_classes.blog_posts'] = 'Layer\\Blog\\Entity\\BlogPost';
 		$app['blog.entity_classes.blog_categories'] = 'Layer\\Blog\\Entity\\BlogCategory';
 
@@ -34,7 +36,7 @@ class BlogPlugin extends Plugin {
 		});
 
 		$app['blog.root_node'] = $app->share(function() use($app) {
-			return new BlogPostListNode($app['blog.repositories.blog_posts']);
+			return new BlogPostListNode($app['blog.repositories.blog_posts'], 'app', null, 'blog', $app['blog.title']);
 		});
 
 		$app['app.home_node'] = $app->share($app->extend('app.home_node', function(ControllerNodeInterface $node) use($app) {
