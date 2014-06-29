@@ -56,31 +56,6 @@ class CmsPlugin extends Plugin {
 			return new CmsHelper($app['url_generator']);
 		});
 
-		$app[$app->assets['js_cms'] = 'assets.js_cms'] = $app->share(function() use($app) {
-			$asset = $app['assetic.factory']->createAsset([
-				'@layer/js/jquery.js',
-				'@cms/js/CmsPanel.js',
-				'@cms/js/Cms.js'
-			], [
-				'?uglifyjs'
-			], [
-				'output' => 'js/cms/cms.js'
-			]);
-			return $asset;
-		});
-
-		$app[$app->assets['css_cms'] = 'assets.css_cms'] = $app->share(function() use($app) {
-			return $app['assetic.factory']->createAsset([
-				'@cms/scss/cms.scss',
-				'@cms/scss/cms_header.scss'
-			], [
-				'compass',
-				'?uglifycss'
-			], [
-				'output' => 'css/cms/cms.css'
-			]);
-		});
-
 		$app['metadata.queries.getCmsEntity'] = $app->share(function() use($app) {
 			return new GetCmsEntityQuery($app['annotations.reader']);
 		});
@@ -193,6 +168,13 @@ class CmsPlugin extends Plugin {
 			$filters->addFilter($app['images.filters.cms_thumbnail']);
 			return $filters;
 		}));
+
+		$app['assets.register_scss']('cms/main', '@cms/scss/cms.scss');
+		$app['assets.register_scss']('cms/header', '@cms/scss/header.scss');
+		$app['assets.register_js']('cms/main', '@cms/js/cms.js');
+		$app['assets.register_js']('cms/header', '@cms/js/header.js');
+		$app['assets.register_js']('cms/panel', '@cms/js/panel.js');
+		$app['assets.register_js']('cms/form', '@cms/js/form.js');
 
 	}
 

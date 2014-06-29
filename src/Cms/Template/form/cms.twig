@@ -15,7 +15,7 @@
 		{% if(is_group is not defined) %}
 			{% set is_group = compound ? (formType not in ['date', 'datetime']) : false %}
 		{% endif %}
-		<div class="form_{% if is_group %}group{% else %}row{% endif %} type_{{ formType }} name_{{ name }}{% if required and not is_group %} required{% endif %}" data-type="{{ formType }}">
+		<div class="form_{% if is_group %}group{% else %}row{% endif %} type_{{ formType }} name_{{ name }}{% if required and not is_group %} required{% endif %}" data-type="{{ formType }}" data-name="{{ name }}">
 			{{ form_label(form) }}
 			{{ form_errors(form) }}
 			{% if not is_group %}<div class="widget">{% endif %}

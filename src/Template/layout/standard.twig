@@ -9,13 +9,15 @@
 
 {% endblock meta %}
 
-{% block head %}
+{% block javascripts_head %}
 
 	{{ parent() }}
 
+	{% include 'element/requirejs' %}
+
 	<script src="{{ asset_url('js_modernizr') }}"></script>
 
-{% endblock head %}
+{% endblock javascripts_head %}
 
 {% block body %}
 
@@ -29,6 +31,6 @@
 
 	</div>
 
-	{% block javascripts %}{% endblock %}
+	{% block body_bottom %}{{ parent() }}{% endblock %}
 
 {% endblock body %}

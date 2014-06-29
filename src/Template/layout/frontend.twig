@@ -1,0 +1,63 @@
+{% extends 'layout/standard' %}
+
+{% if show_cms_header is not defined %}
+	{% set show_cms_header = (app.security.token and is_granted('ROLE_ADMIN')) %}
+{% endif %}
+
+{% block stylesheets %}
+
+	{{ parent() }}
+
+	{% if show_cms_header %}
+		<link rel="stylesheet" type="text/css" href="{{ asset_url('css_cms_header') }}" />
+	{% endif %}
+
+{% endblock stylesheets %}
+
+{% block body %}
+
+	{% if show_cms_header %}
+	{% include '@cms/element/header' %}
+	{% endif %}
+
+	{{ parent() }}
+
+{% endblock body %}
+
+{% block container %}
+
+	<section id="content">
+
+		{% block content_section %}
+
+			<header id="header">
+
+				{% block header %}<h1>{{ app.name }}</h1>{% endblock %}
+
+			</header>
+
+			{{ flash() }}
+
+			<section id="main">
+
+				{% block main %}
+
+					{% block content %}{% endblock %}
+
+				{% endblock main %}
+
+			</section>
+
+			{% if block('footer') is not empty %}
+				<footer>
+
+					{% block footer %}{% endblock %}
+
+				</footer>
+			{% endif %}
+
+		{% endblock content_section %}
+
+	</section>
+
+{% endblock container %}

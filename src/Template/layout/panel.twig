@@ -1,6 +1,6 @@
 {% extends layout|default(default_layout) %}
 
-{% if panel_title is not defined and title is not empty %}
+{% if panel_title is not defined and title is defined and title is not empty %}
 	{% set panel_title = title %}
 {% endif %}
 

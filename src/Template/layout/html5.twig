@@ -16,6 +16,8 @@
 
 		{% block stylesheets %}{% endblock %}
 
+		{% block javascripts_head %}{% endblock %}
+
 		{% endblock head %}
 
 	</head>
@@ -26,9 +28,13 @@
 
 		{% block content %}{% endblock %}
 
-		{% block javascripts %}{% endblock %}
+		{% block body_bottom %}
 
-		{% block javascripts_inline %}{% endblock %}
+			{% block javascripts %}{% endblock %}
+
+			{% block javascripts_inline %}{% endblock %}
+
+		{% endblock body_bottom %}
 
 		{% endblock body %}
 

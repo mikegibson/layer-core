@@ -1,4 +1,4 @@
-{% extends "layout/standard" %}
+{% extends 'layout/standard' %}
 
 {% block title %}{% if title is defined %}{{ title }} | {% endif %}CMS | {{ parent() }}{% endblock %}
 
@@ -6,9 +6,22 @@
 
 	{{ parent() }}
 
-	<link rel="stylesheet" type="text/css" href="{{ asset_url('css_cms') }}"/>
+	<link rel="stylesheet" type="text/css" href="{{ asset_url('css_cms_header') }}" />
+	<link rel="stylesheet" type="text/css" href="{{ asset_url('css_cms_main') }}" />
+
+	{{ block('cms_header_stylesheets') }}
 
 {% endblock stylesheets %}
+
+{% block javascripts_head %}
+
+	{{ parent() }}
+
+	<script>
+		require(['cms/main']);
+	</script>
+
+{% endblock javascripts_head %}
 
 {% block header %}{% endblock %}
 
@@ -42,6 +55,6 @@
 
 	{{ parent() }}
 
-	<script src="{{ asset_url('js_cms') }}"></script>
+	{{ block('cms_header_javascripts') }}
 
 {% endblock javascripts %}
