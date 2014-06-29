@@ -29,7 +29,8 @@
 		"kriswallsmith/assetic": "1.2.*@dev",
 		"imagine/imagine": "~0.5.0",
 		"knplabs/console-service-provider": "dev-master",
-		"ezyang/htmlpurifier": "dev-master"
+		"ezyang/htmlpurifier": "dev-master",
+		"packagist/yuicompressor-bin": "dev-master"
 	},
 	"autoload": {
 		"psr-4": {
