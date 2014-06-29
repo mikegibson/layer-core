@@ -10,13 +10,13 @@ class ListExtension extends TemplateBlockFunctionExtension {
 
 	protected $functionBlocks = [
 		'list' => [
-			'args' => ['node']
+			'args' => ['node', 'theme']
 		],
 		'list_item' => [
-			'args' => ['node']
+			'args' => ['node', 'theme']
 		],
 		'list_item_value' => [
-			'args' => ['node']
+			'args' => ['node', 'theme']
 		]
 	];
 

@@ -54,10 +54,11 @@ class TemplateBlockRenderer {
 				}
 			}
 		}
+		$theme = $vars['theme'] = isset($vars['theme']) ? $vars['theme'] : $this->theme ?: $this->extension->getTemplate();
 		$context = $this->environment->mergeGlobals($vars);
 		$context = $this->extension->beforeRender($block, $context);
 		ob_start();
-		$this->_getTemplateResource()->displayBlock($block, $context);
+		$this->_getTemplateResource($theme)->displayBlock($block, $context);
 		return ob_get_clean();
 	}
 
@@ -73,8 +74,7 @@ class TemplateBlockRenderer {
 		$this->setTheme(null);
 	}
 
-	protected final function _getTemplateResource() {
-		$template = $this->theme ?: $this->extension->getTemplate();
+	protected final function _getTemplateResource($template) {
 		if(!isset($this->__templateResources[$template])) {
 			$this->__templateResources[$template] = $this->environment->loadTemplate($template);
 		}

@@ -8,16 +8,16 @@ class FlashExtension extends TemplateBlockFunctionExtension {
 
 	public $functionBlocks = [
 		'flash' => [
-			'args' => ['key']
+			'args' => ['key', 'theme']
 		],
 		'flash_container' => [
-			'args' => ['messages', 'key']
+			'args' => ['messages', 'key', 'theme']
 		],
 		'flash_messages' => [
-			'args' => ['key']
+			'args' => ['key', 'theme']
 		],
 		'flash_message' => [
-			'args' => ['key', 'message']
+			'args' => ['key', 'message', 'theme']
 		]
 	];
 

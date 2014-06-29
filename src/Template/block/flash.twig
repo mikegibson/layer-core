@@ -7,9 +7,9 @@
 	{% endif %}
 	{% if messages is not empty %}
 		{% if key is defined %}
-			{% set container = flash_container(messages, key) %}
+			{% set container = flash_container(messages, key, theme) %}
 		{% else %}
-			{% set container = flash_container(messages) %}
+			{% set container = flash_container(messages, null, theme) %}
 		{% endif %}
 		{{ container|raw }}
 	{% endif %}
@@ -19,7 +19,7 @@
 {% block flash_container %}
 {% spaceless %}
 	{% if id is not defined %}
-		{% if key is defined %}
+		{% if key is defined and key is not empty %}
 			{% set id = 'flash-' ~ key %}
 		{% else %}
 			{% set id = 'flash' %}
@@ -42,7 +42,7 @@
 	{% endif %}
 	{% for key in keys %}
 		{% for message in app.session.flashBag.get(key) %}
-			{{ flash_message(key, message) }}
+			{{ flash_message(key, message, theme) }}
 		{% endfor %}
 	{% endfor %}
 {% endspaceless %}

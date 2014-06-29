@@ -1,14 +1,14 @@
 {% block list %}
 	{% if node.areChildrenOrdered %}<ol>{% else %}<ul>{% endif %}
 		{% for childNode in node.childNodes %}
-		{{ list_item( childNode ) }}
+		{{ list_item( childNode, theme ) }}
 		{% endfor %}
 	{% if not node.areChildrenOrdered %}</ul>{% else %}</ol>{% endif %}
 {% endblock list %}
 
 {% block list_item %}
 	<li>
-		{{ list_item_value( node ) }}
+		{{ list_item_value( node, theme ) }}
 	</li>
 {% endblock list_item %}
 
@@ -19,6 +19,6 @@
 		{% block list_item_value_plain %}{{ node.label|default('') }}{% endblock %}
 	{% endif %}
 	{% if node.childNodes is not empty %}
-		{{ list( node ) }}
+		{{ list( node, theme ) }}
 	{% endif %}
 {% endblock list_item_value %}
