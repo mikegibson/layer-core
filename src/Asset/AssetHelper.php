@@ -33,7 +33,7 @@ class AssetHelper {
 	 */
 	public function url($name, $timestamp = true) {
 		$asset = $this->assetManager->get($name);
-		$params = ['asset' => $asset->getTargetPath()];
+		$params = ['filename' => $asset->getTargetPath()];
 		if ($timestamp) {
 			$params['v'] = $asset->getLastModified();
 		}

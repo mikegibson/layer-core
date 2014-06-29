@@ -10,6 +10,7 @@ use Assetic\Filter\Yui\JsCompressorFilter;
 use Assetic\FilterManager;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class AssetServiceProvider implements ServiceProviderInterface {
 
@@ -104,43 +105,48 @@ class AssetServiceProvider implements ServiceProviderInterface {
 
 			$controllers = $app['controllers_factory'];
 
-			$controllers->get('/{asset}', function ($asset) use ($app) {
-
-				return new AssetResponse($asset, $app['assetic.asset_writer'], $app['paths.cache_assets']);
-
-			})
-				->bind('asset')
-				->assert('asset', '.+')
-				->convert('asset', function ($file) use ($app) {
-
-					// @todo Fix debug assets
-					/*     if(0 === strpos($file, 'debug/')) {
-								$target = substr($file, 6);
-								$debug = true;
-							} else {*/
-					$target = $file;
-					$debug = false;
-					//}
-
-					$app['assetic.factory']->setDebug($debug);
+			$controllers->match('/{filename}', function (Request $request) use ($app) {
+					return new AssetResponse($request->get('asset'), $app['assetic.asset_writer'], $app['paths.cache_assets']);
+				})
+				->assert('filename', '.+')
+				->beforeMatch(function (array $attrs) use ($app) {
 
 					// @todo: A better way than looping through all loaded assets
 					foreach ($app['assetic.asset_manager']->getNames() as $name) {
 						$asset = $app['assetic.asset_manager']->get($name);
-						if ($asset->getTargetPath() === $target) {
-							if ($debug) {
-								$asset->setTargetPath('debug/' . $target);
-							}
-							return $asset;
+						if ($asset->getTargetPath() === $attrs['filename']) {
+							$attrs['asset'] = $asset;
+							return $attrs;
 						}
 					}
 
-					$app->abort(404);
+					return false;
 
-				});
+				})
+				->bind('asset');
 
 			return $controllers;
 
+		});
+
+		$app['assets.register_js'] = $app->protect(function($name, $scripts) use($app) {
+			$asset = $app['assetic.factory']->createAsset(
+				(array) $scripts,
+				['yui_js'],
+				['output' => 'js/' . $name . '.js']
+			);
+			$app['assetic.asset_manager']->set('js_' . str_replace('/', '_', $name), $asset);
+			return $asset;
+		});
+
+		$app['assets.register_scss'] = $app->protect(function($name, $stylesheets) use($app) {
+			$asset = $app['assetic.factory']->createAsset(
+				(array) $stylesheets,
+				['compass', 'yui_css'],
+				['output' => 'css/' . $name . '.css']
+			);
+			$app['assetic.asset_manager']->set('css_' . str_replace('/', '_', $name), $asset);
+			return $asset;
 		});
 
 		$app['asset_helper'] = $app->share(function () use ($app) {
