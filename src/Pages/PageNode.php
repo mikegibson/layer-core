@@ -13,6 +13,8 @@ class PageNode extends ControllerNode {
 
 	private $page;
 
+	private $initialized = false;
+
 	public function __construct(
 		ManagedRepositoryInterface $repository,
 		Page $page = null,
@@ -52,12 +54,11 @@ class PageNode extends ControllerNode {
 	}
 
 	public function getChildNodes() {
-		static $initialized = false;
-		if(!$initialized) {
+		if(!$this->initialized) {
 			foreach($this->getChildPages() as $page) {
 				$this->initializeChildPage($page);
 			}
-			$initialized = true;
+			$this->initialized = true;
 		}
 		return parent::getChildNodes();
 	}
