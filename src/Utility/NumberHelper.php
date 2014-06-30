@@ -18,7 +18,7 @@
  */
 namespace Sentient\Utility;
 
-use Sentient\Application;
+use Sentient\Sentient;
 
 /**
  * Number helper library.
@@ -95,7 +95,7 @@ class NumberHelper {
 	 */
 	protected static $_numberFormatSupport = null;
 
-	public function __construct(Application $app) {
+	public function __construct(Sentient $app) {
 
 		$this->app = $app;
 	}

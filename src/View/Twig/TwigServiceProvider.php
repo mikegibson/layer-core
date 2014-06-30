@@ -22,7 +22,7 @@ class TwigServiceProvider extends \Silex\Provider\TwigServiceProvider {
 
 			$loader = new Loader();
 
-			if($app instanceof \Sentient\Application) {
+			if($app instanceof \Sentient\Sentient) {
 
 				$loader->prependPath($app['paths.templates']);
 				$loader->addPath($app['paths.sentient'] . '/Template');

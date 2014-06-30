@@ -22,6 +22,7 @@ use Sentient\Utility\StringHelper;
 use Sentient\View\Twig\TwigServiceProvider;
 use Sentient\Utility\ArrayHelper;
 use Sentient\Utility\Inflector;
+use Silex\Application as Silex;
 use Silex\Provider\HttpFragmentServiceProvider;
 use Silex\Provider\RememberMeServiceProvider;
 use Silex\Provider\SecurityServiceProvider;
@@ -44,7 +45,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  *
  * @package Sentient
  */
-class Application extends \Silex\Application {
+class Sentient extends Silex {
 
 	private $plugins = [];
 

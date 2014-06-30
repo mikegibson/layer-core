@@ -2,7 +2,7 @@
 
 namespace Sentient\Config;
 
-use Sentient\Application;
+use Sentient\Sentient;
 use Sentient\Config\Driver\ConfigDriver;
 use Symfony\Component\Config\FileLocatorInterface;
 
@@ -18,7 +18,7 @@ class Configuration {
 
 	protected $_drivers = [];
 
-	public function __construct(Application $app) {
+	public function __construct(Sentient $app) {
 
 		$this->app = $app;
 

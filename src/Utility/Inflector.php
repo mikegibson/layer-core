@@ -14,7 +14,7 @@
  */
 namespace Sentient\Utility;
 
-use Sentient\Application;
+use Sentient\Sentient;
 
 /**
  * Pluralize and singularize English words.
@@ -418,9 +418,9 @@ class Inflector implements InflectorInterface {
 	protected $_initialState = array();
 
 	/**
-	 * @param Application $app
+	 * @param Sentient $app
 	 */
-	public function __construct(Application $app) {
+	public function __construct(Sentient $app) {
 
 		$this->app = $app;
 	}
