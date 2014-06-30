@@ -100,6 +100,8 @@ class Application extends \Silex\Application {
 
 		$app->register(new ConfigServiceProvider());
 
+		$this->setTimezone();
+
 		$app['route_class'] = 'Sentient\\Route\\Route';
 
 		$app->registerErrorHandlers();
@@ -193,7 +195,6 @@ class Application extends \Silex\Application {
 
 		if (!$this->booted) {
 
-			$this->setTimezone();
 			$this->initialize();
 			$this->initializeSecurity();
 			$this->connectRoutes();
