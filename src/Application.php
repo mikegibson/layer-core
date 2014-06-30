@@ -194,9 +194,9 @@ class Application extends \Silex\Application {
 		if (!$this->booted) {
 
 			$this->setTimezone();
+			$this->initialize();
 			$this->initializeSecurity();
 			$this->mountControllers();
-			$this->initialize();
 
 		}
 
