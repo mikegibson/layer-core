@@ -310,7 +310,6 @@ class Application extends \Silex\Application {
 		$templates = $app . '/Template';
 		$vendor = $root . '/vendor';
 		$public = $root . '/public';
-		//   $this['paths.public_assets'] = $this['paths.public'] . '/assets';
 		$storage = $root . '/storage';
 		$log = $storage . '/log';
 		$tmp = $storage . '/tmp';
