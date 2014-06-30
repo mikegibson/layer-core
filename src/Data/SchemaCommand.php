@@ -1,9 +1,9 @@
 <?php
 
-namespace Layer\Data;
+namespace Sentient\Data;
 
 use Doctrine\ORM\Tools\SchemaTool;
-use Layer\Console\Command;
+use Sentient\Console\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 

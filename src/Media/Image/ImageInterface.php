@@ -1,8 +1,8 @@
 <?php
 
-namespace Layer\Media\Image;
+namespace Sentient\Media\Image;
 
-use Layer\Media\File\FileInterface;
+use Sentient\Media\File\FileInterface;
 
 interface ImageInterface extends FileInterface {
 

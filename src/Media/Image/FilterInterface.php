@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Media\Image;
+namespace Sentient\Media\Image;
 
 interface FilterInterface extends \Imagine\Filter\FilterInterface {
 

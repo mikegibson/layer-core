@@ -1,8 +1,8 @@
 <?php
 
-namespace Layer\Cms\Action;
+namespace Sentient\Cms\Action;
 
-use Layer\Cms\Data\CmsRepositoryInterface;
+use Sentient\Cms\Data\CmsRepositoryInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 

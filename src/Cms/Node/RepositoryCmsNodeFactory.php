@@ -1,18 +1,18 @@
 <?php
 
-namespace Layer\Cms\Node;
+namespace Sentient\Cms\Node;
 
-use Layer\Action\ActionInterface;
-use Layer\Cms\Action\RepositoryCmsActionFactoryInterface;
-use Layer\Cms\Data\CmsRepositoryInterface;
-use Layer\Node\ControllerNode;
-use Layer\Node\ControllerNodeInterface;
-use Layer\Node\NodeInterface;
+use Sentient\Action\ActionInterface;
+use Sentient\Cms\Action\RepositoryCmsActionFactoryInterface;
+use Sentient\Cms\Data\CmsRepositoryInterface;
+use Sentient\Node\ControllerNode;
+use Sentient\Node\ControllerNodeInterface;
+use Sentient\Node\NodeInterface;
 
 class RepositoryCmsNodeFactory implements RepositoryCmsNodeFactoryInterface {
 
 	/**
-	 * @var \Layer\Node\ControllerNodeInterface
+	 * @var \Sentient\Node\ControllerNodeInterface
 	 */
 	private $rootCmsNode;
 

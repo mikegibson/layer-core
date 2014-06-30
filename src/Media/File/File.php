@@ -1,20 +1,20 @@
 <?php
 
-namespace Layer\Media\File;
+namespace Sentient\Media\File;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Behavior;
-use Layer\Cms\Data\Metadata\Annotation as Cms;
-use Layer\Data\Metadata\Annotation as Layer;
-use Layer\Media\Image\Image;
+use Sentient\Cms\Data\Metadata\Annotation as Cms;
+use Sentient\Data\Metadata\Annotation as Sentient;
+use Sentient\Media\Image\Image;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="files")
- * @Layer\CrudEntity
- * @Layer\EntityName("files")
+ * @Sentient\CrudEntity
+ * @Sentient\EntityName("files")
  * @Cms\RootNodePath("media/files")
  */
 class File implements FileInterface {
@@ -25,7 +25,7 @@ class File implements FileInterface {
 	 * @ORM\Id
 	 * @ORM\Column(type="integer")
 	 * @ORM\GeneratedValue
-	 * @Layer\PropertyLabel("ID")
+	 * @Sentient\PropertyLabel("ID")
 	 */
 	protected $id;
 
@@ -33,7 +33,7 @@ class File implements FileInterface {
 	 * @var string $filename
 	 *
 	 * @ORM\Column(type="string", unique=true)
-	 * @Layer\TitleProperty
+	 * @Sentient\TitleProperty
 	 */
 	protected $filename;
 
@@ -69,7 +69,7 @@ class File implements FileInterface {
 	 * @var string $path
 	 *
 	 * @ORM\Column(type="string", unique=true)
-	 * @Layer\CrudProperty(visible=false, editable=false)
+	 * @Sentient\CrudProperty(visible=false, editable=false)
 	 */
 	protected $path;
 
@@ -77,7 +77,7 @@ class File implements FileInterface {
 	 * @var string $hash
 	 *
 	 * @ORM\Column(type="string")
-	 * @Layer\CrudProperty(visible=false, editable=false)
+	 * @Sentient\CrudProperty(visible=false, editable=false)
 	 * @todo Make unique, no point storing duplicate files
 	 */
 	protected $hash;
@@ -94,7 +94,7 @@ class File implements FileInterface {
 	 *
 	 * @ORM\Column(type="datetime")
 	 * @Behavior\Timestampable(on="create")
-	 * @Layer\InvisibleProperty
+	 * @Sentient\InvisibleProperty
 	 */
 	protected $created;
 
@@ -103,15 +103,15 @@ class File implements FileInterface {
 	 *
 	 * @ORM\Column(type="datetime")
 	 * @Behavior\Timestampable(on="update")
-	 * @Layer\InvisibleProperty
+	 * @Sentient\InvisibleProperty
 	 */
 	protected $updated;
 
 	/**
 	 * @var UploadedFile $file
 	 * @Assert\File(maxSize="6000000")
-	 * @Layer\CrudProperty(editable="create")
-	 * @Layer\PropertyLabel("File")
+	 * @Sentient\CrudProperty(editable="create")
+	 * @Sentient\PropertyLabel("File")
 	 */
 	protected $uploadedFile;
 
@@ -128,8 +128,8 @@ class File implements FileInterface {
 	/**
 	 * @var Image $image
 	 *
-	 * @ORM\OneToOne(targetEntity="Layer\Media\Image\Image", mappedBy="file")
-	 * @Layer\InvisibleProperty
+	 * @ORM\OneToOne(targetEntity="Sentient\Media\Image\Image", mappedBy="file")
+	 * @Sentient\InvisibleProperty
 	 */
 	protected $image;
 
@@ -224,7 +224,7 @@ class File implements FileInterface {
 	/**
 	 * @return string
 	 *
-	 * @Layer\InvisibleProperty
+	 * @Sentient\InvisibleProperty
 	 */
 	public function getAbsolutePath() {
 		return $this->rootDir . '/' . $this->getPath();
@@ -233,7 +233,7 @@ class File implements FileInterface {
 	/**
 	 * @return string
 	 *
-	 * @Layer\InvisibleProperty
+	 * @Sentient\InvisibleProperty
 	 */
 	public function getWebPath() {
 		return $this->rootDir . '/' . $this->getFilename();
@@ -242,7 +242,7 @@ class File implements FileInterface {
 	/**
 	 * @return null|string
 	 *
-	 * @Layer\InvisibleProperty
+	 * @Sentient\InvisibleProperty
 	 */
 	public function getExtension() {
 		$filename = $this->getFilename();

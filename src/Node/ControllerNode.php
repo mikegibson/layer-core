@@ -1,8 +1,8 @@
 <?php
 
-namespace Layer\Node;
+namespace Sentient\Node;
 
-use Layer\Action\ActionInterface;
+use Sentient\Action\ActionInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class ControllerNode extends Node implements ControllerNodeInterface, ActionInterface {

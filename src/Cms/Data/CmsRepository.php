@@ -1,11 +1,11 @@
 <?php
 
-namespace Layer\Cms\Data;
+namespace Sentient\Cms\Data;
 
-use Layer\Cms\Node\RepositoryCmsNodeFactory;
-use Layer\Data\ManagedRepositoryInterface;
-use Layer\Data\WrappedManagedRepository;
-use Layer\Node\ControllerNodeInterface;
+use Sentient\Cms\Node\RepositoryCmsNodeFactory;
+use Sentient\Data\ManagedRepositoryInterface;
+use Sentient\Data\WrappedManagedRepository;
+use Sentient\Node\ControllerNodeInterface;
 
 class CmsRepository extends WrappedManagedRepository implements CmsRepositoryInterface {
 

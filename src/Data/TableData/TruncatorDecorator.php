@@ -1,13 +1,13 @@
 <?php
 
-namespace Layer\Data\TableData;
+namespace Sentient\Data\TableData;
 
-use Layer\Utility\StringHelper;
+use Sentient\Utility\StringHelper;
 
 class TruncatorDecorator implements TableDataDecoratorInterface {
 
 	/**
-	 * @var \Layer\Utility\StringHelper
+	 * @var \Sentient\Utility\StringHelper
 	 */
 	private $stringHelper;
 

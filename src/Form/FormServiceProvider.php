@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Form;
+namespace Sentient\Form;
 
 use Silex\Application;
 
@@ -57,7 +57,7 @@ class FormServiceProvider extends \Silex\Provider\FormServiceProvider {
 		}));
 
 		$app['form.type.extensions'] = $app->share($app->extend('form.type.extensions', function(array $extensions) use($app) {
-			$extensions[] = new FormTypeLayerExtension();
+			$extensions[] = new FormTypeExtension();
 			$extensions[] = new DateTypeExtension();
 			$extensions[] = new TimeTypeExtension();
 			return $extensions;

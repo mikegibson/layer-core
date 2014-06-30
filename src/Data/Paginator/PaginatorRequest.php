@@ -1,13 +1,13 @@
 <?php
 
-namespace Layer\Data\Paginator;
+namespace Sentient\Data\Paginator;
 
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class PaginatorRequest
  *
- * @package Layer\Data\Paginator
+ * @package Sentient\Data\Paginator
  */
 class PaginatorRequest implements PaginatorRequestInterface {
 

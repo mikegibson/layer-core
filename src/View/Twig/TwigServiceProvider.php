@@ -1,13 +1,13 @@
 <?php
 
-namespace Layer\View\Twig;
+namespace Sentient\View\Twig;
 
 use Silex\Application;
 
 /**
  * Class TwigServiceProvider
  *
- * @package Layer\View\Twig
+ * @package Sentient\View\Twig
  */
 class TwigServiceProvider extends \Silex\Provider\TwigServiceProvider {
 
@@ -22,10 +22,10 @@ class TwigServiceProvider extends \Silex\Provider\TwigServiceProvider {
 
 			$loader = new Loader();
 
-			if($app instanceof \Layer\Application) {
+			if($app instanceof \Sentient\Application) {
 
 				$loader->prependPath($app['paths.templates']);
-				$loader->addPath($app['paths.layer'] . '/Template');
+				$loader->addPath($app['paths.sentient'] . '/Template');
 				foreach($app->getPluginNames() as $name) {
 					foreach([
 						$app['paths.app'] . '/Template/plugin/' . $name,

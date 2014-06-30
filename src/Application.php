@@ -1,27 +1,27 @@
 <?php
 
-namespace Layer;
+namespace Sentient;
 
 use Knp\Provider\ConsoleServiceProvider;
-use Layer\Action\ActionDispatcher;
-use Layer\Action\SimpleAction;
-use Layer\Asset\AssetServiceProvider;
-use Layer\Cms\CmsPlugin;
-use Layer\Config\ConfigServiceProvider;
-use Layer\Data\DataProvider;
-use Layer\Form\FormServiceProvider;
-use Layer\Media\MediaPlugin;
-use Layer\Node\ControllerNode;
-use Layer\Node\ControllerNodeInterface;
-use Layer\Node\ControllerNodeListNode;
-use Layer\Node\ListNode;
-use Layer\Plugin\PluginInterface;
-use Layer\Route\UrlMatcher;
-use Layer\Users\UsersPlugin;
-use Layer\Utility\StringHelper;
-use Layer\View\Twig\TwigServiceProvider;
-use Layer\Utility\ArrayHelper;
-use Layer\Utility\Inflector;
+use Sentient\Action\ActionDispatcher;
+use Sentient\Action\SimpleAction;
+use Sentient\Asset\AssetServiceProvider;
+use Sentient\Cms\CmsPlugin;
+use Sentient\Config\ConfigServiceProvider;
+use Sentient\Data\DataProvider;
+use Sentient\Form\FormServiceProvider;
+use Sentient\Media\MediaPlugin;
+use Sentient\Node\ControllerNode;
+use Sentient\Node\ControllerNodeInterface;
+use Sentient\Node\ControllerNodeListNode;
+use Sentient\Node\ListNode;
+use Sentient\Plugin\PluginInterface;
+use Sentient\Route\UrlMatcher;
+use Sentient\Users\UsersPlugin;
+use Sentient\Utility\StringHelper;
+use Sentient\View\Twig\TwigServiceProvider;
+use Sentient\Utility\ArrayHelper;
+use Sentient\Utility\Inflector;
 use Silex\Provider\HttpFragmentServiceProvider;
 use Silex\Provider\RememberMeServiceProvider;
 use Silex\Provider\SecurityServiceProvider;
@@ -42,7 +42,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 /**
  * Class Application
  *
- * @package Layer
+ * @package Sentient
  */
 class Application extends \Silex\Application {
 
@@ -100,7 +100,7 @@ class Application extends \Silex\Application {
 
 		$app->register(new ConfigServiceProvider());
 
-		$app['route_class'] = 'Layer\\Route\\Route';
+		$app['route_class'] = 'Sentient\\Route\\Route';
 
 		$app->registerErrorHandlers();
 
@@ -230,7 +230,7 @@ class Application extends \Silex\Application {
 
 	/**
 	 * @param $name
-	 * @return \Layer\Plugin\PluginInterface
+	 * @return \Sentient\Plugin\PluginInterface
 	 * @throws \InvalidArgumentException
 	 */
 	public function getPlugin($name) {
@@ -315,9 +315,9 @@ class Application extends \Silex\Application {
 		$tmp = $storage . '/tmp';
 		$cache = $tmp . '/cache';
 		$session = $tmp . '/session';
-		$layer = __DIR__;
+		$sentient = __DIR__;
 		return compact('root', 'app', 'config', 'resources', 'templates', 'vendor',
-			'public', 'storage', 'log', 'tmp', 'cache', 'session', 'layer');
+			'public', 'storage', 'log', 'tmp', 'cache', 'session', 'sentient');
 	}
 
 	protected function registerErrorHandlers() {
@@ -358,7 +358,7 @@ class Application extends \Silex\Application {
 			->register(new HttpFragmentServiceProvider())
 			->register(new SwiftmailerServiceProvider())
 			->register(new ConsoleServiceProvider(), [
-				'console.name' => 'Layer Console',
+				'console.name' => 'Sentient Console',
 				'console.version' => '1.0.0',
 				'console.project_directory' => $this['paths.root']
 			])

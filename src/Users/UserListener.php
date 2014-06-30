@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Users;
+namespace Sentient\Users;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;

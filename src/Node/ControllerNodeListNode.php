@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Node;
+namespace Sentient\Node;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 

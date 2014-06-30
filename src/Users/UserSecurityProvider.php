@@ -1,8 +1,8 @@
 <?php
 
-namespace Layer\Users;
+namespace Sentient\Users;
 
-use Layer\Data\ManagedRepositoryInterface;
+use Sentient\Data\ManagedRepositoryInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 class UserSecurityProvider implements UserProviderInterface {
 
 	/**
-	 * @var \Layer\Data\ManagedRepositoryInterface
+	 * @var \Sentient\Data\ManagedRepositoryInterface
 	 */
 	private $repository;
 

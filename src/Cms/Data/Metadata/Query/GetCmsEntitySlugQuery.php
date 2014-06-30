@@ -1,16 +1,16 @@
 <?php
 
-namespace Layer\Cms\Data\Metadata\Query;
+namespace Sentient\Cms\Data\Metadata\Query;
 
 use Doctrine\Common\Annotations\Annotation;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Layer\Data\Metadata\QueryInterface;
-use Layer\Utility\InflectorInterface;
+use Sentient\Data\Metadata\QueryInterface;
+use Sentient\Utility\InflectorInterface;
 
 /**
  * Class GetCmsEntitySlugQuery
- * @package Layer\Cms\Data\Metadata\Query
+ * @package Sentient\Cms\Data\Metadata\Query
  */
 class GetCmsEntitySlugQuery implements QueryInterface {
 
@@ -20,7 +20,7 @@ class GetCmsEntitySlugQuery implements QueryInterface {
 	protected $getCmsEntityQuery;
 
 	/**
-	 * @var \Layer\Utility\InflectorInterface
+	 * @var \Sentient\Utility\InflectorInterface
 	 */
 	protected $inflector;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace Layer\Cms\Node;
+namespace Sentient\Cms\Node;
 
-use Layer\Cms\Data\CmsRepositoryInterface;
+use Sentient\Cms\Data\CmsRepositoryInterface;
 
 interface RepositoryCmsNodeFactoryInterface {
 

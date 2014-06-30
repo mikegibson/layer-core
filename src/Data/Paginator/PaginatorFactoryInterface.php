@@ -1,8 +1,8 @@
 <?php
 
-namespace Layer\Data\Paginator;
+namespace Sentient\Data\Paginator;
 
-use Layer\Data\ManagedRepositoryInterface;
+use Sentient\Data\ManagedRepositoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 interface PaginatorFactoryInterface {

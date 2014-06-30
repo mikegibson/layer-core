@@ -1,18 +1,18 @@
 <?php
 
-namespace Layer\Blog\Entity;
+namespace Sentient\Blog\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Behavior;
-use Layer\Cms\Data\Metadata\Annotation as Cms;
-use Layer\Data\Metadata\Annotation as Layer;
+use Sentient\Cms\Data\Metadata\Annotation as Cms;
+use Sentient\Data\Metadata\Annotation as Sentient;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="blog_categories")
- * @Layer\CrudEntity
- * @Layer\EntityName("blog_categories")
+ * @Sentient\CrudEntity
+ * @Sentient\EntityName("blog_categories")
  * @Cms\RootNodePath("content/blog/categories")
  */
 class BlogCategory {
@@ -23,7 +23,7 @@ class BlogCategory {
 	 * @ORM\Id
 	 * @ORM\Column(type="integer")
 	 * @ORM\GeneratedValue
-	 * @Layer\PropertyLabel("ID")
+	 * @Sentient\PropertyLabel("ID")
 	 */
 	protected $id;
 
@@ -48,7 +48,7 @@ class BlogCategory {
 	 *
 	 * @ORM\Column(type="datetime")
 	 * @Behavior\Timestampable(on="create")
-	 * @Layer\InvisibleProperty
+	 * @Sentient\InvisibleProperty
 	 */
 	protected $created;
 
@@ -57,7 +57,7 @@ class BlogCategory {
 	 *
 	 * @ORM\Column(type="datetime")
 	 * @Behavior\Timestampable(on="update")
-	 * @Layer\InvisibleProperty
+	 * @Sentient\InvisibleProperty
 	 */
 	protected $updated;
 

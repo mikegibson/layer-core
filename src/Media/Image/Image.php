@@ -1,18 +1,18 @@
 <?php
 
-namespace Layer\Media\Image;
+namespace Sentient\Media\Image;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Behavior;
-use Layer\Cms\Data\Metadata\Annotation as Cms;
-use Layer\Data\Metadata\Annotation as Layer;
-use Layer\Media\File\File;
+use Sentient\Cms\Data\Metadata\Annotation as Cms;
+use Sentient\Data\Metadata\Annotation as Sentient;
+use Sentient\Media\File\File;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="images")
- * @Layer\CrudEntity(create=false, update=false)
- * @Layer\EntityName("images")
+ * @Sentient\CrudEntity(create=false, update=false)
+ * @Sentient\EntityName("images")
  * @Cms\RootNodePath("media/images")
  */
 class Image implements ImageInterface {
@@ -23,14 +23,14 @@ class Image implements ImageInterface {
 	 * @ORM\Id
 	 * @ORM\Column(type="integer")
 	 * @ORM\GeneratedValue
-	 * @Layer\PropertyLabel("ID")
+	 * @Sentient\PropertyLabel("ID")
 	 */
 	protected $id;
 
 	/**
 	 * @var File $file
 	 *
-	 * @ORM\OneToOne(targetEntity="Layer\Media\File\File", mappedBy="image")
+	 * @ORM\OneToOne(targetEntity="Sentient\Media\File\File", mappedBy="image")
 	 * @ORM\JoinColumn(name="file_id", referencedColumnName="id", nullable=false)
 	 */
 	protected $file;
@@ -39,7 +39,7 @@ class Image implements ImageInterface {
 	 * @var int $width
 	 *
 	 * @ORM\Column(type="integer")
-	 * @Layer\CrudProperty(editable=false)
+	 * @Sentient\CrudProperty(editable=false)
 	 */
 	protected $width;
 
@@ -47,7 +47,7 @@ class Image implements ImageInterface {
 	 * @var int $height
 	 *
 	 * @ORM\Column(type="integer")
-	 * @Layer\CrudProperty(editable=false)
+	 * @Sentient\CrudProperty(editable=false)
 	 */
 	protected $height;
 
@@ -96,7 +96,7 @@ class Image implements ImageInterface {
 	/**
 	 * @return string
 	 *
-	 * @Layer\InvisibleProperty
+	 * @Sentient\InvisibleProperty
 	 */
 	public function getExtension() {
 		return ($file = $this->getFile()) ? $file->getExtension() : null;
@@ -105,7 +105,7 @@ class Image implements ImageInterface {
 	/**
 	 * @return string
 	 *
-	 * @Layer\InvisibleProperty
+	 * @Sentient\InvisibleProperty
 	 */
 	public function getHash() {
 		return ($file = $this->getFile()) ? $file->getHash() : null;
@@ -114,7 +114,7 @@ class Image implements ImageInterface {
 	/**
 	 * @return string
 	 *
-	 * @Layer\InvisibleProperty
+	 * @Sentient\InvisibleProperty
 	 */
 	public function getAbsolutePath() {
 		return ($file = $this->getFile()) ? $file->getAbsolutePath() : null;

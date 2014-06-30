@@ -1,10 +1,10 @@
 <?php
 
-namespace Layer\Data\Metadata\Query;
+namespace Sentient\Data\Metadata\Query;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Layer\Data\Metadata\Annotation\CrudProperty;
-use Layer\Data\Metadata\QueryInterface;
+use Sentient\Data\Metadata\Annotation\CrudProperty;
+use Sentient\Data\Metadata\QueryInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class IsPropertyEditableQuery implements QueryInterface {
@@ -13,7 +13,7 @@ class IsPropertyEditableQuery implements QueryInterface {
 		'Doctrine\\ORM\\Mapping\\Id',
 		'Doctrine\\ORM\\Mapping\\GeneratedValue',
 		'Gedmo\\Mapping\\Annotation\\Timestampable',
-		'Layer\\Data\\Metadata\\Annotation\\InvisibleProperty'
+		'Sentient\\Data\\Metadata\\Annotation\\InvisibleProperty'
 	];
 
 	/**
@@ -60,14 +60,14 @@ class IsPropertyEditableQuery implements QueryInterface {
 			$create = true;
 		}
 		if($annotation = $this->annotationQuery->getResult($classMetadata, array_merge($options, [
-			'annotationClass' => 'Layer\\Data\\Metadata\\Annotation\\LockedProperty'
+			'annotationClass' => 'Sentient\\Data\\Metadata\\Annotation\\LockedProperty'
 		]))) {
 			if($create ? $annotation->onCreate : $annotation->onUpdate) {
 				return false;
 			}
 		}
 		if($annotation = $this->annotationQuery->getResult($classMetadata, array_merge($options, [
-			'annotationClass' => 'Layer\\Data\\Metadata\\Annotation\\CrudProperty'
+			'annotationClass' => 'Sentient\\Data\\Metadata\\Annotation\\CrudProperty'
 		]))) {
 			if($annotation->editable === CrudProperty::EDITABLE_ALWAYS) {
 				return true;

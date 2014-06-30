@@ -1,11 +1,11 @@
 <?php
 
-namespace Layer\Cms\Action;
+namespace Sentient\Cms\Action;
 
-use Layer\Action\ActionInterface;
-use Layer\Cms\Data\CmsEntityFormType;
-use Layer\Cms\Data\CmsRepositoryInterface;
-use Layer\Cms\Data\EntityFormType;
+use Sentient\Action\ActionInterface;
+use Sentient\Cms\Data\CmsEntityFormType;
+use Sentient\Cms\Data\CmsRepositoryInterface;
+use Sentient\Cms\Data\EntityFormType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 abstract class SaveAction implements ActionInterface {
 
 	/**
-	 * @var \Layer\Cms\Data\CmsRepositoryInterface
+	 * @var \Sentient\Cms\Data\CmsRepositoryInterface
 	 */
 	private $repository;
 

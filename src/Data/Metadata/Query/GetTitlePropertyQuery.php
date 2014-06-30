@@ -1,9 +1,9 @@
 <?php
 
-namespace Layer\Data\Metadata\Query;
+namespace Sentient\Data\Metadata\Query;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Layer\Data\Metadata\QueryInterface;
+use Sentient\Data\Metadata\QueryInterface;
 
 class GetTitlePropertyQuery implements QueryInterface {
 

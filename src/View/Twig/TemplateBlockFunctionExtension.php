@@ -1,10 +1,10 @@
 <?php
 
-namespace Layer\View\Twig;
+namespace Sentient\View\Twig;
 
 /**
  * Class TemplateBlockFunctionExtension
- * @package Layer\View\Twig
+ * @package Sentient\View\Twig
  */
 abstract class TemplateBlockFunctionExtension extends \Twig_Extension {
 

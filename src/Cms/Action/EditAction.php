@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Cms\Action;
+namespace Sentient\Cms\Action;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;

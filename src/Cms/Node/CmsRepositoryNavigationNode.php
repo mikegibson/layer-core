@@ -1,10 +1,10 @@
 <?php
 
-namespace Layer\Cms\Node;
+namespace Sentient\Cms\Node;
 
-use Layer\Cms\Data\CmsRepositoryInterface;
-use Layer\Node\ControllerNodeInterface;
-use Layer\Node\ControllerNodeListNode;
+use Sentient\Cms\Data\CmsRepositoryInterface;
+use Sentient\Node\ControllerNodeInterface;
+use Sentient\Node\ControllerNodeListNode;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class CmsRepositoryNavigationNode extends ControllerNodeListNode {
@@ -12,7 +12,7 @@ class CmsRepositoryNavigationNode extends ControllerNodeListNode {
 	private $repository;
 
 	/**
-	 * @var \Layer\Node\ControllerNodeInterface
+	 * @var \Sentient\Node\ControllerNodeInterface
 	 */
 	private $currentControllerNode;
 

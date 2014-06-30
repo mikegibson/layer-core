@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Asset;
+namespace Sentient\Asset;
 
 use Assetic\AssetManager;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;

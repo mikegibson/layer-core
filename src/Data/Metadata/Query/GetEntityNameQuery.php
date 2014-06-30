@@ -1,16 +1,16 @@
 <?php
 
-namespace Layer\Data\Metadata\Query;
+namespace Sentient\Data\Metadata\Query;
 
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Layer\Data\Metadata\QueryInterface;
+use Sentient\Data\Metadata\QueryInterface;
 
 class GetEntityNameQuery implements QueryInterface {
 
 	protected $reader;
 
-	protected $annotationClass = 'Layer\\Data\\Metadata\\Annotation\\EntityName';
+	protected $annotationClass = 'Sentient\\Data\\Metadata\\Annotation\\EntityName';
 
 	public function __construct(Reader $reader) {
 		$this->reader = $reader;

@@ -1,14 +1,14 @@
 <?php
 
-namespace Layer\Cms\Data\Metadata\Query;
+namespace Sentient\Cms\Data\Metadata\Query;
 
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Layer\Data\Metadata\QueryInterface;
+use Sentient\Data\Metadata\QueryInterface;
 
 class GetCmsNodePathQuery implements QueryInterface {
 
-	protected $annotationClass = 'Layer\\Cms\\Data\\Metadata\\Annotation\\RootNodePath';
+	protected $annotationClass = 'Sentient\\Cms\\Data\\Metadata\\Annotation\\RootNodePath';
 
 	private $reader;
 

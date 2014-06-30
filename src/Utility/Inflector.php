@@ -12,9 +12,9 @@
  * @since         CakePHP(tm) v 0.2.9
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Layer\Utility;
+namespace Sentient\Utility;
 
-use Layer\Application;
+use Sentient\Application;
 
 /**
  * Pluralize and singularize English words.

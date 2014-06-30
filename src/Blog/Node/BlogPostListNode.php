@@ -1,18 +1,18 @@
 <?php
 
-namespace Layer\Blog\Node;
+namespace Sentient\Blog\Node;
 
-use Layer\Action\SimpleAction;
-use Layer\Blog\Entity\BlogPost;
-use Layer\Data\ManagedRepositoryInterface;
-use Layer\Data\Paginator\PaginatedNode;
-use Layer\Node\ControllerNode;
-use Layer\Node\ControllerNodeInterface;
+use Sentient\Action\SimpleAction;
+use Sentient\Blog\Entity\BlogPost;
+use Sentient\Data\ManagedRepositoryInterface;
+use Sentient\Data\Paginator\PaginatedNode;
+use Sentient\Node\ControllerNode;
+use Sentient\Node\ControllerNodeInterface;
 
 class BlogPostListNode extends PaginatedNode {
 
 	/**
-	 * @var \Layer\Data\ManagedRepositoryInterface
+	 * @var \Sentient\Data\ManagedRepositoryInterface
 	 */
 	private $repository;
 
@@ -60,7 +60,7 @@ class BlogPostListNode extends PaginatedNode {
 
 	/**
 	 * @param $post
-	 * @return ControllerNode|\Layer\Node\ControllerNodeInterface
+	 * @return ControllerNode|\Sentient\Node\ControllerNodeInterface
 	 * @throws \RuntimeException
 	 */
 	protected function createEntityNode($post) {

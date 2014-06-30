@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Media\Image;
+namespace Sentient\Media\Image;
 
 use Imagine\Filter\Transformation;
 use Imagine\Image\ImageInterface;

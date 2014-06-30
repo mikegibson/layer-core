@@ -1,8 +1,8 @@
 <?php
 
-namespace Layer\View\Twig;
+namespace Sentient\View\Twig;
 
-use Layer\Node\ListNodeInterface;
+use Sentient\Node\ListNodeInterface;
 
 class ListExtension extends TemplateBlockFunctionExtension {
 

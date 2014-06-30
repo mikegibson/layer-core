@@ -1,40 +1,40 @@
 <?php
 
-namespace Layer\Cms;
+namespace Sentient\Cms;
 
 use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
-use Layer\Action\ReskinnedAction;
-use Layer\Cms\Action\AddActionFactory;
-use Layer\Cms\Action\EditActionFactory;
-use Layer\Cms\Action\IndexActionFactory;
-use Layer\Cms\Data\CmsRepository;
-use Layer\Cms\Data\HtmlStripperDecorator;
-use Layer\Cms\Data\LinkerDecorator;
-use Layer\Cms\Data\Metadata\Query\GetCmsNodePathQuery;
-use Layer\Cms\Node\CmsNavigationNode;
-use Layer\Cms\Node\RepositoryCmsNodeFactory;
-use Layer\Cms\Data\Metadata\Query\GetCmsEntityQuery;
-use Layer\Cms\Data\Metadata\Query\GetCmsEntitySlugQuery;
-use Layer\Cms\View\CmsHelper;
-use Layer\Cms\View\TwigCmsExtension;
-use Layer\Data\ManagedRepositoryEvent;
-use Layer\Data\Metadata\QueryCollection;
-use Layer\Data\TableData\ChainedTableDataDecorator;
-use Layer\Data\TableData\EscaperDecorator;
-use Layer\Data\TableData\StringifierDecorator;
-use Layer\Data\TableData\TruncatorDecorator;
-use Layer\Media\Image\FilterRegistry;
-use Layer\Media\Image\ImageTransformer;
-use Layer\Node\ControllerNode;
-use Layer\Plugin\Plugin;
+use Sentient\Action\ReskinnedAction;
+use Sentient\Cms\Action\AddActionFactory;
+use Sentient\Cms\Action\EditActionFactory;
+use Sentient\Cms\Action\IndexActionFactory;
+use Sentient\Cms\Data\CmsRepository;
+use Sentient\Cms\Data\HtmlStripperDecorator;
+use Sentient\Cms\Data\LinkerDecorator;
+use Sentient\Cms\Data\Metadata\Query\GetCmsNodePathQuery;
+use Sentient\Cms\Node\CmsNavigationNode;
+use Sentient\Cms\Node\RepositoryCmsNodeFactory;
+use Sentient\Cms\Data\Metadata\Query\GetCmsEntityQuery;
+use Sentient\Cms\Data\Metadata\Query\GetCmsEntitySlugQuery;
+use Sentient\Cms\View\CmsHelper;
+use Sentient\Cms\View\TwigCmsExtension;
+use Sentient\Data\ManagedRepositoryEvent;
+use Sentient\Data\Metadata\QueryCollection;
+use Sentient\Data\TableData\ChainedTableDataDecorator;
+use Sentient\Data\TableData\EscaperDecorator;
+use Sentient\Data\TableData\StringifierDecorator;
+use Sentient\Data\TableData\TruncatorDecorator;
+use Sentient\Media\Image\FilterRegistry;
+use Sentient\Media\Image\ImageTransformer;
+use Sentient\Node\ControllerNode;
+use Sentient\Plugin\Plugin;
 use Silex\Application;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class CmsProvider
  *
- * @package Layer\Cms\Provider
+ * @package Sentient\Cms\Provider
  */
 class CmsPlugin extends Plugin {
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Form;
+namespace Sentient\Form;
 
 use Doctrine\Common\Annotations\Reader;
 use Symfony\Component\Form\FormTypeGuesserInterface;
@@ -11,7 +11,7 @@ class HtmlTypeGuesser implements FormTypeGuesserInterface {
 
 	private $reader;
 
-	protected $annotationClass = 'Layer\\Data\\Metadata\\Annotation\\HtmlProperty';
+	protected $annotationClass = 'Sentient\\Data\\Metadata\\Annotation\\HtmlProperty';
 
 	public function __construct(Reader $reader) {
 		$this->reader = $reader;

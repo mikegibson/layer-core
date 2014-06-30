@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Asset;
+namespace Sentient\Asset;
 
 use Assetic\AssetManager;
 use Assetic\AssetWriter;
@@ -54,7 +54,7 @@ class AssetServiceProvider implements ServiceProviderInterface {
 		$app['assetic.filters.compass'] = $app->share(function () use ($app) {
 			$filter = new CompassFilter();
 			$filter->setCacheLocation($app['paths.cache'] . '/compass');
-			$filter->addLoadPath($app['paths.layer'] . '/Resource/scss');
+			$filter->addLoadPath($app['paths.sentient'] . '/Resource/scss');
 			return $filter;
 		});
 
@@ -89,8 +89,8 @@ class AssetServiceProvider implements ServiceProviderInterface {
 			$factory = new AssetFactory($app['paths.resources'], false);
 			$factory->setAssetManager($app['assetic.asset_manager']);
 			$factory->setFilterManager($app['assetic.filter_manager']);
-			$factory->addPath('layer', $app['paths.templates'] . '/layer');
-			$factory->addPath('layer', $app['paths.layer'] . '/Resource');
+			$factory->addPath('sentient', $app['paths.templates'] . '/sentient');
+			$factory->addPath('sentient', $app['paths.sentient'] . '/Resource');
 			foreach($app->getPluginNames() as $name) {
 				$factory->addPath($name, $app['paths.resources'] . '/plugin/' . $name);
 				$factory->addPath($name, $app->getPlugin($name)->getPath() . '/Resource');
@@ -177,7 +177,7 @@ class AssetServiceProvider implements ServiceProviderInterface {
 			'jquery',
 			'dropdown'
 		] as $script) {
-			$app['assets.register_js']($script, '@layer/js/' . $script . '.js');
+			$app['assets.register_js']($script, '@sentient/js/' . $script . '.js');
 		}
 
 	}

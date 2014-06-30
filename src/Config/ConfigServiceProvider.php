@@ -1,10 +1,10 @@
 <?php
 
-namespace Layer\Config;
+namespace Sentient\Config;
 
-use Layer\Config\Driver\JsonConfigDriver;
-use Layer\Config\Driver\PhpConfigDriver;
-use Layer\Config\Driver\YamlConfigDriver;
+use Sentient\Config\Driver\JsonConfigDriver;
+use Sentient\Config\Driver\PhpConfigDriver;
+use Sentient\Config\Driver\YamlConfigDriver;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 use Symfony\Component\Config\FileLocator;
@@ -12,7 +12,7 @@ use Symfony\Component\Config\FileLocator;
 /**
  * Class ConfigServiceProvider
  *
- * @package Layer\Config
+ * @package Sentient\Config
  */
 class ConfigServiceProvider implements ServiceProviderInterface {
 

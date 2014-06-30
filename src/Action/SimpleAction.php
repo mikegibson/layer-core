@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Action;
+namespace Sentient\Action;
 
 use Symfony\Component\HttpFoundation\Request;
 

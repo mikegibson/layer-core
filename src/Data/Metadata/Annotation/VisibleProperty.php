@@ -1,12 +1,12 @@
 <?php
 
-namespace Layer\Data\Metadata\Annotation;
+namespace Sentient\Data\Metadata\Annotation;
 
 use Doctrine\Common\Annotations\Annotation;
 
 /**
  * Class VisibleProperty
- * @package Layer\Data\Metadata\Annotation
+ * @package Sentient\Data\Metadata\Annotation
  * @Annotation
  */
 class VisibleProperty extends Annotation {

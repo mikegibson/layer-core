@@ -1,11 +1,11 @@
 <?php
 
-namespace Layer\View\Twig;
+namespace Sentient\View\Twig;
 
 /**
  * Class TwigExtension
  *
- * @package Layer\View
+ * @package Sentient\View
  */
 abstract class Extension extends \Twig_Extension {
 

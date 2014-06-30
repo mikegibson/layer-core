@@ -1,15 +1,15 @@
 <?php
 
-namespace Layer\Action;
+namespace Sentient\Action;
 
-use Layer\View\ViewInterface;
+use Sentient\View\ViewInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class ActionDispatcher
- * @package Layer\Action
+ * @package Sentient\Action
  */
 class ActionDispatcher {
 
@@ -19,7 +19,7 @@ class ActionDispatcher {
 	protected $eventDispatcher;
 
 	/**
-	 * @var \Layer\View\ViewInterface
+	 * @var \Sentient\View\ViewInterface
 	 */
 	protected $view;
 

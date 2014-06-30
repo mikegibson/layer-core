@@ -1,10 +1,10 @@
 <?php
 
-namespace Layer\Pages;
+namespace Sentient\Pages;
 
-use Layer\Data\ManagedRepositoryInterface;
-use Layer\Node\ControllerNode;
-use Layer\Node\ControllerNodeInterface;
+use Sentient\Data\ManagedRepositoryInterface;
+use Sentient\Node\ControllerNode;
+use Sentient\Node\ControllerNodeInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class PageNode extends ControllerNode {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Form;
+namespace Sentient\Form;
 
 interface HtmlPurifierInterface {
 

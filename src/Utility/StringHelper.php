@@ -14,7 +14,7 @@
  * @since         CakePHP(tm) v 1.2.0.5551
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Layer\Utility;
+namespace Sentient\Utility;
 
 /**
  * String handling methods.

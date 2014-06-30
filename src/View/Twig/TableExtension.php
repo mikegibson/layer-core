@@ -1,10 +1,10 @@
 <?php
 
-namespace Layer\View\Twig;
+namespace Sentient\View\Twig;
 
-use Layer\Data\Paginator\Paginator;
-use Layer\Data\Paginator\PaginatorResult;
-use Layer\Data\TableData\TableDataInterface;
+use Sentient\Data\Paginator\Paginator;
+use Sentient\Data\Paginator\PaginatorResult;
+use Sentient\Data\TableData\TableDataInterface;
 
 class TableExtension extends TemplateBlockFunctionExtension {
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Plugin;
+namespace Sentient\Plugin;
 
 use Silex\ServiceProviderInterface;
 

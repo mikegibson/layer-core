@@ -1,15 +1,15 @@
 <?php
 
-namespace Layer\Pages;
+namespace Sentient\Pages;
 
-use Layer\Node\ControllerNodeInterface;
-use Layer\Plugin\Plugin;
+use Sentient\Node\ControllerNodeInterface;
+use Sentient\Plugin\Plugin;
 use Silex\Application;
 
 /**
  * Class PagesPlugin
  *
- * @package Layer\Pages
+ * @package Sentient\Pages
  */
 class PagesPlugin extends Plugin {
 
@@ -19,7 +19,7 @@ class PagesPlugin extends Plugin {
 
 	public function register(Application $app) {
 
-		$app['pages.entity_class'] = 'Layer\\Pages\\Page';
+		$app['pages.entity_class'] = 'Sentient\\Pages\\Page';
 
 		$app['pages.repository'] = $app->share(function() use($app) {
 			return $app['orm.rm']->loadRepository($app['orm.em'], $app['pages.entity_class']);

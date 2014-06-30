@@ -1,8 +1,8 @@
 <?php
 
-namespace Layer\Cms\Action;
+namespace Sentient\Cms\Action;
 
-use Layer\Cms\Data\CmsRepositoryInterface;
+use Sentient\Cms\Data\CmsRepositoryInterface;
 
 interface RepositoryCmsActionFactoryInterface {
 
@@ -14,7 +14,7 @@ interface RepositoryCmsActionFactoryInterface {
 
 	/**
 	 * @param CmsRepositoryInterface $repository
-	 * @return \Layer\Action\ActionInterface
+	 * @return \Sentient\Action\ActionInterface
 	 */
 	public function createAction(CmsRepositoryInterface $repository);
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace Layer\Action;
+namespace Sentient\Action;
 
-use Layer\Data\ManagedRepositoryInterface;
-use Layer\Data\Paginator\Paginator;
-use Layer\Data\Paginator\PaginatorRequest;
-use Layer\Data\Paginator\PaginatorResult;
+use Sentient\Data\ManagedRepositoryInterface;
+use Sentient\Data\Paginator\Paginator;
+use Sentient\Data\Paginator\PaginatorRequest;
+use Sentient\Data\Paginator\PaginatorResult;
 use Symfony\Component\HttpFoundation\Request;
 
 class PaginationAction implements ActionInterface {
@@ -15,7 +15,7 @@ class PaginationAction implements ActionInterface {
 	protected $result;
 
 	/**
-	 * @var \Layer\Cms\Data\CmsRepositoryInterface|\Layer\Data\ManagedRepositoryInterface
+	 * @var \Sentient\Cms\Data\CmsRepositoryInterface|\Sentient\Data\ManagedRepositoryInterface
 	 */
 	private $repository;
 
@@ -72,7 +72,7 @@ class PaginationAction implements ActionInterface {
 	}
 
 	/**
-	 * @return \Layer\Data\|ManagedRepositoryInterface
+	 * @return \Sentient\Data\|ManagedRepositoryInterface
 	 */
 	public function getRepository() {
 		return $this->repository;

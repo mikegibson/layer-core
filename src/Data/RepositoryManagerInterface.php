@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Data;
+namespace Sentient\Data;
 
 use Doctrine\ORM\EntityManagerInterface;
 

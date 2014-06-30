@@ -1,8 +1,8 @@
 <?php
 
-namespace Layer\Asset;
+namespace Sentient\Asset;
 
-use Layer\View\Twig\Extension;
+use Sentient\View\Twig\Extension;
 
 class TwigAssetExtension extends Extension {
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\View;
+namespace Sentient\View;
 
 interface ViewInterface {
 

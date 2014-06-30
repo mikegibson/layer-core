@@ -1,9 +1,9 @@
 <?php
 
-namespace Layer\Data\Metadata\Query;
+namespace Sentient\Data\Metadata\Query;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Layer\Data\Metadata\QueryInterface;
+use Sentient\Data\Metadata\QueryInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class IsPropertyVisibleQuery implements QueryInterface {
@@ -49,14 +49,14 @@ class IsPropertyVisibleQuery implements QueryInterface {
 		}
 		if($annotation = $this->annotationQuery->getResult($classMetadata, [
 			'property' => $options['property'],
-			'annotationClass' => 'Layer\\Data\\Metadata\\Annotation\\InvisibleProperty',
+			'annotationClass' => 'Sentient\\Data\\Metadata\\Annotation\\InvisibleProperty',
 			'checkSetter' => false
 		])) {
 			return false;
 		}
 		if($annotation = $this->annotationQuery->getResult($classMetadata, [
 			'property' => $options['property'],
-			'annotationClass' => 'Layer\\Data\\Metadata\\Annotation\\CrudProperty',
+			'annotationClass' => 'Sentient\\Data\\Metadata\\Annotation\\CrudProperty',
 			'checkSetter' => false
 		])) {
 			if(!empty($options['important'])) {

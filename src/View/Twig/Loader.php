@@ -1,11 +1,11 @@
 <?php
 
-namespace Layer\View\Twig;
+namespace Sentient\View\Twig;
 
 /**
  * Class TwigLoader
  *
- * @package Layer\View\Twig
+ * @package Sentient\View\Twig
  */
 class Loader extends \Twig_Loader_Filesystem {
 

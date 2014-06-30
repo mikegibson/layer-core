@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Data\Metadata;
+namespace Sentient\Data\Metadata;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace Layer\Data;
+namespace Sentient\Data;
 
 class WrappedManagedRepository implements ManagedRepositoryInterface {
 
 	/**
-	 * @var \Layer\Data\ManagedRepositoryInterface
+	 * @var \Sentient\Data\ManagedRepositoryInterface
 	 */
 	private $baseRepository;
 

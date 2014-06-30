@@ -1,21 +1,21 @@
 <?php
 
-namespace Layer\Media;
+namespace Sentient\Media;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Layer\Data\ManagedRepositoryInterface;
-use Layer\Media\File\File;
+use Sentient\Data\ManagedRepositoryInterface;
+use Sentient\Media\File\File;
 
 class UploadListener implements EventSubscriber {
 
 	/**
-	 * @var \Layer\Data\ManagedRepositoryInterface
+	 * @var \Sentient\Data\ManagedRepositoryInterface
 	 */
 	private $fileRepository;
 
 	/**
-	 * @var \Layer\Data\ManagedRepositoryInterface
+	 * @var \Sentient\Data\ManagedRepositoryInterface
 	 */
 	private $imageRepository;
 

@@ -1,19 +1,19 @@
 <?php
 
-namespace Layer\Data\Paginator;
+namespace Sentient\Data\Paginator;
 
 use Doctrine\ORM\QueryBuilder;
-use Layer\Data\ManagedRepositoryInterface;
+use Sentient\Data\ManagedRepositoryInterface;
 
 /**
  * Class PaginatorQuery
  *
- * @package Layer\Data\Paginator
+ * @package Sentient\Data\Paginator
  */
 class PaginatorResult implements PaginatorResultInterface {
 
 	/**
-	 * @var \Layer\Data\ManagedRepositoryInterface
+	 * @var \Sentient\Data\ManagedRepositoryInterface
 	 */
 	protected $repository;
 

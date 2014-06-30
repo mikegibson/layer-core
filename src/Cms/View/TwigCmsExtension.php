@@ -1,13 +1,13 @@
 <?php
 
-namespace Layer\Cms\View;
+namespace Sentient\Cms\View;
 
-use Layer\View\Twig\Extension;
+use Sentient\View\Twig\Extension;
 
 /**
  * Class TwigCmsExtension
  *
- * @package Layer\Cms\View
+ * @package Sentient\Cms\View
  */
 class TwigCmsExtension extends Extension {
 

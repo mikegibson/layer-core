@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Cms\Data;
+namespace Sentient\Cms\Data;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;

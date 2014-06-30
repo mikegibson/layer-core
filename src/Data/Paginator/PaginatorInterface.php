@@ -1,13 +1,13 @@
 <?php
 
-namespace Layer\Data\Paginator;
+namespace Sentient\Data\Paginator;
 
-use Layer\Data\TableData\TableDataInterface;
+use Sentient\Data\TableData\TableDataInterface;
 
 /**
  * Interface PaginatorInterface
  *
- * @package Layer\Data\Paginator
+ * @package Sentient\Data\Paginator
  */
 interface PaginatorInterface extends TableDataInterface {
 

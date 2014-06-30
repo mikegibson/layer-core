@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Config\Driver;
+namespace Sentient\Config\Driver;
 
 use Symfony\Component\Yaml\Yaml;
 

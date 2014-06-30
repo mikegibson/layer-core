@@ -1,10 +1,10 @@
 <?php
 
-namespace Layer\Cms\View;
+namespace Sentient\Cms\View;
 
-use Layer\Cms\Data\CmsRepositoryInterface;
-use Layer\Cms\Node\CmsRepositoryNavigationNode;
-use Layer\Node\ControllerNodeInterface;
+use Sentient\Cms\Data\CmsRepositoryInterface;
+use Sentient\Cms\Node\CmsRepositoryNavigationNode;
+use Sentient\Node\ControllerNodeInterface;
 use Silex\Application;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 

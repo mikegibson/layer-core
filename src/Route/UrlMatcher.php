@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Route;
+namespace Sentient\Route;
 
 use Silex\RedirectableUrlMatcher;
 use Symfony\Component\Routing\Route as BaseRoute;

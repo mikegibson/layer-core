@@ -1,9 +1,9 @@
 <?php
 
-namespace Layer\Users\Command;
+namespace Sentient\Users\Command;
 
-use Layer\Console\Command;
-use Layer\Users\User;
+use Sentient\Console\Command;
+use Sentient\Users\User;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

@@ -6,7 +6,7 @@
  * which is licensed under a MIT license: https://github.com/dflydev/dflydev-doctrine-orm-service-provider
  */
 
-namespace Layer\Data;
+namespace Sentient\Data;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
@@ -31,20 +31,20 @@ use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
 use Gedmo\Sluggable\SluggableListener;
 use Gedmo\Timestampable\TimestampableListener;
 use Gedmo\Tree\TreeListener;
-use Layer\Data\Metadata\Query\GetEditablePropertiesQuery;
-use Layer\Data\Metadata\Query\GetEntityCrudQuery;
-use Layer\Data\Metadata\Query\GetEntityHumanNameQuery;
-use Layer\Data\Metadata\Query\GetEntityNameQuery;
-use Layer\Data\Metadata\Query\GetPropertyAnnotationQuery;
-use Layer\Data\Metadata\Query\GetPropertyLabelQuery;
-use Layer\Data\Metadata\Query\GetTitlePropertyQuery;
-use Layer\Data\Metadata\Query\GetVisiblePropertiesQuery;
-use Layer\Data\Metadata\Query\GetVisiblePropertyLabelsQuery;
-use Layer\Data\Metadata\Query\IsHtmlPropertyQuery;
-use Layer\Data\Metadata\Query\IsPropertyEditableQuery;
-use Layer\Data\Metadata\Query\IsPropertyVisibleQuery;
-use Layer\Data\Metadata\Query\IsTitlePropertyQuery;
-use Layer\Data\Metadata\QueryCollection;
+use Sentient\Data\Metadata\Query\GetEditablePropertiesQuery;
+use Sentient\Data\Metadata\Query\GetEntityCrudQuery;
+use Sentient\Data\Metadata\Query\GetEntityHumanNameQuery;
+use Sentient\Data\Metadata\Query\GetEntityNameQuery;
+use Sentient\Data\Metadata\Query\GetPropertyAnnotationQuery;
+use Sentient\Data\Metadata\Query\GetPropertyLabelQuery;
+use Sentient\Data\Metadata\Query\GetTitlePropertyQuery;
+use Sentient\Data\Metadata\Query\GetVisiblePropertiesQuery;
+use Sentient\Data\Metadata\Query\GetVisiblePropertyLabelsQuery;
+use Sentient\Data\Metadata\Query\IsHtmlPropertyQuery;
+use Sentient\Data\Metadata\Query\IsPropertyEditableQuery;
+use Sentient\Data\Metadata\Query\IsPropertyVisibleQuery;
+use Sentient\Data\Metadata\Query\IsTitlePropertyQuery;
+use Sentient\Data\Metadata\QueryCollection;
 use Silex\Application;
 use Silex\Provider\DoctrineServiceProvider;
 use Silex\ServiceProviderInterface;
@@ -559,7 +559,7 @@ class DataProvider implements ServiceProviderInterface {
 				'mappings' => [
 					[
 						'type' => 'annotation',
-						'namespace' => 'Layer'
+						'namespace' => 'Sentient'
 					]
 				]
 			],

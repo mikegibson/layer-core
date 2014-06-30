@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\View\Twig;
+namespace Sentient\View\Twig;
 
 /**
  * Token Parser for template block theme tags.

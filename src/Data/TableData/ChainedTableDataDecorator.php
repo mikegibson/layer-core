@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Data\TableData;
+namespace Sentient\Data\TableData;
 
 class ChainedTableDataDecorator implements TableDataDecoratorInterface {
 

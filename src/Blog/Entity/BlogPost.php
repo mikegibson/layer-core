@@ -1,18 +1,18 @@
 <?php
 
-namespace Layer\Blog\Entity;
+namespace Sentient\Blog\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Behavior;
-use Layer\Cms\Data\Metadata\Annotation as Cms;
-use Layer\Data\Metadata\Annotation as Layer;
+use Sentient\Cms\Data\Metadata\Annotation as Cms;
+use Sentient\Data\Metadata\Annotation as Sentient;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="blog_posts")
- * @Layer\CrudEntity
- * @Layer\EntityName("blog_posts")
+ * @Sentient\CrudEntity
+ * @Sentient\EntityName("blog_posts")
  * @Cms\RootNodePath("content/blog")
  */
 class BlogPost {
@@ -23,7 +23,7 @@ class BlogPost {
 	 * @ORM\Id
 	 * @ORM\Column(type="integer")
 	 * @ORM\GeneratedValue
-	 * @Layer\PropertyLabel("ID")
+	 * @Sentient\PropertyLabel("ID")
 	 */
 	protected $id;
 
@@ -47,7 +47,7 @@ class BlogPost {
 	 * @var string $content
 	 *
 	 * @ORM\Column(type="text")
-	 * @Layer\HtmlProperty
+	 * @Sentient\HtmlProperty
 	 */
 	protected $content;
 

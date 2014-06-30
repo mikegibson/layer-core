@@ -1,12 +1,12 @@
 <?php
 
-namespace Layer\Cms\Data\Metadata\Annotation;
+namespace Sentient\Cms\Data\Metadata\Annotation;
 
 use Doctrine\Common\Annotations\Annotation;
 
 /**
  * Class FormProperty
- * @package Layer\Cms\Data\Metadata\Annotation
+ * @package Sentient\Cms\Data\Metadata\Annotation
  * @Annotation
  */
 class FormFieldProperty extends Annotation {

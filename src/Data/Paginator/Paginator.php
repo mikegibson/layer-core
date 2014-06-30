@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Data\Paginator;
+namespace Sentient\Data\Paginator;
 
 /**
  * Class Paginator
@@ -15,7 +15,7 @@ class Paginator implements PaginatorInterface {
 	private $result;
 
 	/**
-	 * @var \Layer\Data\Paginator\PaginatorRequestInterface
+	 * @var \Sentient\Data\Paginator\PaginatorRequestInterface
 	 */
 	private $request;
 

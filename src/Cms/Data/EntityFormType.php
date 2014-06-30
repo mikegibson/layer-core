@@ -1,8 +1,8 @@
 <?php
 
-namespace Layer\Cms\Data;
+namespace Sentient\Cms\Data;
 
-use Layer\Data\ManagedRepositoryInterface;
+use Sentient\Data\ManagedRepositoryInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -39,7 +39,7 @@ class EntityFormType extends AbstractType {
 			];
 			if($annotation = $this->getRepository()->queryMetadata('getPropertyAnnotation', [
 				'property' => $property,
-				'annotationClass' => 'Layer\\Cms\\Data\\Metadata\\Annotation\\FormFieldProperty'
+				'annotationClass' => 'Sentient\\Cms\\Data\\Metadata\\Annotation\\FormFieldProperty'
 			])) {
 				if(!empty($annotation->value)) {
 					$type = $annotation->value;

@@ -1,9 +1,9 @@
 <?php
 
-namespace Layer\Data\Paginator;
+namespace Sentient\Data\Paginator;
 
-use Layer\Action\PaginationAction;
-use Layer\Node\ControllerNode;
+use Sentient\Action\PaginationAction;
+use Sentient\Node\ControllerNode;
 
 abstract class PaginatedNode extends ControllerNode {
 
@@ -80,12 +80,12 @@ abstract class PaginatedNode extends ControllerNode {
 
 	/**
 	 * @param $entity
-	 * @return \Layer\Node\ControllerNodeInterface
+	 * @return \Sentient\Node\ControllerNodeInterface
 	 */
 	abstract protected function createEntityNode($entity);
 
 	/**
-	 * @return \Layer\Data\ManagedRepositoryInterface
+	 * @return \Sentient\Data\ManagedRepositoryInterface
 	 */
 	abstract protected function getRepository();
 

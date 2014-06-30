@@ -1,10 +1,10 @@
 <?php
 
-namespace Layer\View\Twig;
+namespace Sentient\View\Twig;
 
 /**
  * Class TemplateBlockThemeNode
- * @package Layer\View\Twig
+ * @package Sentient\View\Twig
  */
 class TemplateBlockThemeNode extends \Twig_Node {
 

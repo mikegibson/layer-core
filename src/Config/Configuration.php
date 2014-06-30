@@ -1,9 +1,9 @@
 <?php
 
-namespace Layer\Config;
+namespace Sentient\Config;
 
-use Layer\Application;
-use Layer\Config\Driver\ConfigDriver;
+use Sentient\Application;
+use Sentient\Config\Driver\ConfigDriver;
 use Symfony\Component\Config\FileLocatorInterface;
 
 class Configuration {

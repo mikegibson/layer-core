@@ -1,15 +1,15 @@
 <?php
 
-namespace Layer\Users;
+namespace Sentient\Users;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Layer\Node\ControllerNode;
-use Layer\Node\ControllerNodeInterface;
-use Layer\Node\ListNode;
-use Layer\Node\ListNodeInterface;
-use Layer\Plugin\Plugin;
-use Layer\Users\Action\LoginAction;
-use Layer\Users\Command\AddUserCommand;
+use Sentient\Node\ControllerNode;
+use Sentient\Node\ControllerNodeInterface;
+use Sentient\Node\ListNode;
+use Sentient\Node\ListNodeInterface;
+use Sentient\Plugin\Plugin;
+use Sentient\Users\Action\LoginAction;
+use Sentient\Users\Command\AddUserCommand;
 use Silex\Application;
 
 class UsersPlugin extends Plugin {
@@ -20,7 +20,7 @@ class UsersPlugin extends Plugin {
 
 	public function register(Application $app) {
 
-		$app['users.entity_class'] = 'Layer\\Users\\User';
+		$app['users.entity_class'] = 'Sentient\\Users\\User';
 
 		$app['users.repository'] = $app->share(function() use($app) {
 			return $app['orm.rm']->loadRepository($app['orm.em'], $app['users.entity_class']);

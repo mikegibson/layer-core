@@ -1,13 +1,13 @@
 <?php
 
-namespace Layer\Data;
+namespace Sentient\Data;
 
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Selectable;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Layer\Data\Metadata\QueryCollection;
+use Sentient\Data\Metadata\QueryCollection;
 
 class ManagedRepository implements ManagedRepositoryInterface, Selectable {
 

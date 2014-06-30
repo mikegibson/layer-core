@@ -1,11 +1,11 @@
 <?php
 
-namespace Layer\Data\Metadata\Query;
+namespace Sentient\Data\Metadata\Query;
 
 use Doctrine\Common\Annotations\Annotation;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Layer\Data\Metadata\QueryInterface;
-use Layer\Utility\InflectorInterface;
+use Sentient\Data\Metadata\QueryInterface;
+use Sentient\Utility\InflectorInterface;
 
 class GetPropertyLabelQuery implements QueryInterface {
 
@@ -13,7 +13,7 @@ class GetPropertyLabelQuery implements QueryInterface {
 
 	private $inflector;
 
-	protected $annotationClass = 'Layer\\Data\\Metadata\\Annotation\\PropertyLabel';
+	protected $annotationClass = 'Sentient\\Data\\Metadata\\Annotation\\PropertyLabel';
 
 	public function __construct(GetPropertyAnnotationQuery $annotationQuery, InflectorInterface $inflector) {
 		$this->annotationQuery = $annotationQuery;

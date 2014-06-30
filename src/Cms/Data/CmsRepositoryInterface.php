@@ -1,9 +1,9 @@
 <?php
 
-namespace Layer\Cms\Data;
+namespace Sentient\Cms\Data;
 
-use Layer\Data\ManagedRepositoryInterface;
-use Layer\Node\ControllerNodeInterface;
+use Sentient\Data\ManagedRepositoryInterface;
+use Sentient\Node\ControllerNodeInterface;
 
 interface CmsRepositoryInterface extends ManagedRepositoryInterface {
 

@@ -1,11 +1,11 @@
 <?php
 
-namespace Layer\Cms\Action;
+namespace Sentient\Cms\Action;
 
-use Layer\Action\PaginationAction;
-use Layer\Data\ManagedRepositoryInterface;
-use Layer\Data\Paginator\DecoratedPaginator;
-use Layer\Data\TableData\TableDataDecoratorInterface;
+use Sentient\Action\PaginationAction;
+use Sentient\Data\ManagedRepositoryInterface;
+use Sentient\Data\Paginator\DecoratedPaginator;
+use Sentient\Data\TableData\TableDataDecoratorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
@@ -40,7 +40,7 @@ class IndexAction extends PaginationAction {
 
 	/**
 	 * @param Request $request
-	 * @return DecoratedPaginator|\Layer\Data\Paginator\Paginator
+	 * @return DecoratedPaginator|\Sentient\Data\Paginator\Paginator
 	 */
 	protected function createPaginator(Request $request) {
 		return new DecoratedPaginator(parent::createPaginator($request), $this->decorator, $this->propertyAccessor);

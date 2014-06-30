@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Media\File;
+namespace Sentient\Media\File;
 
 class FilesystemFile implements FileInterface {
 

@@ -1,13 +1,13 @@
 <?php
 
-namespace Layer\View\Twig;
+namespace Sentient\View\Twig;
 
-use Layer\View\ViewInterface;
+use Sentient\View\ViewInterface;
 
 /**
  * Class TwigView
  *
- * @package Layer\View
+ * @package Sentient\View
  */
 class View implements ViewInterface {
 

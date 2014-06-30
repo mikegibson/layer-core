@@ -1,21 +1,21 @@
 <?php
 
-namespace Layer\Users;
+namespace Sentient\Users;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Behavior;
-use Layer\Cms\Data\Metadata\Annotation as Cms;
-use Layer\Data\Metadata\Annotation as Layer;
+use Sentient\Cms\Data\Metadata\Annotation as Cms;
+use Sentient\Data\Metadata\Annotation as Sentient;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Layer\Users\User
+ * Sentient\Users\User
  *
  * @ORM\Entity
  * @ORM\Table(name="users")
- * @Layer\CrudEntity
- * @Layer\EntityName("users")
+ * @Sentient\CrudEntity
+ * @Sentient\EntityName("users")
  */
 class User implements UserInterface {
 
@@ -33,7 +33,7 @@ class User implements UserInterface {
 	 *
 	 * @ORM\Column(type="string")
 	 * @Assert\NotBlank
-	 * @Layer\TitleProperty
+	 * @Sentient\TitleProperty
 	 */
 	protected $username;
 
@@ -50,8 +50,8 @@ class User implements UserInterface {
 	 * @var string $plainPassword
 	 *
 	 * @Cms\FormFieldProperty("password")
-	 * @Layer\CrudProperty(editable=true,visible=false)
-	 * @Layer\PropertyLabel("Password")
+	 * @Sentient\CrudProperty(editable=true,visible=false)
+	 * @Sentient\PropertyLabel("Password")
 	 */
 	protected $plainPassword;
 
@@ -59,7 +59,7 @@ class User implements UserInterface {
 	 * @var string $password
 	 *
 	 * @ORM\Column(type="string")
-	 * @Layer\CrudProperty(editable=false,visible=false)
+	 * @Sentient\CrudProperty(editable=false,visible=false)
 	 */
 	protected $password;
 
@@ -74,7 +74,7 @@ class User implements UserInterface {
 	 * @var string $salt
 	 *
 	 * @ORM\Column(type="string")
-	 * @Layer\CrudProperty(editable=false,visible=false)
+	 * @Sentient\CrudProperty(editable=false,visible=false)
 	 */
 	protected $salt;
 

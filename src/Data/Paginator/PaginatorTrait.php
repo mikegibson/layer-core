@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Data\Paginator;
+namespace Sentient\Data\Paginator;
 
 use Doctrine\ORM\QueryBuilder;
 use Silex\Application;
@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Class PaginatorTrait
  *
- * @package Layer\Data\Paginator
+ * @package Sentient\Data\Paginator
  */
 trait PaginatorTrait {
 
@@ -44,7 +44,7 @@ trait PaginatorTrait {
 	);
 
 	/**
-	 * @return \Layer\Data\ManagedRepositoryInterface
+	 * @return \Sentient\Data\ManagedRepositoryInterface
 	 */
 	abstract protected function getRepository();
 

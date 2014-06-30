@@ -1,1 +1,1 @@
-Layer CMS Framework
+Sentient CMS Framework

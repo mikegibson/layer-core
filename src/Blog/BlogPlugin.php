@@ -1,11 +1,11 @@
 <?php
 
-namespace Layer\Blog;
+namespace Sentient\Blog;
 
-use Layer\Action\PaginationAction;
-use Layer\Blog\Node\BlogPostListNode;
-use Layer\Node\ControllerNodeInterface;
-use Layer\Plugin\Plugin;
+use Sentient\Action\PaginationAction;
+use Sentient\Blog\Node\BlogPostListNode;
+use Sentient\Node\ControllerNodeInterface;
+use Sentient\Plugin\Plugin;
 use Silex\Application;
 
 class BlogPlugin extends Plugin {
@@ -18,8 +18,8 @@ class BlogPlugin extends Plugin {
 
 		$app['blog.title'] = 'Blog';
 
-		$app['blog.entity_classes.blog_posts'] = 'Layer\\Blog\\Entity\\BlogPost';
-		$app['blog.entity_classes.blog_categories'] = 'Layer\\Blog\\Entity\\BlogCategory';
+		$app['blog.entity_classes.blog_posts'] = 'Sentient\\Blog\\Entity\\BlogPost';
+		$app['blog.entity_classes.blog_categories'] = 'Sentient\\Blog\\Entity\\BlogCategory';
 
 		$app['blog.repositories.blog_posts'] = $app->share(function() use($app) {
 			return $app['orm.rm']->loadRepository($app['orm.em'], $app['blog.entity_classes.blog_posts']);

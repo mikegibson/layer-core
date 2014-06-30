@@ -1,9 +1,9 @@
 <?php
 
-namespace Layer\Cms\Data;
+namespace Sentient\Cms\Data;
 
-use Layer\Data\RepositoryManagerInterface;
-use Layer\Data\TableData\TableDataDecoratorInterface;
+use Sentient\Data\RepositoryManagerInterface;
+use Sentient\Data\TableData\TableDataDecoratorInterface;
 
 class HtmlStripperDecorator implements TableDataDecoratorInterface {
 

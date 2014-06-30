@@ -1,21 +1,21 @@
 <?php
 
-namespace Layer\Pages;
+namespace Sentient\Pages;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Behavior;
-use Layer\Cms\Data\Metadata\Annotation as Cms;
-use Layer\Data\Metadata\Annotation as Layer;
+use Sentient\Cms\Data\Metadata\Annotation as Cms;
+use Sentient\Data\Metadata\Annotation as Sentient;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Layer\Pages\Page
+ * Sentient\Pages\Page
  *
  * @ORM\Entity
  * @ORM\Table(name="content_pages")
  * @Behavior\Tree(type="nested")
- * @Layer\CrudEntity
- * @Layer\EntityName("pages")
+ * @Sentient\CrudEntity
+ * @Sentient\EntityName("pages")
  * @Cms\RootNodePath("content/pages")
  */
 class Page {
@@ -26,7 +26,7 @@ class Page {
 	 * @ORM\Id
 	 * @ORM\Column(type="integer")
 	 * @ORM\GeneratedValue
-	 * @Layer\PropertyLabel("ID")
+	 * @Sentient\PropertyLabel("ID")
 	 */
 	protected $id;
 
@@ -50,7 +50,7 @@ class Page {
 	 * @var string $content
 	 *
 	 * @ORM\Column(type="text")
-	 * @Layer\HtmlProperty
+	 * @Sentient\HtmlProperty
 	 */
 	protected $content;
 
@@ -82,7 +82,7 @@ class Page {
 	 *
 	 * @Behavior\TreeRoot
 	 * @ORM\Column(type="integer", nullable=true)
-	 * @Layer\InvisibleProperty
+	 * @Sentient\InvisibleProperty
 	 */
 	protected $root;
 
@@ -96,7 +96,7 @@ class Page {
 
 	/**
 	 * @ORM\OneToMany(targetEntity="Page", mappedBy="parent")
-	 * @Layer\InvisibleProperty
+	 * @Sentient\InvisibleProperty
 	 */
 	protected $children;
 
@@ -105,7 +105,7 @@ class Page {
 	 *
 	 * @ORM\Column(type="datetime")
 	 * @Behavior\Timestampable(on="create")
-	 * @Layer\InvisibleProperty
+	 * @Sentient\InvisibleProperty
 	 */
 	protected $created;
 
@@ -114,7 +114,7 @@ class Page {
 	 *
 	 * @ORM\Column(type="datetime")
 	 * @Behavior\Timestampable(on="update")
-	 * @Layer\InvisibleProperty
+	 * @Sentient\InvisibleProperty
 	 */
 	protected $updated;
 
@@ -159,7 +159,7 @@ class Page {
 
 	/**
 	 * @return int
-	 * @Layer\InvisibleProperty
+	 * @Sentient\InvisibleProperty
 	 */
 	public function getLeft() {
 		return $this->lft;
@@ -167,7 +167,7 @@ class Page {
 
 	/**
 	 * @return int
-	 * @Layer\InvisibleProperty
+	 * @Sentient\InvisibleProperty
 	 */
 	public function getRight() {
 		return $this->rgt;

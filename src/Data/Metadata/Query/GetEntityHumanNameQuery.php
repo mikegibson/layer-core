@@ -1,11 +1,11 @@
 <?php
 
-namespace Layer\Data\Metadata\Query;
+namespace Sentient\Data\Metadata\Query;
 
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Layer\Data\Metadata\QueryInterface;
-use Layer\Utility\InflectorInterface;
+use Sentient\Data\Metadata\QueryInterface;
+use Sentient\Utility\InflectorInterface;
 
 class GetEntityHumanNameQuery implements QueryInterface {
 
@@ -13,7 +13,7 @@ class GetEntityHumanNameQuery implements QueryInterface {
 
 	protected $inflector;
 
-	protected $annotationClass = 'Layer\\Data\\Metadata\\Annotation\\EntityHumanName';
+	protected $annotationClass = 'Sentient\\Data\\Metadata\\Annotation\\EntityHumanName';
 
 	public function __construct(Reader $reader, InflectorInterface $inflector) {
 		$this->reader = $reader;

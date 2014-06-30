@@ -1,9 +1,9 @@
 <?php
 
-namespace Layer\Cms\Action;
+namespace Sentient\Cms\Action;
 
-use Layer\Cms\Data\CmsRepositoryInterface;
-use Layer\Data\TableData\TableDataDecoratorInterface;
+use Sentient\Cms\Data\CmsRepositoryInterface;
+use Sentient\Data\TableData\TableDataDecoratorInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class IndexActionFactory implements RepositoryCmsActionFactoryInterface {
@@ -31,7 +31,7 @@ class IndexActionFactory implements RepositoryCmsActionFactoryInterface {
 
 	/**
 	 * @param CmsRepositoryInterface $repository
-	 * @return \Layer\Action\ActionInterface|void
+	 * @return \Sentient\Action\ActionInterface|void
 	 */
 	public function createAction(CmsRepositoryInterface $repository) {
 		return new IndexAction($repository, $this->propertyAccessor, $this->decorator);

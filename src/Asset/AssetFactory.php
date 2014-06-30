@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Asset;
+namespace Sentient\Asset;
 
 use Assetic\Asset\AssetCollection;
 use Assetic\Asset\AssetCollectionInterface;

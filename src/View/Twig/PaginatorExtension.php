@@ -1,8 +1,8 @@
 <?php
 
-namespace Layer\View\Twig;
+namespace Sentient\View\Twig;
 
-use Layer\Data\Paginator\PaginatorInterface;
+use Sentient\Data\Paginator\PaginatorInterface;
 
 class PaginatorExtension extends TemplateBlockFunctionExtension {
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Form;
+namespace Sentient\Form;
 
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;

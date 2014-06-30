@@ -1,9 +1,9 @@
 <?php
 
-namespace Layer\Users\Action;
+namespace Sentient\Users\Action;
 
-use Layer\Action\ActionInterface;
-use Layer\Users\Form\LoginFormType;
+use Sentient\Action\ActionInterface;
+use Sentient\Users\Form\LoginFormType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\SecurityContextInterface;

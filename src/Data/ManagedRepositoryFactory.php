@@ -1,18 +1,18 @@
 <?php
 
-namespace Layer\Data;
+namespace Sentient\Data;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Repository\RepositoryFactory;
-use Layer\Data\Metadata\QueryCollection;
+use Sentient\Data\Metadata\QueryCollection;
 
 class ManagedRepositoryFactory implements RepositoryFactory {
 
 	/**
 	 * Base entity repository classname
 	 */
-	const REPOSITORY_CLASS = 'Layer\\Data\\ManagedRepository';
+	const REPOSITORY_CLASS = 'Sentient\\Data\\ManagedRepository';
 
 	private $queryCollection;
 

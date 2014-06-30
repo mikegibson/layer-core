@@ -1,9 +1,9 @@
 <?php
 
-namespace Layer\Cms\Node;
+namespace Sentient\Cms\Node;
 
-use Layer\Node\ControllerNodeInterface;
-use Layer\Node\ControllerNodeListNode;
+use Sentient\Node\ControllerNodeInterface;
+use Sentient\Node\ControllerNodeListNode;
 
 class CmsNavigationNode extends ControllerNodeListNode {
 

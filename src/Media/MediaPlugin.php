@@ -1,16 +1,16 @@
 <?php
 
-namespace Layer\Media;
+namespace Sentient\Media;
 
-use Layer\Action\ActionEvent;
-use Layer\Media\File\FileResponse;
-use Layer\Media\File\FilesystemFile;
-use Layer\Media\Image\FilteredImageResponse;
-use Layer\Media\Image\FilteredImageWriter;
-use Layer\Media\Image\FilterRegistry;
-use Layer\Node\ControllerNode;
-use Layer\Node\ControllerNodeInterface;
-use Layer\Plugin\Plugin;
+use Sentient\Action\ActionEvent;
+use Sentient\Media\File\FileResponse;
+use Sentient\Media\File\FilesystemFile;
+use Sentient\Media\Image\FilteredImageResponse;
+use Sentient\Media\Image\FilteredImageWriter;
+use Sentient\Media\Image\FilterRegistry;
+use Sentient\Node\ControllerNode;
+use Sentient\Node\ControllerNodeInterface;
+use Sentient\Plugin\Plugin;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -22,8 +22,8 @@ class MediaPlugin extends Plugin {
 
 	public function register(Application $app) {
 
-		$app['media.entity_classes.files'] = 'Layer\\Media\\File\\File';
-		$app['media.entity_classes.images'] = 'Layer\\Media\\Image\\Image';
+		$app['media.entity_classes.files'] = 'Sentient\\Media\\File\\File';
+		$app['media.entity_classes.images'] = 'Sentient\\Media\\Image\\Image';
 
 		$app['paths.uploads'] = $app['paths.storage'] . '/uploads';
 
@@ -156,7 +156,7 @@ class MediaPlugin extends Plugin {
 			return $controllers;
 		});
 
-		$app['paths.core_fonts'] = $app['paths.layer'] . '/Resource/fonts';
+		$app['paths.core_fonts'] = $app['paths.sentient'] . '/Resource/fonts';
 
 		$app['fonts.controllers'] = $app->share(function() use($app) {
 			return $app['filesystem_controllers_factory']($app['paths.core_fonts'], 'fonts');

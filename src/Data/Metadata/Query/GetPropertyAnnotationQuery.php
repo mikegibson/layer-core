@@ -1,11 +1,11 @@
 <?php
 
-namespace Layer\Data\Metadata\Query;
+namespace Sentient\Data\Metadata\Query;
 
 use Doctrine\Common\Annotations\Annotation;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Layer\Data\Metadata\QueryInterface;
+use Sentient\Data\Metadata\QueryInterface;
 
 class GetPropertyAnnotationQuery implements QueryInterface {
 

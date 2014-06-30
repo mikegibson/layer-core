@@ -1,12 +1,12 @@
 <?php
 
-namespace Layer\Data\Metadata\Annotation;
+namespace Sentient\Data\Metadata\Annotation;
 
 use Doctrine\Common\Annotations\Annotation;
 
 /**
  * Class PropertyLabel
- * @package Layer\Data\Metadata\Annotation
+ * @package Sentient\Data\Metadata\Annotation
  * @Annotation
  */
 class PropertyLabel extends Annotation {

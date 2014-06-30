@@ -1,11 +1,11 @@
 <?php
 
-namespace Layer\Data\Paginator;
+namespace Sentient\Data\Paginator;
 
 /**
  * Interface PaginatorRequestInterface
  *
- * @package Layer\Data\Paginator
+ * @package Sentient\Data\Paginator
  */
 interface PaginatorRequestInterface {
 

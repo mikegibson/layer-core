@@ -1,8 +1,8 @@
 <?php
 
-namespace Layer\Action;
+namespace Sentient\Action;
 
-use Layer\View\ViewInterface;
+use Sentient\View\ViewInterface;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\HttpFoundation\Request;
 

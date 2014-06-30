@@ -1,9 +1,9 @@
 <?php
 
-namespace Layer\Data\Paginator;
+namespace Sentient\Data\Paginator;
 
 use Doctrine\ORM\QueryBuilder;
-use Layer\Data\ManagedRepositoryInterface;
+use Sentient\Data\ManagedRepositoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class PaginatorFactory implements PaginatorFactoryInterface {

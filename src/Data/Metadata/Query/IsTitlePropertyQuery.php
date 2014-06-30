@@ -1,9 +1,9 @@
 <?php
 
-namespace Layer\Data\Metadata\Query;
+namespace Sentient\Data\Metadata\Query;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Layer\Data\Metadata\QueryInterface;
+use Sentient\Data\Metadata\QueryInterface;
 
 class IsTitlePropertyQuery implements QueryInterface {
 
@@ -12,7 +12,7 @@ class IsTitlePropertyQuery implements QueryInterface {
 	 */
 	private $annotationQuery;
 
-	protected $annotationClass = 'Layer\\Data\\Metadata\\Annotation\\TitleProperty';
+	protected $annotationClass = 'Sentient\\Data\\Metadata\\Annotation\\TitleProperty';
 
 	protected $titleProperties = [
 		'title', 'name'

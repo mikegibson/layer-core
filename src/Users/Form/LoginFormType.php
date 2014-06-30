@@ -1,6 +1,6 @@
 <?php
 
-namespace Layer\Users\Form;
+namespace Sentient\Users\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;

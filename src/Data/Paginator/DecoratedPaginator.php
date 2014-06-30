@@ -1,9 +1,9 @@
 <?php
 
-namespace Layer\Data\Paginator;
+namespace Sentient\Data\Paginator;
 
-use Layer\Data\TableData\DecoratedTableData;
-use Layer\Data\TableData\TableDataDecoratorInterface;
+use Sentient\Data\TableData\DecoratedTableData;
+use Sentient\Data\TableData\TableDataDecoratorInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class DecoratedPaginator extends DecoratedTableData implements PaginatorInterface {

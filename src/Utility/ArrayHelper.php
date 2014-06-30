@@ -12,9 +12,9 @@
  * @since         CakePHP(tm) v 2.2.0
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-namespace Layer\Utility;
+namespace Sentient\Utility;
 
-use Layer\Application;
+use Sentient\Application;
 
 /**
  * Library of array functions for manipulating and extracting data

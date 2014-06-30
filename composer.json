@@ -1,6 +1,6 @@
 {
-	"name": "mikegibson/layer-core",
-	"description": "Layer CMS Framework",
+	"name": "mikegibson/sentient-core",
+	"description": "Sentient CMS Framework",
 	"license": "MIT",
 	"authors": [
 		{
@@ -34,7 +34,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Layer\\": "./src"
+			"Sentient\\": "./src"
 		}
 	}
 }
