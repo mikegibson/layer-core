@@ -45,7 +45,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
  *
  * @package Sentient
  */
-class Sentient extends Silex {
+class Application extends Silex {
 
 	private $plugins = [];
 

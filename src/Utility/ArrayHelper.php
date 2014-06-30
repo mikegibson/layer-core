@@ -14,7 +14,7 @@
  */
 namespace Sentient\Utility;
 
-use Sentient\Sentient;
+use Sentient\Application;
 
 /**
  * Library of array functions for manipulating and extracting data
@@ -34,9 +34,9 @@ class ArrayHelper {
 	protected $app;
 
 	/**
-	 * @param Sentient $app
+	 * @param Application $app
 	 */
-	public function __construct(Sentient $app) {
+	public function __construct(Application $app) {
 
 		$this->app = $app;
 
