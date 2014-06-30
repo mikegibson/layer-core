@@ -7,12 +7,12 @@ use Sentient\Console\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class SchemaCommand extends Command {
+class UpdateSchemaCommand extends Command {
 
 	protected function configure() {
 
 		parent::configure();
-		$this->setName('schema');
+		$this->setName('updateSchema');
 		$this->setDescription('Write the schema to the database');
 	}
 

@@ -533,12 +533,12 @@ class DataProvider implements ServiceProviderInterface {
 			return $extensions;
 		}));
 
-		$app['console.commands.schema'] = $app->share(function() {
-			return new SchemaCommand();
+		$app['console.commands.updateSchema'] = $app->share(function() {
+			return new UpdateSchemaCommand();
 		});
 
 		$app['console'] = $app->share($app->extend('console', function(\Knp\Console\Application $consoleApp) use($app) {
-			$consoleApp->add($app['console.commands.schema']);
+			$consoleApp->add($app['console.commands.updateSchema']);
 			return $consoleApp;
 		}));
 
