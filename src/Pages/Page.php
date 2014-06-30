@@ -66,18 +66,16 @@ class Page {
 	 *
 	 * @Behavior\TreeLeft
 	 * @ORM\Column(type="integer")
-	 * @Layer\InvisibleProperty
 	 */
-	protected $left;
+	protected $lft;
 
 	/**
 	 * @var int $rght
 	 *
 	 * @Behavior\TreeRight
 	 * @ORM\Column(type="integer")
-	 * @Layer\InvisibleProperty
 	 */
-	protected $right;
+	protected $rgt;
 
 	/**
 	 * @var int|null $root
@@ -161,16 +159,18 @@ class Page {
 
 	/**
 	 * @return int
+	 * @Layer\InvisibleProperty
 	 */
 	public function getLeft() {
-		return $this->left;
+		return $this->lft;
 	}
 
 	/**
 	 * @return int
+	 * @Layer\InvisibleProperty
 	 */
 	public function getRight() {
-		return $this->right;
+		return $this->rgt;
 	}
 
 	/**
