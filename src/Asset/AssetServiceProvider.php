@@ -171,6 +171,15 @@ class AssetServiceProvider implements ServiceProviderInterface {
 			$app['assetic.filters']($app['assetic.filter_manager']);
 		}
 
+		foreach([
+			'modernizr',
+			'require',
+			'jquery',
+			'dropdown'
+		] as $script) {
+			$app['assets.register_js']($script, '@layer/js/' . $script . '.js');
+		}
+
 	}
 
 }

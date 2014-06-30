@@ -195,8 +195,8 @@ class Application extends \Silex\Application {
 
 			$this->setTimezone();
 			$this->initializeSecurity();
-			$this->initializeAssets();
 			$this->mountControllers();
+			$this->initialize();
 
 		}
 
@@ -296,6 +296,8 @@ class Application extends \Silex\Application {
 		return (php_sapi_name() === 'cli');
 	}
 
+	protected function initialize() {}
+
 	protected function getPaths() {
 
 		$root = realpath(__DIR__ . '/../../../..');
@@ -390,19 +392,6 @@ class Application extends \Silex\Application {
 			$this->register(new SecurityServiceProvider());
 			$this->register(new RememberMeServiceProvider());
 		}
-	}
-
-	protected function initializeAssets() {
-
-		foreach([
-			'modernizr',
-			'require',
-			'jquery',
-			'dropdown'
-		] as $script) {
-			$this['assets.register_js']($script, '@layer/js/' . $script . '.js');
-		}
-
 	}
 
 	protected function mountControllers() {
