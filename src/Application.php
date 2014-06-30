@@ -196,7 +196,7 @@ class Application extends \Silex\Application {
 			$this->setTimezone();
 			$this->initialize();
 			$this->initializeSecurity();
-			$this->mountControllers();
+			$this->connectRoutes();
 
 		}
 
@@ -298,7 +298,7 @@ class Application extends \Silex\Application {
 
 	protected function initialize() {}
 
-	protected function mountControllers() {}
+	protected function connectRoutes() {}
 
 	protected function getPaths() {
 
