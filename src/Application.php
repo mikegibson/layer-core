@@ -362,7 +362,7 @@ class Application extends \Silex\Application {
 			])
 			->register(new TwigServiceProvider(), [
 				'twig.options' => [
-					'cache' => false,//$this['paths.cache'] . '/twig',
+					'cache' => $this['debug'] ? false : $this['paths.cache'] . '/twig',
 					'auto_reload' => true
 				]
 			])
