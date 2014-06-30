@@ -3,7 +3,7 @@
 namespace Sentient\Data;
 
 use Doctrine\ORM\Tools\SchemaTool;
-use Sentient\Console\Command;
+use Knp\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
