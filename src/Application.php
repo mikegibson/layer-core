@@ -51,7 +51,7 @@ class Application extends \Silex\Application {
 	/**
 	 * Constructor
 	 */
-	public function __construct() {
+	public final function __construct() {
 
 		parent::__construct();
 
@@ -298,6 +298,8 @@ class Application extends \Silex\Application {
 
 	protected function initialize() {}
 
+	protected function mountControllers() {}
+
 	protected function getPaths() {
 
 		$root = realpath(__DIR__ . '/../../../..');
@@ -392,10 +394,6 @@ class Application extends \Silex\Application {
 			$this->register(new SecurityServiceProvider());
 			$this->register(new RememberMeServiceProvider());
 		}
-	}
-
-	protected function mountControllers() {
-		$this->mount('/', $this['app.controllers']);
 	}
 
 }
