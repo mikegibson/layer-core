@@ -159,29 +159,29 @@ class Application extends Silex {
 			}
 		);
 
-		$app['app.home_template'] = 'view/home';
+		$app['home_template'] = 'view/home';
 
-		$app['app.home_action'] = $app->share(function() use($app) {
-			return new SimpleAction('home', 'Home', $app['app.home_template']);
+		$app['home_action'] = $app->share(function() use($app) {
+			return new SimpleAction('home', 'Home', $app['home_template']);
 		});
 
-		$app['app.home_node'] = $app->share(function() use($app) {
-			return new ControllerNode('app', $app['app.home_action']);
+		$app['home_node'] = $app->share(function() use($app) {
+			return new ControllerNode($app['home_action']);
 		});
 
-		$app['app.controllers'] = $app->share(function() use($app) {
-			return $app['nodes.controllers_factory']($app['app.home_node']);
+		$app['home_controllers'] = $app->share(function() use($app) {
+			return $app['nodes.controllers_factory']($app['home_node'], 'app');
 		});
 
-		$app['app.home_list_node'] = $app->share(function() use($app) {
-			return new ControllerNodeListNode($app['app.home_node'], $app['url_generator']);
+		$app['home_list_node'] = $app->share(function() use($app) {
+			return new ControllerNodeListNode($app['home_node'], 'app', $app['url_generator']);
 		});
 
-		$app['app.navigation'] = $app->share(function() use($app) {
+		$app['navigation'] = $app->share(function() use($app) {
 			$rootNode = new ListNode();
 			$homeNode = new ControllerNodeListNode($app['app.home_node'], $app['url_generator'], $rootNode, false);
 			$rootNode->registerChildNode($homeNode);
-			$rootNode->adoptChildNodes($app['app.home_list_node']);
+			$rootNode->adoptChildNodes($app['home_list_node']);
 			return $rootNode;
 		});
 
