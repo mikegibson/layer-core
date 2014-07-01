@@ -300,7 +300,14 @@ class Application extends Silex {
 
 	protected function initialize() {}
 
-	protected function connectRoutes() {}
+	protected function connectRoutes() {
+
+		/**
+		 * Mount the base app controller
+		 */
+		$this->mount('/', $this['home_controllers']);
+
+	}
 
 	protected function getPaths() {
 
