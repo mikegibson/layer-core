@@ -32,14 +32,13 @@ class BlogPostListNode extends PaginatedNode {
 	 */
 	public function __construct(
 		ManagedRepositoryInterface $repository,
-		$routeName = 'app',
 		ControllerNodeInterface $parentNode = null,
 		$name = null,
 		$label = null,
 		$template = '@blog/view/list_posts',
 		array $criteria = []
 	) {
-		parent::__construct($routeName, null, $parentNode, $name, $label, $template, true, true);
+		parent::__construct(null, $parentNode, $name, $label, $template, true, true);
 		$this->repository = $repository;
 		$this->criteria = $criteria;
 	}
@@ -70,7 +69,7 @@ class BlogPostListNode extends PaginatedNode {
 		$action = new SimpleAction('view', (string) $post, '@blog/view/view_post', function() use($post) {
 			return compact('post');
 		});
-		return new ControllerNode('app', $action);
+		return new ControllerNode($action);
 	}
 
 }

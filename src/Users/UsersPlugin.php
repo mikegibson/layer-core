@@ -60,10 +60,10 @@ class UsersPlugin extends Plugin {
 		});
 
 		$app['users.login_node'] = $app->share(function() use($app) {
-			return new ControllerNode('login', $app['users.login_action']);
+			return new ControllerNode($app['users.login_action']);
 		});
 
-		$app['app.home_node'] = $app->share($app->extend('app.home_node', function(ControllerNodeInterface $node) use($app) {
+		$app['home_node'] = $app->share($app->extend('home_node', function(ControllerNodeInterface $node) use($app) {
 			$node->getChildNodes();
 			$node->wrapChildNode($app['users.login_node']);
 			return $node;

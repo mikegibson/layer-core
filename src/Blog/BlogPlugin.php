@@ -36,10 +36,10 @@ class BlogPlugin extends Plugin {
 		});
 
 		$app['blog.root_node'] = $app->share(function() use($app) {
-			return new BlogPostListNode($app['blog.repositories.blog_posts'], 'app', null, 'blog', $app['blog.title']);
+			return new BlogPostListNode($app['blog.repositories.blog_posts'], null, 'blog', $app['blog.title']);
 		});
 
-		$app['app.home_node'] = $app->share($app->extend('app.home_node', function(ControllerNodeInterface $node) use($app) {
+		$app['home_node'] = $app->share($app->extend('home_node', function(ControllerNodeInterface $node) use($app) {
 			$node->wrapChildNode($app['blog.root_node'], $app['blog.url_fragment']);
 			return $node;
 		}));

@@ -86,7 +86,7 @@ class RepositoryCmsNodeFactory implements RepositoryCmsNodeFactoryInterface {
 	 * @return ControllerNode
 	 */
 	protected function createNodeFromAction(ActionInterface $action) {
-		return new ControllerNode('cms', $action);
+		return new ControllerNode($action);
 	}
 
 }

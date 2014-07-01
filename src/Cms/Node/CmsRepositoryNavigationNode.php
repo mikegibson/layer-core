@@ -19,12 +19,13 @@ class CmsRepositoryNavigationNode extends ControllerNodeListNode {
 	public function __construct(
 		CmsRepositoryInterface $repository,
 		UrlGeneratorInterface $urlGenerator,
-		ControllerNodeInterface $currentControllerNode = null
+		ControllerNodeInterface $currentControllerNode = null,
+		$routeName = 'cms'
 	) {
 		$this->repository = $repository;
 		$rootNode = $repository->getRootCmsNode();
 		$this->currentControllerNode = $currentControllerNode;
-		parent::__construct($rootNode, $urlGenerator);
+		parent::__construct($rootNode, $routeName, $urlGenerator);
 	}
 
 	protected function initialize() {

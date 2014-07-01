@@ -148,13 +148,15 @@ class Application extends Silex {
 		});
 
 		$app['nodes.controllers_factory'] = $app->protect(
-			function(ControllerNodeInterface $rootNode, $key = 'node', $rejectNotFound = true) use($app) {
+			function(ControllerNodeInterface $rootNode, $routeName = null, $key = 'node', $rejectNotFound = true) use($app) {
 				$controllers = $app['controllers_factory'];
-				$controllers->match('/{' . $key . '}', $app['nodes.dispatcher']($key))
+				$route = $controllers->match('/{' . $key . '}', $app['nodes.dispatcher']($key))
 					->value($key, '')
 					->assert($key, '.*')
-					->beforeMatch($app['nodes.matcher']($rootNode, $key, $rejectNotFound))
-					->bind($rootNode->getRouteName());
+					->beforeMatch($app['nodes.matcher']($rootNode, $key, $rejectNotFound));
+				if($routeName !== null) {
+					$route->bind($routeName);
+				}
 				return $controllers;
 			}
 		);
@@ -179,7 +181,7 @@ class Application extends Silex {
 
 		$app['navigation'] = $app->share(function() use($app) {
 			$rootNode = new ListNode();
-			$homeNode = new ControllerNodeListNode($app['app.home_node'], $app['url_generator'], $rootNode, false);
+			$homeNode = new ControllerNodeListNode($app['home_node'], 'app', $app['url_generator'], $rootNode, false);
 			$rootNode->registerChildNode($homeNode);
 			$rootNode->adoptChildNodes($app['home_list_node']);
 			return $rootNode;

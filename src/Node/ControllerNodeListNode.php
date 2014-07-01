@@ -11,6 +11,8 @@ class ControllerNodeListNode extends ListNode {
 	 */
 	private $controllerNode;
 
+	private $routeName;
+
 	/**
 	 * @var \Symfony\Component\Routing\Generator\UrlGeneratorInterface
 	 */
@@ -22,17 +24,20 @@ class ControllerNodeListNode extends ListNode {
 
 	/**
 	 * @param ControllerNodeInterface $controllerNode
+	 * @param string $routeName
 	 * @param UrlGeneratorInterface $urlGenerator
 	 * @param ListNodeInterface $parentNode
 	 * @param bool $controllerNodeChildrenAccessible
 	 */
 	public function __construct(
 		ControllerNodeInterface $controllerNode,
+		$routeName,
 		UrlGeneratorInterface $urlGenerator,
 		ListNodeInterface $parentNode = null,
 		$controllerNodeChildrenAccessible = true
 	) {
 		$this->controllerNode = $controllerNode;
+		$this->routeName = $routeName;
 		$this->urlGenerator = $urlGenerator;
 		$this->parentNode = $parentNode;
 		$this->controllerNodeChildrenAccessible = $controllerNodeChildrenAccessible;
@@ -54,7 +59,7 @@ class ControllerNodeListNode extends ListNode {
 		$controllerNode = $this->getControllerNode();
 		if($controllerNode->isDirectlyAccessible()) {
 			$params['node'] = $controllerNode->getPath();
-			return $this->getUrlGenerator()->generate($controllerNode->getRouteName(), $params);
+			return $this->getUrlGenerator()->generate($this->routeName, $params);
 		}
 		return false;
 	}
@@ -79,14 +84,14 @@ class ControllerNodeListNode extends ListNode {
 		return parent::registerChildNode($node, $overwrite, $prepend);
 	}
 
-	protected function registerControllerChildNode($name) {
+	protected function registerControllerChildNode($name, $childrenAccessible = true) {
 		if(
 			!parent::hasChildNode($name) &&
 			$this->areControllerNodeChildrenAccessible() &&
 			$this->getControllerNode()->hasChildNode($name) &&
 			$this->getControllerNode()->getChildNode($name)->isVisible()
 		) {
-			$listNode = $this->createListNode($this->getControllerNode()->getChildNode($name));
+			$listNode = $this->createListNode($this->getControllerNode()->getChildNode($name, $childrenAccessible));
 			$this->registerChildNode($listNode);
 			return true;
 		}
@@ -108,11 +113,11 @@ class ControllerNodeListNode extends ListNode {
 
 	/**
 	 * @param ControllerNodeInterface $controllerNode
-	 * @param bool $areChildrenAccessible
+	 * @param bool $childrenAccessible
 	 * @return ControllerNodeListNode
 	 */
-	protected function createListNode(ControllerNodeInterface $controllerNode, $areChildrenAccessible = true) {
-		return new ControllerNodeListNode($controllerNode, $this->getUrlGenerator(), $this, $areChildrenAccessible);
+	protected function createListNode(ControllerNodeInterface $controllerNode, $childrenAccessible = true) {
+		return new ControllerNodeListNode($controllerNode, $this->routeName, $this->getUrlGenerator(), $this, $childrenAccessible);
 	}
 
 	/**

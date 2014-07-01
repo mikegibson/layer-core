@@ -128,7 +128,7 @@ class MediaPlugin extends Plugin {
 		});
 
 		$app['cms.media_node'] = $app->share(function() use($app) {
-			return new ControllerNode('cms', null, null, 'media', 'Media', null, true, false);
+			return new ControllerNode(null, null, 'media', 'Media', null, true, false);
 		});
 
 		$app['filesystem_controllers_factory'] = $app->protect(function($basePath, $routeName = null) use($app) {

@@ -9,10 +9,11 @@ class CmsNavigationNode extends ControllerNodeListNode {
 
 	/**
 	 * @param ControllerNodeInterface $controllerNode
-	 * @return ControllerNodeListNode
+	 * @param bool $childrenAccessible
+	 * @return CmsNavigationNode
 	 */
-	protected function createListNode(ControllerNodeInterface $controllerNode, $areChildrenAccessible = true) {
-		return new CmsNavigationNode($controllerNode, $this->getUrlGenerator(), $this, $areChildrenAccessible);
+	protected function createListNode(ControllerNodeInterface $controllerNode, $childrenAccessible = true) {
+		return new CmsNavigationNode($controllerNode, 'cms', $this->getUrlGenerator(), $this, $childrenAccessible);
 	}
 
 }

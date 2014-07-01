@@ -29,7 +29,7 @@ class PagesPlugin extends Plugin {
 			return new PageNode($app['pages.repository']);
 		});
 
-		$app['app.home_node'] = $app->share($app->extend('app.home_node', function(ControllerNodeInterface $node) use($app) {
+		$app['home_node'] = $app->share($app->extend('home_node', function(ControllerNodeInterface $node) use($app) {
 			$node->adoptChildNodes($app['pages.root_node']);
 			return $node;
 		}));

@@ -7,8 +7,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ControllerNode extends Node implements ControllerNodeInterface, ActionInterface {
 
-	private $routeName;
-
 	/**
 	 * @var ActionInterface
 	 */
@@ -21,7 +19,6 @@ class ControllerNode extends Node implements ControllerNodeInterface, ActionInte
 	private $accessible;
 
 	public function __construct(
-		$routeName,
 		ActionInterface $action = null,
 		ControllerNodeInterface $parentNode = null,
 		$name = null,
@@ -31,17 +28,12 @@ class ControllerNode extends Node implements ControllerNodeInterface, ActionInte
 		$accessible = null
 	) {
 		parent::__construct($parentNode);
-		$this->routeName = $routeName;
 		$this->action = $action;
 		$this->name = $name;
 		$this->label = $label;
 		$this->template = $template;
 		$this->visible = $visible;
 		$this->accessible = $accessible;
-	}
-
-	public function getRouteName() {
-		return $this->routeName;
 	}
 
 	public function getActionName() {

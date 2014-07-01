@@ -9,11 +9,6 @@ interface ControllerNodeInterface extends NodeInterface {
 	/**
 	 * @return string
 	 */
-	public function getRouteName();
-
-	/**
-	 * @return string
-	 */
 	public function getActionName();
 
 	/**

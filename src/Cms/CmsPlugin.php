@@ -48,10 +48,6 @@ class CmsPlugin extends Plugin {
 			$app['cms.url_fragment'] = 'cms';
 		}
 
-		$app['cms.controllers'] = $app->share(function() use($app) {
-			return $app['nodes.controllers_factory']($app['cms.root_node'], 'node', false);
-		});
-
 		$app['cms.helper'] = $app->share(function() use($app) {
 			return new CmsHelper($app['url_generator']);
 		});
@@ -112,22 +108,26 @@ class CmsPlugin extends Plugin {
 		});
 
 		$app['cms.login_node'] = $app->share(function() use($app) {
-			return new ControllerNode('cms_login', $app['cms.login_action']);
+			return new ControllerNode($app['cms.login_action']);
 		});
 
 		$app['cms.content_node'] = $app->share(function() use($app) {
-			return new ControllerNode('cms', null, null, 'content', 'Content', null, true, false);
+			return new ControllerNode(null, null, 'content', 'Content', null, true, false);
 		});
 
 		$app['cms.root_node'] = $app->share(function() use($app) {
-			$node = new ControllerNode('cms');
+			$node = new ControllerNode();
 			$node->wrapChildNode($app['cms.login_node']);
 			$node->wrapChildNode($app['cms.content_node']);
 			return $node;
 		});
 
+		$app['cms.controllers'] = $app->share(function() use($app) {
+			return $app['nodes.controllers_factory']($app['cms.root_node'], 'cms', 'node', false);
+		});
+
 		$app['cms.navigation_list'] = $app->share(function() use($app) {
-			$node = new CmsNavigationNode($app['cms.root_node'], $app['url_generator']);
+			$node = new CmsNavigationNode($app['cms.root_node'], 'cms', $app['url_generator']);
 			return $node;
 		});
 
