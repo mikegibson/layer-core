@@ -19,7 +19,8 @@ class SimpleAction implements ActionInterface {
 	private $isDirectlyAccessible;
 
 	public function __construct(
-		$name, $label,
+		$name,
+		$label,
 		$template = null,
 		$callable = null,
 		$isVisible = true,
