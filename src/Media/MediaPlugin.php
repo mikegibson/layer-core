@@ -184,12 +184,12 @@ class MediaPlugin extends Plugin {
 		$app['dispatcher']->addListener(ActionEvent::BEFORE_RENDER, function(ActionEvent $event) use($app) {
 			$result = $event->getResult();
 			if(
+				$event->getRouteName() !== 'cms' ||
+				$event->getAction()->getName() !== 'edit' ||
 				empty($result['node']) ||
 				empty($result['repository']) ||
 				$result['repository'] !== $app['media.repositories.files'] ||
-				!$result['node'] instanceof ControllerNodeInterface ||
-				$result['node']->getRouteName() !== 'cms' ||
-				$result['node']->getActionName() !== 'edit'
+				!$result['node'] instanceof ControllerNodeInterface
 			) {
 				return;
 			}
