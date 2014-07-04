@@ -4,8 +4,8 @@ namespace Sentient\Cms\Action;
 
 use Sentient\Action\ActionInterface;
 use Sentient\Cms\Data\CmsEntityFormType;
-use Sentient\Cms\Data\CmsRepositoryInterface;
 use Sentient\Cms\Data\EntityFormType;
+use Sentient\Data\ManagedRepositoryInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 abstract class SaveAction implements ActionInterface {
 
 	/**
-	 * @var \Sentient\Cms\Data\CmsRepositoryInterface
+	 * @var ManagedRepositoryInterface
 	 */
 	private $repository;
 
@@ -29,12 +29,12 @@ abstract class SaveAction implements ActionInterface {
 	private $urlGenerator;
 
 	/**
-	 * @param CmsRepositoryInterface $repository
+	 * @param ManagedRepositoryInterface $repository
 	 * @param FormFactoryInterface $formFactory
 	 * @param UrlGeneratorInterface $urlGenerator
 	 */
 	public function __construct(
-		CmsRepositoryInterface $repository,
+		ManagedRepositoryInterface $repository,
 		FormFactoryInterface $formFactory,
 		UrlGeneratorInterface $urlGenerator
 	) {
@@ -57,11 +57,15 @@ abstract class SaveAction implements ActionInterface {
 				$this->getRepository()->save($entity);
 				$message = sprintf('The %s was saved', $singularName);
 				$flashBag->add('message', $message);
-				if($repository->hasCmsNode('add') && $form->has('save_and_add') && $form->get('save_and_add')->isClicked()) {
-					$nodePath = $repository->getCmsNode('add')->getPath();
+				if(
+					$repository->queryMetadata('hasCmsNode', ['action' => 'add']) &&
+					$form->has('save_and_add') &&
+					$form->get('save_and_add')->isClicked()
+				) {
+					$nodePath = $repository->queryMetadata('getCmsNode', ['action' => 'add'])->getPath();
 					$redirect = $this->getUrlGenerator()->generate('cms', ['node' => $nodePath]);
-				} elseif($repository->hasCmsNode('edit')) {
-					$nodePath = $repository->getCmsNode('edit')->getPath();
+				} elseif($repository->queryMetadata('hasCmsNode', ['action' => 'edit'])) {
+					$nodePath = $repository->queryMetadata('getCmsNode', ['action' => 'edit'])->getPath();
 					$redirect = $this->getUrlGenerator()->generate('cms', ['node' => $nodePath, 'id' => $entity->getId()]);
 				}
 				return new RedirectResponse($redirect);
@@ -107,7 +111,7 @@ abstract class SaveAction implements ActionInterface {
 	}
 
 	/**
-	 * @return CmsRepositoryInterface
+	 * @return ManagedRepositoryInterface
 	 */
 	protected function getRepository() {
 		return $this->repository;

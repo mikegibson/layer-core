@@ -2,7 +2,7 @@
 
 namespace Sentient\Cms\Action;
 
-use Sentient\Cms\Data\CmsRepositoryInterface;
+use Sentient\Data\ManagedRepositoryInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -17,12 +17,12 @@ class AddActionFactory implements RepositoryCmsActionFactoryInterface {
 		$this->urlGenerator = $urlGenerator;
 	}
 
-	public function isRepositoryEligible(CmsRepositoryInterface $repository) {
+	public function isRepositoryEligible(ManagedRepositoryInterface $repository) {
 		$crud = $repository->queryMetadata('getEntityCrud');
 		return !empty($crud->create);
 	}
 
-	public function createAction(CmsRepositoryInterface $repository) {
+	public function createAction(ManagedRepositoryInterface $repository) {
 		return new AddAction($repository, $this->formFactory, $this->urlGenerator);
 	}
 

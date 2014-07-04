@@ -2,20 +2,20 @@
 
 namespace Sentient\Cms\Action;
 
-use Sentient\Cms\Data\CmsRepositoryInterface;
+use Sentient\Data\ManagedRepositoryInterface;
 
 interface RepositoryCmsActionFactoryInterface {
 
 	/**
-	 * @param CmsRepositoryInterface $repository
+	 * @param ManagedRepositoryInterface $repository
 	 * @return bool
 	 */
-	public function isRepositoryEligible(CmsRepositoryInterface $repository);
+	public function isRepositoryEligible(ManagedRepositoryInterface $repository);
 
 	/**
-	 * @param CmsRepositoryInterface $repository
+	 * @param ManagedRepositoryInterface $repository
 	 * @return \Sentient\Action\ActionInterface
 	 */
-	public function createAction(CmsRepositoryInterface $repository);
+	public function createAction(ManagedRepositoryInterface $repository);
 
 }

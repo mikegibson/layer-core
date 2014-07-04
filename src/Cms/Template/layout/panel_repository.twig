@@ -1,6 +1,6 @@
 {% extends "@cms/layout/panel" %}
 
-{% block panel_class %}{{ parent() }} repository-{{ repository.cmsSlug }}{% endblock %}
+{% block panel_class %}{{ parent() }} repository-{{ repository.getCmsEntitySlug() }}{% endblock %}
 
 {% if title is not defined %}
 	{% set title = repository.getEntityHumanName({plural: true, capitalize: true}) %}

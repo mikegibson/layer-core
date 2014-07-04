@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class LinkerDecorator implements TableDataDecoratorInterface {
 
 	/**
-	 * @var CmsRepositoryInterface
+	 * @var \Sentient\Data\RepositoryManagerInterface
 	 */
 	private $repositoryManager;
 
@@ -27,6 +27,10 @@ class LinkerDecorator implements TableDataDecoratorInterface {
 		$this->urlGenerator = $urlGenerator;
 	}
 
+	/**
+	 * @param array $columns
+	 * @return array
+	 */
 	public function decorateColumns(array $columns) {
 		return $columns;
 	}
@@ -44,11 +48,10 @@ class LinkerDecorator implements TableDataDecoratorInterface {
 			return $value;
 		}
 		if(
-			$repository instanceof CmsRepositoryInterface &&
 			$repository->queryMetadata('isTitleProperty', ['property' => $key]) &&
-			$repository->hasCmsNode('edit')
+			$repository->queryMetadata('hasCmsNode', ['action' => 'edit'])
 		) {
-			$node = $repository->getCmsNode('edit');
+			$node = $repository->queryMetadata('getCmsNode', ['action' => 'edit']);
 			$url = $this->urlGenerator->generate('cms', ['node' => $node->getPath(), 'id' => $object->getId()]);
 			$value = sprintf('<a href="%s">%s</a>', htmlspecialchars($url), $value);
 		}

@@ -2,7 +2,7 @@
 
 namespace Sentient\Cms\Node;
 
-use Sentient\Cms\Data\CmsRepositoryInterface;
+use Sentient\Data\ManagedRepositoryInterface;
 use Sentient\Node\ControllerNodeInterface;
 use Sentient\Node\ControllerNodeListNode;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -17,32 +17,24 @@ class CmsRepositoryNavigationNode extends ControllerNodeListNode {
 	private $currentControllerNode;
 
 	public function __construct(
-		CmsRepositoryInterface $repository,
+		ManagedRepositoryInterface $repository,
 		UrlGeneratorInterface $urlGenerator,
 		ControllerNodeInterface $currentControllerNode = null,
 		$routeName = 'cms'
 	) {
-		$this->repository = $repository;
-		$rootNode = $repository->getRootCmsNode();
-		$this->currentControllerNode = $currentControllerNode;
+		$rootNode = $repository->queryMetadata('getRootCmsNode');
 		parent::__construct($rootNode, $routeName, $urlGenerator);
-	}
-
-	protected function initialize() {
-		$currentNode = $this->getCurrentControllerNode();
-		$diff = [$currentNode->getActionName() => null];
-		$repository = $this->getRepository();
-		foreach(array_diff_key(['index', 'add'], $diff) as $action) {
-			if($repository->hasCmsNode($action)) {
-				$controllerNode = $repository->getCmsNode($action);
-				$listNode = $this->createListNode($controllerNode);
-				$this->wrapChildNode($listNode, $controllerNode->getActionName(), $controllerNode->getActionLabel(), false);
+		$this->repository = $repository;
+		$this->currentControllerNode = $currentControllerNode;
+		$diff = $currentControllerNode === null ? [] : [$currentControllerNode->getActionName() => null];
+		foreach(array_diff(['index', 'add'], array_keys($diff)) as $action) {
+			if(!$this->hasChildNode($action) && $repository->queryMetadata('hasCmsNode', compact('action'))) {
+				$node = $repository->queryMetadata('getCmsNode', compact('action'));
+				$listNode = $this->createListNode($node);
+				$this->wrapChildNode($listNode, $action, $node->getActionLabel(), false);
 			}
 		}
-		parent::initialize();
-		if($currentNode !== null) {
-			$this->childNodes = array_diff_key($this->childNodes, $diff);
-		}
+		$this->childNodes = array_diff_key($this->childNodes, $diff);
 	}
 
 	protected function getRepository() {

@@ -4,7 +4,7 @@ namespace Sentient\Cms\Node;
 
 use Sentient\Action\ActionInterface;
 use Sentient\Cms\Action\RepositoryCmsActionFactoryInterface;
-use Sentient\Cms\Data\CmsRepositoryInterface;
+use Sentient\Data\ManagedRepositoryInterface;
 use Sentient\Node\ControllerNode;
 use Sentient\Node\ControllerNodeInterface;
 use Sentient\Node\NodeInterface;
@@ -40,10 +40,11 @@ class RepositoryCmsNodeFactory implements RepositoryCmsNodeFactoryInterface {
 	}
 
 	/**
-	 * @param CmsRepositoryInterface $repository
-	 * @return array|null
+	 * @param ManagedRepositoryInterface $repository
+	 * @return array
+	 * @throws \RuntimeException
 	 */
-	public function getRepositoryCmsNodes(CmsRepositoryInterface $repository) {
+	public function createNodes(ManagedRepositoryInterface $repository) {
 
 		$actions = $nodes = [];
 
@@ -55,7 +56,7 @@ class RepositoryCmsNodeFactory implements RepositoryCmsNodeFactoryInterface {
 
 		if($actions) {
 			$parentNode = $this->rootCmsNode;
-			$name = $repository->getCmsSlug();
+			$name = $repository->queryMetadata('getCmsEntitySlug');
 			$label = $repository->queryMetadata('getEntityHumanName', ['plural' => true, 'capitalize' => true]);
 			$rootAction = array_shift($actions);
 			$repositoryBaseNode = $this->createNodeFromAction($rootAction);

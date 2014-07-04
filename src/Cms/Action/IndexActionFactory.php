@@ -2,7 +2,7 @@
 
 namespace Sentient\Cms\Action;
 
-use Sentient\Cms\Data\CmsRepositoryInterface;
+use Sentient\Data\ManagedRepositoryInterface;
 use Sentient\Data\TableData\TableDataDecoratorInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
@@ -21,19 +21,19 @@ class IndexActionFactory implements RepositoryCmsActionFactoryInterface {
 	}
 
 	/**
-	 * @param CmsRepositoryInterface $repository
+	 * @param ManagedRepositoryInterface $repository
 	 * @return bool
 	 */
-	public function isRepositoryEligible(CmsRepositoryInterface $repository) {
+	public function isRepositoryEligible(ManagedRepositoryInterface $repository) {
 		$crud = $repository->queryMetadata('getEntityCrud');
 		return !empty($crud->read);
 	}
 
 	/**
-	 * @param CmsRepositoryInterface $repository
+	 * @param ManagedRepositoryInterface $repository
 	 * @return \Sentient\Action\ActionInterface|void
 	 */
-	public function createAction(CmsRepositoryInterface $repository) {
+	public function createAction(ManagedRepositoryInterface $repository) {
 		return new IndexAction($repository, $this->propertyAccessor, $this->decorator);
 	}
 

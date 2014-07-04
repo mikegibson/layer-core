@@ -2,10 +2,10 @@
 
 namespace Sentient\Cms\Node;
 
-use Sentient\Cms\Data\CmsRepositoryInterface;
+use Sentient\Data\ManagedRepositoryInterface;
 
 interface RepositoryCmsNodeFactoryInterface {
 
-	public function getRepositoryCmsNodes(CmsRepositoryInterface $repository);
+	public function createNodes(ManagedRepositoryInterface $repository);
 
 }

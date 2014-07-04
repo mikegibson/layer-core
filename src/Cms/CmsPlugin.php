@@ -8,11 +8,14 @@ use Sentient\Action\ReskinnedAction;
 use Sentient\Cms\Action\AddActionFactory;
 use Sentient\Cms\Action\EditActionFactory;
 use Sentient\Cms\Action\IndexActionFactory;
-use Sentient\Cms\Data\CmsRepository;
 use Sentient\Cms\Data\HtmlStripperDecorator;
 use Sentient\Cms\Data\LinkerDecorator;
 use Sentient\Cms\Data\Metadata\Query\GetCmsNodePathQuery;
+use Sentient\Cms\Data\Metadata\Query\GetCmsNodeQuery;
+use Sentient\Cms\Data\Metadata\Query\GetRootCmsNodeQuery;
+use Sentient\Cms\Data\Metadata\Query\HasCmsNodeQuery;
 use Sentient\Cms\Node\CmsNavigationNode;
+use Sentient\Cms\Node\CmsNodeRegistry;
 use Sentient\Cms\Node\RepositoryCmsNodeFactory;
 use Sentient\Cms\Data\Metadata\Query\GetCmsEntityQuery;
 use Sentient\Cms\Data\Metadata\Query\GetCmsEntitySlugQuery;
@@ -52,16 +55,32 @@ class CmsPlugin extends Plugin {
 			return new CmsHelper($app['url_generator']);
 		});
 
+		$app['cms.node_registry'] = $app->share(function() use($app) {
+			return new CmsNodeRegistry();
+		});
+
 		$app['metadata.queries.getCmsEntity'] = $app->share(function() use($app) {
 			return new GetCmsEntityQuery($app['annotations.reader']);
 		});
 
 		$app['metadata.queries.getCmsEntitySlug'] = $app->share(function() use($app) {
-			return new GetCmsEntitySlugQuery($app['metadata.queries.getCmsEntity'], $app['inflector']);
+			return new GetCmsEntitySlugQuery($app['annotations.reader'], $app['metadata.queries.getEntityName']);
 		});
 
 		$app['metadata.queries.getCmsNodePath'] = $app->share(function() use($app) {
 			return new GetCmsNodePathQuery($app['annotations.reader']);
+		});
+
+		$app['metadata.queries.getCmsNode'] = $app->share(function() use($app) {
+			return new GetCmsNodeQuery($app['orm.manager_registry'], $app['cms.node_registry']);
+		});
+
+		$app['metadata.queries.hasCmsNode'] = $app->share(function() use($app) {
+			return new HasCmsNodeQuery($app['orm.manager_registry'], $app['cms.node_registry']);
+		});
+
+		$app['metadata.queries.getRootCmsNode'] = $app->share(function() use($app) {
+			return new GetRootCmsNodeQuery($app['orm.manager_registry'], $app['cms.node_registry']);
 		});
 
 		$app['metadata.queries'] = $app->share($app->extend('metadata.queries',
@@ -70,6 +89,9 @@ class CmsPlugin extends Plugin {
 					->registerQuery($app['metadata.queries.getCmsEntity'])
 					->registerQuery($app['metadata.queries.getCmsEntitySlug'])
 					->registerQuery($app['metadata.queries.getCmsNodePath'])
+					->registerQuery($app['metadata.queries.getCmsNode'])
+					->registerQuery($app['metadata.queries.hasCmsNode'])
+					->registerQuery($app['metadata.queries.getRootCmsNode'])
 				;
 				return $collection;
 			}
@@ -133,9 +155,13 @@ class CmsPlugin extends Plugin {
 
 		$app['dispatcher'] = $app->share($app->extend('dispatcher', function(EventDispatcherInterface $dispatcher) use($app) {
 			$dispatcher->addListener(ManagedRepositoryEvent::REGISTER, function(ManagedRepositoryEvent $event) use($app) {
-				$baseRepository = $event->getRepository();
-				$repository = new CmsRepository($baseRepository, $app['cms.repository_node_factory']);
-				$event->setRepository($repository);
+				$repository = $event->getRepository();
+				$nodes = $app['cms.repository_node_factory']->createNodes($repository);
+				$isRootNode = true;
+				foreach($nodes as $node) {
+					$app['cms.node_registry']->register($repository, $node, $isRootNode);
+					$isRootNode = false;
+				}
 			});
 			return $dispatcher;
 		}));

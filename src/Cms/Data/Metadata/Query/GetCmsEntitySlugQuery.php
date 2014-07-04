@@ -5,8 +5,8 @@ namespace Sentient\Cms\Data\Metadata\Query;
 use Doctrine\Common\Annotations\Annotation;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Sentient\Data\Metadata\Query\GetEntityNameQuery;
 use Sentient\Data\Metadata\QueryInterface;
-use Sentient\Utility\InflectorInterface;
 
 /**
  * Class GetCmsEntitySlugQuery
@@ -17,20 +17,23 @@ class GetCmsEntitySlugQuery implements QueryInterface {
 	/**
 	 * @var GetCmsEntityQuery
 	 */
-	protected $getCmsEntityQuery;
+	protected $reader;
 
 	/**
-	 * @var \Sentient\Utility\InflectorInterface
+	 * @var \Sentient\Data\Metadata\Query\GetEntityNameQuery
 	 */
-	protected $inflector;
+	protected $entityNameQuery;
 
 	/**
 	 * @param Reader $reader
-	 * @param InflectorInterface $inflector
+	 * @param GetEntityNameQuery $entityNameQuery
 	 */
-	public function __construct(GetCmsEntityQuery $getCmsEntityQuery, InflectorInterface $inflector) {
-		$this->getCmsEntityQuery = $getCmsEntityQuery;
-		$this->inflector = $inflector;
+	public function __construct(
+		Reader $reader,
+		GetEntityNameQuery $entityNameQuery
+	) {
+		$this->reader = $reader;
+		$this->entityNameQuery = $entityNameQuery;
 	}
 
 	/**
@@ -44,23 +47,14 @@ class GetCmsEntitySlugQuery implements QueryInterface {
 	 * {@inheritdoc}
 	 */
 	public function getResult(ClassMetadata $classMetadata, array $options = []) {
-		$annotation = $this->getCmsEntityQuery->getResult($classMetadata);
-		if(!empty($annotation->slug)) {
-			return $annotation->slug;
+		$cmsEntity = $this->reader->getClassAnnotation(
+			$classMetadata->getReflectionClass(),
+			'Sentient\\Cms\\Data\\Metadata\\Annotation\\CmsEntity'
+		);
+		if(!empty($cmsEntity->slug)) {
+			return $cmsEntity->slug;
 		}
-		return $this->getFallbackResult($classMetadata, $options);
-	}
-
-	/**
-	 * @param ClassMetadata $classMetadata
-	 * @param array $options
-	 * @return mixed
-	 */
-	protected function getFallbackResult(ClassMetadata $classMetadata, array $options = []) {
-		$replacement = isset($options['replacement']) ? $options['replacement'] : '-';
-		$parts = explode('\\', $classMetadata->getName());
-		$className = array_pop($parts);
-		return str_replace('_', $replacement, $this->inflector->underscore($className));
+		return $this->entityNameQuery->getResult($classMetadata);
 	}
 
 }
