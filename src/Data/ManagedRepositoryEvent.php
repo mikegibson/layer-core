@@ -18,8 +18,4 @@ class ManagedRepositoryEvent extends Event {
 		return $this->repository;
 	}
 
-	public function setRepository(ManagedRepositoryInterface $repository) {
-		$this->repository = $repository;
-	}
-
 }
