@@ -35,10 +35,11 @@ class ActionDispatcher {
 	/**
 	 * @param ActionInterface $action
 	 * @param Request $request
-	 * @return array
+	 * @param null $routeName
+	 * @return mixed
 	 */
-	public function dispatch(ActionInterface $action, Request $request) {
-		$event = new ActionEvent($action, $request, $this->view);
+	public function dispatch(ActionInterface $action, Request $request, $routeName = null) {
+		$event = new ActionEvent($action, $request, $this->view, $routeName);
 		$this->eventDispatcher->dispatch(ActionEvent::BEFORE_DISPATCH, $event);
 		$result = $event->getResult();
 		if($result === null) {

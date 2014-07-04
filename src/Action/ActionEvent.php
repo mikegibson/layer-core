@@ -25,6 +25,11 @@ class ActionEvent extends Event {
 	private $request;
 
 	/**
+	 * @var string|null
+	 */
+	private $routeName;
+
+	/**
 	 * @var mixed $response
 	 */
 	private $result;
@@ -48,10 +53,12 @@ class ActionEvent extends Event {
 	 * @param ActionInterface $action
 	 * @param Request $request
 	 * @param ViewInterface $view
+	 * @param string|null $routeName
 	 */
-	public function __construct(ActionInterface $action, Request $request, ViewInterface $view) {
+	public function __construct(ActionInterface $action, Request $request, ViewInterface $view, $routeName) {
 		$this->action = $action;
 		$this->request = $request;
+		$this->routeName = $routeName;
 		$this->setView($view);
 		$this->setTemplate($action->getTemplate());
 	}
@@ -68,6 +75,13 @@ class ActionEvent extends Event {
 	 */
 	public function getRequest() {
 		return $this->request;
+	}
+
+	/**
+	 * @return string|null
+	 */
+	public function getRouteName() {
+		return $this->routeName;
 	}
 
 	/**
