@@ -523,9 +523,9 @@ class DataProvider implements ServiceProviderInterface {
 		});
 
 		$app['orm.manager_registry'] = $app->share(function() use($app) {
-			$managerRegistry = new ManagerRegistry(null, [], ['orm.em'], null, null, $app['orm.proxies_namespace']);
-			$managerRegistry->setContainer($app);
-			return $managerRegistry;
+			return new ManagerRegistry(
+				$app, 'sentient', [], ['default' => 'orm.em'], null, 'default', $app['orm.proxies_namespace']
+			);
 		});
 
 		$app['form.extensions'] = $app->share($app->extend('form.extensions', function ($extensions) use($app) {

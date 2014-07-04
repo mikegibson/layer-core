@@ -13,22 +13,31 @@ class ManagerRegistry extends AbstractManagerRegistry {
 	/**
 	 * @var Application
 	 */
-	protected $container;
+	private $app;
+
+	public function __construct(
+		Application $app,
+		$name,
+		array $connections,
+		array $managers,
+		$defaultConnection,
+		$defaultManager,
+		$proxyInterfaceName
+	) {
+		$this->app = $app;
+		parent::__construct($name, $connections, $managers, $defaultConnection, $defaultManager, $proxyInterfaceName);
+	}
 
 	protected function getService($name) {
-		return $this->container[$name];
+		return $this->app[$name];
 	}
 
 	protected function resetService($name) {
-		unset($this->container[$name]);
+		unset($this->app[$name]);
 	}
 
 	public function getAliasNamespace($alias) {
 		throw new \BadMethodCallException('Namespace aliases not supported.');
-	}
-
-	public function setContainer(Application $container) {
-		$this->container = $container;
 	}
 
 }
