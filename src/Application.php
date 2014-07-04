@@ -137,20 +137,20 @@ class Application extends Silex {
 			}
 		);
 
-		$app['nodes.dispatcher'] = $app->protect(function($key = 'node') use($app) {
-			return function(Request $request) use($app, $key) {
+		$app['nodes.dispatcher'] = $app->protect(function($key = 'node', $routeName = null) use($app) {
+			return function(Request $request) use($app, $key, $routeName) {
 				$node = $request->get($key);
 				if(!$node instanceof ControllerNodeInterface || !$node->isAccessible()) {
 					$app->abort(404);
 				}
-				return $app['actions.dispatcher']->dispatch($node, $request);
+				return $app['actions.dispatcher']->dispatch($node, $request, $routeName);
 			};
 		});
 
 		$app['nodes.controllers_factory'] = $app->protect(
 			function(ControllerNodeInterface $rootNode, $routeName = null, $key = 'node', $rejectNotFound = true) use($app) {
 				$controllers = $app['controllers_factory'];
-				$route = $controllers->match('/{' . $key . '}', $app['nodes.dispatcher']($key))
+				$route = $controllers->match('/{' . $key . '}', $app['nodes.dispatcher']($key, $routeName))
 					->value($key, '')
 					->assert($key, '.*')
 					->beforeMatch($app['nodes.matcher']($rootNode, $key, $rejectNotFound));
