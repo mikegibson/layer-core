@@ -15,7 +15,7 @@ class PaginationAction implements ActionInterface {
 	protected $result;
 
 	/**
-	 * @var \Sentient\Cms\Data\CmsRepositoryInterface|\Sentient\Data\ManagedRepositoryInterface
+	 * @var \Sentient\Data\ManagedRepositoryInterface
 	 */
 	private $repository;
 
