@@ -52,7 +52,7 @@ class Application extends Silex {
 	/**
 	 * Constructor
 	 */
-	public final function __construct() {
+	public function __construct() {
 
 		parent::__construct();
 
@@ -161,6 +161,8 @@ class Application extends Silex {
 			}
 		);
 
+		$app['name'] = 'Sentient';
+
 		$app['home_template'] = 'view/home';
 
 		$app['home_action'] = $app->share(function() use($app) {
@@ -187,7 +189,36 @@ class Application extends Silex {
 			return $rootNode;
 		});
 
-		$this->registerServiceProviders();
+		$app
+			->register(new ServiceControllerServiceProvider())
+			->register(new UrlGeneratorServiceProvider())
+			->register(new SessionServiceProvider(), [
+				'session.storage.save_path' => $app['paths.session']
+			])
+			->register(new HttpFragmentServiceProvider())
+			->register(new SwiftmailerServiceProvider())
+			->register(new ConsoleServiceProvider(), [
+				'console.name' => 'Sentient Console',
+				'console.version' => '1.0.0',
+				'console.project_directory' => $app['paths.root']
+			])
+			->register(new TwigServiceProvider(), [
+				'twig.options' => [
+					'cache' => $app['debug'] ? false : $app['paths.cache'] . '/twig',
+					'auto_reload' => true
+				]
+			])
+			->register(new AssetServiceProvider())
+			->register(new TranslationServiceProvider(), [
+				'locale_fallbacks' => ['en'],
+			])
+			->register(new FormServiceProvider())
+			->register(new ValidatorServiceProvider())
+			->register(new DataProvider())
+			->register(new CmsPlugin())
+			->register(new UsersPlugin())
+			->register(new MediaPlugin())
+		;
 
 	}
 
@@ -206,6 +237,8 @@ class Application extends Silex {
 
 		parent::boot();
 	}
+
+	protected function initialize() {}
 
 	/**
 	 * @param ServiceProviderInterface $serviceProvider
@@ -300,8 +333,6 @@ class Application extends Silex {
 		return (php_sapi_name() === 'cli');
 	}
 
-	protected function initialize() {}
-
 	protected function connectRoutes() {
 
 		/**
@@ -356,39 +387,6 @@ class Application extends Silex {
 			return $app['twig']->render('view/error.twig', compact('error'));
 		});
 
-	}
-
-	protected function registerServiceProviders() {
-		$this
-			->register(new ServiceControllerServiceProvider())
-			->register(new UrlGeneratorServiceProvider())
-			->register(new SessionServiceProvider(), [
-				'session.storage.save_path' => $this['paths.session']
-			])
-			->register(new HttpFragmentServiceProvider())
-			->register(new SwiftmailerServiceProvider())
-			->register(new ConsoleServiceProvider(), [
-				'console.name' => 'Sentient Console',
-				'console.version' => '1.0.0',
-				'console.project_directory' => $this['paths.root']
-			])
-			->register(new TwigServiceProvider(), [
-				'twig.options' => [
-					'cache' => $this['debug'] ? false : $this['paths.cache'] . '/twig',
-					'auto_reload' => true
-				]
-			])
-			->register(new AssetServiceProvider())
-			->register(new TranslationServiceProvider(), [
-				'locale_fallbacks' => ['en'],
-			])
-			->register(new FormServiceProvider())
-			->register(new ValidatorServiceProvider())
-			->register(new DataProvider())
-			->register(new CmsPlugin())
-			->register(new UsersPlugin())
-			->register(new MediaPlugin())
-		;
 	}
 
 	protected function setTimezone() {
