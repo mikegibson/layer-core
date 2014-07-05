@@ -3,6 +3,7 @@
 namespace Sentient\Node;
 
 use Sentient\Action\ActionInterface;
+use Silex\ControllerCollection;
 use Symfony\Component\HttpFoundation\Request;
 
 class ControllerNode extends Node implements ControllerNodeInterface, ActionInterface {
@@ -17,6 +18,8 @@ class ControllerNode extends Node implements ControllerNodeInterface, ActionInte
 	private $visible;
 
 	private $accessible;
+
+	private $controllerCollections = [];
 
 	public function __construct(
 		ActionInterface $action = null,
@@ -121,6 +124,22 @@ class ControllerNode extends Node implements ControllerNodeInterface, ActionInte
 			throw new \InvalidArgumentException('Child nodes must implement ControllerNodeInterface.');
 		}
 		parent::registerChildNode($childNode);
+	}
+
+	public function mountControllers(ControllerCollection $controllers) {
+		$this->controllerCollections[] = $controllers;
+	}
+
+	public function connectControllers(ControllerCollection $controllers, $prefix = null) {
+		if($prefix === null) {
+			$prefix = static::SEPARATOR . $this->getPath();
+		}
+		foreach($this->controllerCollections as $collection) {
+			$controllers->mount($prefix, $collection);
+		}
+		foreach($this->getChildNodes() as $childNode) {
+			$childNode->connectControllers($controllers);
+		}
 	}
 
 	protected function getAction() {

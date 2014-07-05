@@ -2,6 +2,7 @@
 
 namespace Sentient\Node;
 
+use Silex\ControllerCollection;
 use Symfony\Component\HttpFoundation\Request;
 
 interface ControllerNodeInterface extends NodeInterface {
@@ -46,5 +47,15 @@ interface ControllerNodeInterface extends NodeInterface {
 	 * @return array
 	 */
 	public function getVisibleChildNodes();
+
+	/**
+	 * @param ControllerCollection $controllers
+	 */
+	public function mountControllers(ControllerCollection $controllers);
+
+	/**
+	 * @param ControllerCollection $controllers
+	 */
+	public function connectControllers(ControllerCollection $controllers);
 
 }

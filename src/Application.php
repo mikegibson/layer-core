@@ -157,6 +157,7 @@ class Application extends Silex {
 				if($routeName !== null) {
 					$route->bind($routeName);
 				}
+				$rootNode->connectControllers($controllers);
 				return $controllers;
 			}
 		);
