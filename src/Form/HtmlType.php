@@ -26,11 +26,11 @@ class HtmlType extends AbstractType {
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		if($options['purify']) {
-			$_this = $this;
-			$builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) use($_this) {
+			$purifier = $this->purifier;
+			$builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) use($purifier) {
 				$html = $event->getData();
 				if(!empty($html)) {
-					$event->setData($_this->purifier->purify($html));
+					$event->setData($purifier->purify($html));
 				}
 			});
 		}
