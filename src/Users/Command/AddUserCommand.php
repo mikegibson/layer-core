@@ -2,7 +2,7 @@
 
 namespace Sentient\Users\Command;
 
-use Sentient\Console\Command;
+use Knp\Command\Command;
 use Sentient\Users\User;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
