@@ -1,10 +1,10 @@
-<script src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js"></script>
+<script src="{{ requirejs_url|default('//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js') }}"></script>
 <script>
 
 	requirejs.config({
 		baseUrl: '/assets/js',
 		paths: {
-			jquery: '//code.jquery.com/jquery-1.11.1.min'
+			jquery: '{{ jquery_url|default('//code.jquery.com/jquery-1.11.1.min') }}'
 		}
 	});
 
