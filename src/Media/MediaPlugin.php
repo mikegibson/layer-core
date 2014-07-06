@@ -156,12 +156,6 @@ class MediaPlugin extends Plugin {
 			return $controllers;
 		});
 
-		$app['paths.core_fonts'] = $app['paths.sentient'] . '/Resource/fonts';
-
-		$app['fonts.controllers'] = $app->share(function() use($app) {
-			return $app['filesystem_controllers_factory']($app['paths.core_fonts'], 'fonts');
-		});
-
 		$app['cms.root_node'] = $app->share($app->extend('cms.root_node',
 			function(ControllerNodeInterface $rootNode) use($app) {
 				$rootNode->wrapChildNode($app['cms.media_node']);
@@ -180,7 +174,6 @@ class MediaPlugin extends Plugin {
 		));
 		$app->mount('/' . $app['media.url_fragment'], $app['media.controllers']);
 		$app->mount('/' . $app['images.url_fragment'], $app['images.controllers']);
-		$app->mount('/assets/fonts', $app['fonts.controllers']);
 		$app['dispatcher']->addListener(ActionEvent::BEFORE_RENDER, function(ActionEvent $event) use($app) {
 			$result = $event->getResult();
 			if(
