@@ -1,9 +1,10 @@
 <?php
 
-namespace Sentient\Media\File;
+namespace Sentient\Media;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Behavior;
+use Sentient\Asset\FileInterface;
 use Sentient\Cms\Data\Metadata\Annotation as Cms;
 use Sentient\Data\Metadata\Annotation as Sentient;
 use Sentient\Media\Image\Image;
@@ -128,7 +129,7 @@ class File implements FileInterface {
 	/**
 	 * @var Image $image
 	 *
-	 * @ORM\OneToOne(targetEntity="Sentient\Media\Image\Image", mappedBy="file")
+	 * @ORM\OneToOne(targetEntity="Image", mappedBy="file")
 	 * @Sentient\InvisibleProperty
 	 */
 	protected $image;

@@ -2,7 +2,7 @@
 
 namespace Sentient\Media\Image;
 
-use Sentient\Media\File\FileInterface;
+use Sentient\Asset\FileInterface;
 
 interface ImageInterface extends FileInterface {
 

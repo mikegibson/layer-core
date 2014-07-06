@@ -1,12 +1,12 @@
 <?php
 
-namespace Sentient\Media\Image;
+namespace Sentient\Media;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Behavior;
 use Sentient\Cms\Data\Metadata\Annotation as Cms;
 use Sentient\Data\Metadata\Annotation as Sentient;
-use Sentient\Media\File\File;
+use Sentient\Media\Image\ImageInterface;
 
 /**
  * @ORM\Entity
@@ -30,7 +30,7 @@ class Image implements ImageInterface {
 	/**
 	 * @var File $file
 	 *
-	 * @ORM\OneToOne(targetEntity="Sentient\Media\File\File", mappedBy="image")
+	 * @ORM\OneToOne(targetEntity="File", mappedBy="image")
 	 * @ORM\JoinColumn(name="file_id", referencedColumnName="id", nullable=false)
 	 */
 	protected $file;

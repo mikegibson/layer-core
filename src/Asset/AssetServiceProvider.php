@@ -160,6 +160,31 @@ class AssetServiceProvider implements ServiceProviderInterface {
 			})
 		);
 
+		$app['filesystem_controllers_factory'] = $app->protect(function($basePath, $routeName = null) use($app) {
+			$controllers = $app['controllers_factory'];
+			$route = $controllers
+				->match('/{filename}', function(Request $request) {
+					$file = new FilesystemFile($request->get('path'));
+					return new FileResponse($file);
+				})
+				->beforeMatch(function(array $attrs) use($basePath) {
+					if(false !== strpos($attrs['filename'], '..')) {
+						return false;
+					}
+					$attrs['path'] = $basePath . '/' . $attrs['filename'];
+					if(!is_file($attrs['path'])) {
+						return false;
+					}
+					return $attrs;
+				})
+				->assert('filename', '.+')
+			;
+			if($routeName !== null) {
+				$route->bind($routeName);
+			}
+			return $controllers;
+		});
+
 		$app->mount('/assets', $app['assets.controllers']);
 
 	}

@@ -1,7 +1,8 @@
 <?php
 
-namespace Sentient\Media\File;
+namespace Sentient\Asset;
 
+use Sentient\Media\File\FileInterface;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class FileResponse extends StreamedResponse {

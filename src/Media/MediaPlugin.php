@@ -3,8 +3,7 @@
 namespace Sentient\Media;
 
 use Sentient\Action\ActionEvent;
-use Sentient\Media\File\FileResponse;
-use Sentient\Media\File\FilesystemFile;
+use Sentient\Asset\FileResponse;
 use Sentient\Media\Image\FilteredImageResponse;
 use Sentient\Media\Image\FilteredImageWriter;
 use Sentient\Media\Image\FilterRegistry;
@@ -22,8 +21,8 @@ class MediaPlugin extends Plugin {
 
 	public function register(Application $app) {
 
-		$app['media.entity_classes.files'] = 'Sentient\\Media\\File\\File';
-		$app['media.entity_classes.images'] = 'Sentient\\Media\\Image\\Image';
+		$app['media.entity_classes.files'] = 'Sentient\\Media\\File';
+		$app['media.entity_classes.images'] = 'Sentient\\Media\\Image';
 
 		$app['paths.uploads'] = $app['paths.storage'] . '/uploads';
 
@@ -129,31 +128,6 @@ class MediaPlugin extends Plugin {
 
 		$app['cms.media_node'] = $app->share(function() use($app) {
 			return new ControllerNode(null, null, 'media', 'Media', null, true, false);
-		});
-
-		$app['filesystem_controllers_factory'] = $app->protect(function($basePath, $routeName = null) use($app) {
-			$controllers = $app['controllers_factory'];
-			$route = $controllers
-				->match('/{filename}', function(Request $request) {
-					$file = new FilesystemFile($request->get('path'));
-					return new FileResponse($file);
-				})
-				->beforeMatch(function(array $attrs) use($basePath) {
-					if(false !== strpos($attrs['filename'], '..')) {
-						return false;
-					}
-					$attrs['path'] = $basePath . '/' . $attrs['filename'];
-					if(!is_file($attrs['path'])) {
-						return false;
-					}
-					return $attrs;
-				})
-				->assert('filename', '.+')
-			;
-			if($routeName !== null) {
-				$route->bind($routeName);
-			}
-			return $controllers;
 		});
 
 		$app['cms.root_node'] = $app->share($app->extend('cms.root_node',
