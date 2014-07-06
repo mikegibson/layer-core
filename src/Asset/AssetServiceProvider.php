@@ -199,7 +199,6 @@ class AssetServiceProvider implements ServiceProviderInterface {
 		foreach([
 			'modernizr',
 			'require',
-			'jquery',
 			'dropdown'
 		] as $script) {
 			$app['assets.register_js']($script, '@sentient/js/' . $script . '.js');
