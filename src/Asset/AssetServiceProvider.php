@@ -197,7 +197,6 @@ class AssetServiceProvider implements ServiceProviderInterface {
 		}
 
 		foreach([
-			'modernizr',
 			'require',
 			'dropdown'
 		] as $script) {
