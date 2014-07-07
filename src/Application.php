@@ -4,6 +4,7 @@ namespace Sentient;
 
 use Knp\Provider\ConsoleServiceProvider;
 use Sentient\Action\ActionDispatcher;
+use Sentient\Action\ActionInterface;
 use Sentient\Action\SimpleAction;
 use Sentient\Asset\AssetServiceProvider;
 use Sentient\Cms\CmsPlugin;
@@ -116,22 +117,22 @@ class Application extends Silex {
 		});
 
 		$app['nodes.matcher'] = $app->protect(
-			function(ControllerNodeInterface $node, $key = 'node', $rejectNotFound = true) {
-				return function(array $attrs) use($node, $key, $rejectNotFound) {
-					try {
-						$nodePath = trim($attrs[$key], '/');
-						if($nodePath !== '') {
-							$node = $node->getDescendent($nodePath);;
-						}
-						if($rejectNotFound && !$node->isAccessible()) {
-							return false;
-						}
-						$attrs[$key] = $node;
-					} catch(\InvalidArgumentException $e) {
-						if($rejectNotFound) {
+			function(ControllerNodeInterface $node, $key = 'node') {
+				return function(array $attrs) use($node, $key) {
+					$path = trim($attrs[$key], '/');
+					$parts = $path === '' ? [] : explode('/', $path);
+					while(!empty($parts)) {
+						$part = array_shift($parts);
+						try {
+							$node = $node->getChildNode($part);
+						} catch(\InvalidArgumentException $e) {
 							return false;
 						}
 					}
+					if(!$node->isAccessible()) {
+						return false;
+					}
+					$attrs[$key] = $node;
 					return $attrs;
 				};
 			}
@@ -148,12 +149,12 @@ class Application extends Silex {
 		});
 
 		$app['nodes.controllers_factory'] = $app->protect(
-			function(ControllerNodeInterface $rootNode, $routeName = null, $key = 'node', $rejectNotFound = true) use($app) {
+			function(ControllerNodeInterface $rootNode, $routeName = null, $key = 'node') use($app) {
 				$controllers = $app['controllers_factory'];
 				$route = $controllers->match('/{' . $key . '}', $app['nodes.dispatcher']($key, $routeName))
 					->value($key, '')
 					->assert($key, '.*')
-					->beforeMatch($app['nodes.matcher']($rootNode, $key, $rejectNotFound));
+					->beforeMatch($app['nodes.matcher']($rootNode, $key));
 				if($routeName !== null) {
 					$route->bind($routeName);
 				}
