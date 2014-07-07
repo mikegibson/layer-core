@@ -116,6 +116,12 @@ class Application extends Silex {
 			return new ActionDispatcher($app['dispatcher'], $app['twig.view']);
 		});
 
+		$app['actions.dispatch'] = $app->protect(function(ActionInterface $action) use($app) {
+			return function(Request $request) use($app, $action) {
+				return $app['actions.dispatcher']->dispatch($action, $request);
+			};
+		});
+
 		$app['nodes.matcher'] = $app->protect(
 			function(ControllerNodeInterface $node, $key = 'node') {
 				return function(array $attrs) use($node, $key) {
