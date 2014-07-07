@@ -400,7 +400,9 @@ class Application extends Silex {
 
 	protected function initializeSecurity() {
 		if(!empty($this['security.firewalls'])) {
+			$hierarchy = $this['security.role_hierarchy'];
 			$this->register(new SecurityServiceProvider());
+			$this['security.role_hierarchy'] = $hierarchy;
 			$this->register(new RememberMeServiceProvider());
 		}
 	}
