@@ -68,7 +68,7 @@ class PaginationAction implements ActionInterface {
 	}
 
 	protected function createPaginator(Request $request) {
-		return new Paginator($this->getPaginatorResult(), $this->createPaginatorRequest($request));
+		return new Paginator($this->getPaginatorResult($request), $this->createPaginatorRequest($request));
 	}
 
 	/**
@@ -78,14 +78,14 @@ class PaginationAction implements ActionInterface {
 		return $this->repository;
 	}
 
-	public function getPaginatorResult() {
+	public function getPaginatorResult(Request $request) {
 		if($this->result === null) {
-			$this->result = new PaginatorResult($this->getRepository(), $this->createQueryBuilder());
+			$this->result = new PaginatorResult($this->getRepository(), $this->createQueryBuilder($request));
 		}
 		return $this->result;
 	}
 
-	protected function createQueryBuilder() {
+	protected function createQueryBuilder(Request $request) {
 		return $this->getRepository()->createQueryBuilder($this->getRepository()->getName());
 	}
 
