@@ -7,7 +7,7 @@ use Gedmo\Mapping\Annotation as Behavior;
 use Sentient\Asset\FileInterface;
 use Sentient\Cms\Data\Metadata\Annotation as Cms;
 use Sentient\Data\Metadata\Annotation as Sentient;
-use Sentient\Media\Image\Image;
+use Sentient\Media\Image;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
