@@ -19,6 +19,8 @@ class ControllerNode extends Node implements ControllerNodeInterface, ActionInte
 
 	private $accessible;
 
+	private $passthrough;
+
 	private $controllerCollections = [];
 
 	public function __construct(
@@ -28,7 +30,8 @@ class ControllerNode extends Node implements ControllerNodeInterface, ActionInte
 		$label = null,
 		$template = null,
 		$visible = null,
-		$accessible = null
+		$accessible = null,
+		$passthrough = null
 	) {
 		parent::__construct($parentNode);
 		$this->action = $action;
@@ -37,6 +40,7 @@ class ControllerNode extends Node implements ControllerNodeInterface, ActionInte
 		$this->template = $template;
 		$this->visible = $visible;
 		$this->accessible = $accessible;
+		$this->passthrough = $passthrough;
 	}
 
 	public function getActionName() {
@@ -106,7 +110,20 @@ class ControllerNode extends Node implements ControllerNodeInterface, ActionInte
 		if($this->visible !== null) {
 			return !!$this->visible;
 		}
+		if($this->isPassthrough()) {
+			return true;
+		}
 		return $this->isDirectlyAccessible() && $this->getAction()->isVisible();
+	}
+
+	public function isPassthrough() {
+		if($this->passthrough !== null) {
+			return !!$this->passthrough;
+		}
+		if($parent = $this->getParentNode()) {
+			return $parent->isPassthrough();
+		}
+		return false;
 	}
 
 	public function getVisibleChildNodes() {
@@ -127,6 +144,7 @@ class ControllerNode extends Node implements ControllerNodeInterface, ActionInte
 	}
 
 	public function mountControllers(ControllerCollection $controllers) {
+		$this->passthrough = true;
 		$this->controllerCollections[] = $controllers;
 	}
 

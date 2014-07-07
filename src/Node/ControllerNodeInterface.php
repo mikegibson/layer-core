@@ -44,6 +44,11 @@ interface ControllerNodeInterface extends NodeInterface {
 	public function isVisible();
 
 	/**
+	 * @return bool
+	 */
+	public function isPassthrough();
+
+	/**
 	 * @return array
 	 */
 	public function getVisibleChildNodes();

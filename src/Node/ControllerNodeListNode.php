@@ -57,7 +57,7 @@ class ControllerNodeListNode extends ListNode {
 
 	public function getUrl(array $params = []) {
 		$controllerNode = $this->getControllerNode();
-		if($controllerNode->isDirectlyAccessible()) {
+		if($controllerNode->isDirectlyAccessible() || $controllerNode->isPassthrough()) {
 			$params['node'] = $controllerNode->getPath();
 			return $this->getUrlGenerator()->generate($this->routeName, $params);
 		}
