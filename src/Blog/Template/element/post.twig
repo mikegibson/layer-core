@@ -1,0 +1,59 @@
+{% extends 'layout/panel' %}
+
+{% if layout is not defined %}
+	{% set layout = 'layout/blank' %}
+{% endif %}
+
+{% set panel_tag = 'article' %}
+
+{% if link_title is not defined %}
+	{% set link_title = true %}
+{% endif %}
+
+{% if date_format is not defined %}
+	{% set date_format = 'l jS F Y' %}
+{% endif %}
+
+{% if show_content is not defined %}
+	{% set show_content = true %}
+{% endif %}
+
+{% block panel_class %}{{ parent() }} blog-post{% endblock %}
+
+{% block panel_header %}
+
+	<h1>
+		{%- block post_title %}
+		{%- if link_title %}<a href="{{ url('blog_post', {slug: post.slug}) }}">{% endif %}
+		{{- post.title -}}
+		{% if link_title %}</a>{% endif -%}
+		{% endblock post_title -%}
+	</h1>
+
+	{% include '@blog/element/post_meta' %}
+
+{% endblock panel_header %}
+
+{% block panel_content %}
+
+	{% if post.introduction is not empty %}
+		<div class="post-introduction">
+			{% block post_introduction %}
+
+			{{ post.introduction|raw }}
+
+			{% endblock post_introduction %}
+		</div>
+	{% endif %}
+
+	{% if show_content and post.content is not empty %}
+		<div class="post-content">
+			{% block post_content %}
+
+			{{ post.content|raw }}
+
+			{% endblock post_content %}
+		</div>
+	{% endif %}
+
+{% endblock panel_content %}

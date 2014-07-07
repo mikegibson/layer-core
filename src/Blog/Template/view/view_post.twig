@@ -1,19 +1,5 @@
-{% extends layout|default(default_layout) %}
+{% extends '@blog/element/post' %}
 
-{% block content %}
-<article class="blog_post">
-
-	<header>
-
-		<h1>{{ post.title }}</h1>
-
-	</header>
-
-	<div class="content">
-
-		{{ post.content|raw }}
-
-	</div>
-
-</article>
-{% endblock content %}
+{% if layout is not defined %}
+	{% set layout = default_layout %}
+{% endif %}

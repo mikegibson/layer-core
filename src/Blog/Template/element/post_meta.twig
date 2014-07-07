@@ -1,0 +1,11 @@
+<div class="meta">
+	{% block post_meta %}
+
+	<time datetime="{{ post.publishedDate|date(constant('DATE_ATOM')) }}">{{ post.publishedDate|date(date_format) }}</time>
+
+	{% if post.category is not empty %}
+		<a class="category" href="{{ url('blog_category', {slug: post.category.slug}) }}">{{ post.category }}</a>
+	{% endif %}
+
+	{% endblock post_meta %}
+</div>

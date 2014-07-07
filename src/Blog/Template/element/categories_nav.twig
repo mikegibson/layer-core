@@ -1,0 +1,25 @@
+{% extends 'layout/panel' %}
+
+{% if layout is not defined %}
+	{% set layout = 'layout/blank' %}
+{% endif %}
+
+{% if title is not defined %}
+	{% set title = 'Categories' %}
+{% endif %}
+
+{% if panel_tag is not defined %}
+	{% set panel_tag = 'aside' %}
+{% endif %}
+
+{% block panel_class %}{{ parent() }} blog-categories{% endblock %}
+
+{% block panel_content %}
+	<nav>
+		<ul>
+			{% for category in categories %}
+			<li class="category-{{ category.slug }}{% if current_category is defined and current_category.id == category.id %} current{% endif %}"><a href="{{ url('blog_category', {slug: category.slug}) }}">{{ category.name }}</a></li>
+			{% endfor %}
+		</ul>
+	</nav>
+{% endblock %}

@@ -1,23 +1,38 @@
-{% extends layout|default(default_layout) %}
+{% extends 'layout/panel' %}
 
-{% block content %}
+{% if show_content is not defined %}
+	{% set show_content = false %}
+{% endif %}
+
+{% if title is not defined %}
+	{% if category is defined %}
+		{% set title = category.name %}
+	{% else %}
+		{% set title = 'Blog' %}
+	{% endif %}
+{% endif %}
+
+{% block panel_content %}
 
 	{% for post in paginator.data %}
 
-		<h1><a href="{{ url('app', {node: node.getDescendent(post.slug).path}) }}">{{ post.title }}</a></h1>
-
-		<div class="content">
-
-			{% block post_content %}
-
-				{{ post.content|raw }}
-
-			{% endblock %}
-
-		</div>
+		{% include '@blog/element/post' %}
 
 	{% endfor %}
 
 	{{ paginator_links(paginator) }}
 
-{% endblock content %}
+{% endblock panel_content %}
+
+{% block main %}
+
+	{{ parent() }}
+
+	{% set category_vars = {categories: categories} %}
+	{% if category is defined %}
+		{% set category_vars = category_vars|merge({current_category: category}) %}
+	{% endif %}
+
+	{% include '@blog/element/categories_nav' with category_vars only %}
+
+{% endblock main %}

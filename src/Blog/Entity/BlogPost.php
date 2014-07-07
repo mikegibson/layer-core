@@ -44,6 +44,14 @@ class BlogPost {
 	protected $slug;
 
 	/**
+	 * @var string $introduction
+	 *
+	 * @ORM\Column(type="text")
+	 * @Sentient\HtmlProperty
+	 */
+	protected $introduction;
+
+	/**
 	 * @var string $content
 	 *
 	 * @ORM\Column(type="text")
@@ -106,6 +114,13 @@ class BlogPost {
 	/**
 	 * @return string
 	 */
+	public function getIntroduction() {
+		return $this->introduction;
+	}
+
+	/**
+	 * @return string
+	 */
 	public function getContent() {
 		return $this->content;
 	}
@@ -144,6 +159,10 @@ class BlogPost {
 
 	public function setSlug($slug) {
 		$this->slug = $slug;
+	}
+
+	public function setIntroduction($introduction) {
+		$this->introduction = $introduction;
 	}
 
 	public function setContent($content) {
