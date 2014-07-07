@@ -5,7 +5,7 @@ namespace Sentient\Media;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Sentient\Data\ManagedRepositoryInterface;
-use Sentient\Media\File\File;
+use Sentient\Media\File;
 
 class UploadListener implements EventSubscriber {
 
