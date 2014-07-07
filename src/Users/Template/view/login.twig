@@ -1,19 +1,17 @@
-{% extends layout|default(default_layout) %}
+{% extends 'layout/panel' %}
 
-{% block content %}
-<section class="login">
+{% if title is not defined %}
+	{% set title = 'Login' %}
+{% endif %}
 
-	<header>
+{% block panel_class %}{{ parent() }} login{% endblock %}
 
-		<h1>Login</h1>
+{% block panel_content %}
 
-	</header>
+	{% if is_granted('ROLE_USER') %}
+		<p class="info">You are currently logged in as {{ app.security.token.user }}.</p>
+	{% endif %}
 
-	<div class="content">
+	{{ form( form ) }}
 
-		{{ form( form ) }}
-
-	</div>
-
-</section>
-{% endblock content %}
+{% endblock panel_content %}
