@@ -108,9 +108,7 @@ class UsersPlugin extends Plugin {
 			return ['^/login-check$', 'ROLE_USER'];
 		});
 
-		$app['security.role_hierarchy'] = $app->share(function() use($app) {
-			return ['ROLE_ADMIN' => ['ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH']];
-		});
+		$app['security.role_hierarchy'] = ['ROLE_ADMIN' => ['ROLE_USER', 'ROLE_ALLOWED_TO_SWITCH']];
 
 	}
 
