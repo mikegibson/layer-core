@@ -47,7 +47,7 @@ class ControllerNodeListNode extends ListNode {
 		return $this->getControllerNode()->getLabel();
 	}
 
-	public function getParentNode() {
+	public function getParent() {
 		return $this->parentNode;
 	}
 
@@ -64,35 +64,35 @@ class ControllerNodeListNode extends ListNode {
 		return false;
 	}
 
-	public function hasChildNode($name) {
+	public function hasChild($name) {
 		$this->initControllerNodeChildren();
-		return parent::hasChildNode($name);
+		return parent::hasChild($name);
 	}
 
-	public function getChildNode($name) {
+	public function getChild($name) {
 		$this->initControllerNodeChildren();
-		return parent::getChildNode($name);
+		return parent::getChild($name);
 	}
 
-	public function getChildNodes() {
+	public function getChildren() {
 		$this->initControllerNodeChildren();
-		return parent::getChildNodes();
+		return parent::getChildren();
 	}
 
-	public function registerChildNode(NodeInterface $node, $overwrite = false, $prepend = false) {
+	public function registerChild(NodeInterface $node, $overwrite = false, $prepend = false) {
 		$this->initControllerNodeChildren();
-		return parent::registerChildNode($node, $overwrite, $prepend);
+		return parent::registerChild($node, $overwrite, $prepend);
 	}
 
 	protected function registerControllerChildNode($name, $childrenAccessible = true) {
 		if(
-			!parent::hasChildNode($name) &&
+			!parent::hasChild($name) &&
 			$this->areControllerNodeChildrenAccessible() &&
-			$this->getControllerNode()->hasChildNode($name) &&
-			$this->getControllerNode()->getChildNode($name)->isVisible()
+			$this->getControllerNode()->hasChild($name) &&
+			$this->getControllerNode()->getChild($name)->isVisible()
 		) {
-			$listNode = $this->createListNode($this->getControllerNode()->getChildNode($name, $childrenAccessible));
-			$this->registerChildNode($listNode);
+			$listNode = $this->createListNode($this->getControllerNode()->getChild($name, $childrenAccessible));
+			$this->registerChild($listNode);
 			return true;
 		}
 		return false;
@@ -104,7 +104,7 @@ class ControllerNodeListNode extends ListNode {
 		}
 		$this->initializing = true;
 		if($this->areControllerNodeChildrenAccessible()) {
-			foreach($this->getControllerNode()->getChildNodes() as $key => $node) {
+			foreach($this->getControllerNode()->getChildren() as $key => $node) {
 				$this->registerControllerChildNode($key);
 			}
 		}

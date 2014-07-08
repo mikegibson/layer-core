@@ -40,31 +40,31 @@ class WrappedNode extends Node {
 		return $this->baseNode;
 	}
 
-	public function getChildNodes() {
+	public function getChildren() {
 		if(!$this->areBaseChildrenAccessible()) {
-			return parent::getChildNodes();
+			return parent::getChildren();
 		}
-		$names = array_keys(array_merge($this->getBaseNode()->getChildNodes(), $this->childNodes));
+		$names = array_keys(array_merge($this->getBaseNode()->getChildren(), $this->childNodes));
 		$nodes = [];
 		foreach($names as $name) {
-			$nodes[$name] = $this->getChildNode($name);
+			$nodes[$name] = $this->getChild($name);
 		}
 		return $nodes;
 	}
 
-	public function hasChildNode($name) {
+	public function hasChild($name) {
 		if(!$this->areBaseChildrenAccessible()) {
-			return parent::hasChildNode($name);
+			return parent::hasChild($name);
 		}
-		return $this->baseNode->hasChildNode($name) || isset($this->childNodes[$name]);
+		return $this->baseNode->hasChild($name) || isset($this->childNodes[$name]);
 	}
 
-	public function getChildNode($name) {
+	public function getChild($name) {
 		if(!$this->areBaseChildrenAccessible()) {
-			return parent::getChildNode($name);
+			return parent::getChild($name);
 		}
 		if(!isset($this->childNodes[$name])) {
-			$node = $this->getBaseNode()->getChildNode($name);
+			$node = $this->getBaseNode()->getChild($name);
 			$class = get_class($this);
 			$this->childNodes[$name] = new $class($node, $this);
 		}

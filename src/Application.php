@@ -130,7 +130,7 @@ class Application extends Silex {
 					while(!empty($parts)) {
 						$part = array_shift($parts);
 						try {
-							$node = $node->getChildNode($part);
+							$node = $node->getChild($part);
 						} catch(\InvalidArgumentException $e) {
 							return false;
 						}
@@ -192,8 +192,8 @@ class Application extends Silex {
 		$app['navigation'] = $app->share(function() use($app) {
 			$rootNode = new ListNode();
 			$homeNode = new ControllerNodeListNode($app['home_node'], 'app', $app['url_generator'], $rootNode, false);
-			$rootNode->registerChildNode($homeNode);
-			$rootNode->adoptChildNodes($app['home_list_node']);
+			$rootNode->registerChild($homeNode);
+			$rootNode->adoptChildren($app['home_list_node']);
 			return $rootNode;
 		});
 

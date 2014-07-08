@@ -132,7 +132,7 @@ class MediaPlugin extends Plugin {
 
 		$app['cms.root_node'] = $app->share($app->extend('cms.root_node',
 			function(ControllerNodeInterface $rootNode) use($app) {
-				$rootNode->wrapChildNode($app['cms.media_node']);
+				$rootNode->wrapChild($app['cms.media_node']);
 				return $rootNode;
 			}
 		));

@@ -64,8 +64,8 @@ class UsersPlugin extends Plugin {
 		});
 
 		$app['home_node'] = $app->share($app->extend('home_node', function(ControllerNodeInterface $node) use($app) {
-			$node->getChildNodes();
-			$node->wrapChildNode($app['users.login_node']);
+			$node->getChildren();
+			$node->wrapChild($app['users.login_node']);
 			return $node;
 		}));
 
@@ -117,7 +117,7 @@ class UsersPlugin extends Plugin {
 		$app['users.repository'];
 
 		$app['cms.navigation_list'] = $app->share($app->extend('cms.navigation_list', function(ListNodeInterface $cmsNav) use($app) {
-			$cmsNav->getChildNode('users')->wrapChildNode($app['users.logout_list_node']);
+			$cmsNav->getChild('users')->wrapChild($app['users.logout_list_node']);
 			return $cmsNav;
 		}));
 

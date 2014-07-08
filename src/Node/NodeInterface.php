@@ -19,12 +19,12 @@ interface NodeInterface {
 	/**
 	 * @return null|NodeInterface
 	 */
-	public function getParentNode();
+	public function getParent();
 
 	/**
 	 * @return NodeInterface[]
 	 */
-	public function getChildNodes();
+	public function getChildren();
 
 	/**
 	 * @return string
@@ -41,23 +41,23 @@ interface NodeInterface {
 	 * @param $name
 	 * @return bool
 	 */
-	public function hasChildNode($name);
+	public function hasChild($name);
 
 	/**
 	 * @param $name
 	 * @return NodeInterface
 	 */
-	public function getChildNode($name);
+	public function getChild($name);
 
 	/**
 	 * @return NodeInterface
 	 */
-	public function getRootNode();
+	public function getRoot();
 
 	/**
 	 * @param NodeInterface $childNode
 	 */
-	public function registerChildNode(NodeInterface $childNode);
+	public function registerChild(NodeInterface $childNode);
 
 	/**
 	 * @param NodeInterface $baseNode
@@ -68,7 +68,7 @@ interface NodeInterface {
 	 * @param bool $prepend
 	 * @return NodeInterface
 	 */
-	public function wrapChildNode(
+	public function wrapChild(
 		NodeInterface $baseNode,
 		$name = null,
 		$label = null,
@@ -80,11 +80,11 @@ interface NodeInterface {
 	/**
 	 * @param NodeInterface $node
 	 */
-	public function adoptChildNodes(NodeInterface $node);
+	public function adoptChildren(NodeInterface $node);
 
 	/**
 	 * @param callable $callback
 	 */
-	public function sortChildNodes($callback);
+	public function sortChildren($callback);
 
 }

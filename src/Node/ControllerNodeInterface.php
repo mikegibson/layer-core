@@ -51,7 +51,7 @@ interface ControllerNodeInterface extends NodeInterface {
 	/**
 	 * @return array
 	 */
-	public function getVisibleChildNodes();
+	public function getVisibleChildren();
 
 	/**
 	 * @param ControllerCollection $controllers

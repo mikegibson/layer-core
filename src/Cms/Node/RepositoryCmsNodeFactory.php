@@ -72,9 +72,9 @@ class RepositoryCmsNodeFactory implements RepositoryCmsNodeFactoryInterface {
 					}
 				}
 			}
-			$nodes[] = $repositoryRoot = $parentNode->wrapChildNode($repositoryBaseNode, $name, $label);
+			$nodes[] = $repositoryRoot = $parentNode->wrapChild($repositoryBaseNode, $name, $label);
 			foreach($actions as $action) {
-				$nodes[] = $repositoryRoot->wrapChildNode($this->createNodeFromAction($action), $action->getName());
+				$nodes[] = $repositoryRoot->wrapChild($this->createNodeFromAction($action), $action->getName());
 			}
 
 		}

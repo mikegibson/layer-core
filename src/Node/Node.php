@@ -30,21 +30,21 @@ class Node implements NodeInterface {
 		return $this->label;
 	}
 
-	public function getParentNode() {
+	public function getParent() {
 		return $this->parentNode;
 	}
 
-	public function getChildNodes() {
+	public function getChildren() {
 		$this->registerAdopters();
 		return $this->childNodes;
 	}
 
-	public function hasChildNode($name) {
+	public function hasChild($name) {
 		$this->registerAdopters();
 		return isset($this->childNodes[$name]);
 	}
 
-	public function getChildNode($name) {
+	public function getChild($name) {
 		$this->registerAdopters();
 		if(!isset($this->childNodes[$name])) {
 			throw new \InvalidArgumentException(sprintf('Child node %s does not exist.', $name));
@@ -52,7 +52,7 @@ class Node implements NodeInterface {
 		return $this->childNodes[$name];
 	}
 
-	public function wrapChildNode(
+	public function wrapChild(
 		NodeInterface $baseNode,
 		$name = null,
 		$label = null,
@@ -61,7 +61,7 @@ class Node implements NodeInterface {
 		$prepend = false
 	) {
 		$wrappedNode = $this->createWrappedNode($baseNode, $name, $label, $baseChildrenAccessible);
-		$this->registerChildNode($wrappedNode, $overwrite, $prepend);
+		$this->registerChild($wrappedNode, $overwrite, $prepend);
 		return $wrappedNode;
 	}
 
@@ -69,9 +69,9 @@ class Node implements NodeInterface {
 		return new WrappedNode($baseNode, $this, $name, $label, $baseChildrenAccessible);
 	}
 
-	public function registerChildNode(NodeInterface $node, $overwrite = false, $prepend = false) {
+	public function registerChild(NodeInterface $node, $overwrite = false, $prepend = false) {
 		$this->registerAdopters();
-		if($node->getParentNode() !== $this) {
+		if($node->getParent() !== $this) {
 			throw new \RuntimeException('Nodes being registered must return this node from their getParentNode method.');
 		}
 		$name = $node->getName();
@@ -79,13 +79,13 @@ class Node implements NodeInterface {
 			throw new \RuntimeException(sprintf('Node name %s is already registered.', $name));
 		}
 		if($prepend) {
-			$this->childNodes = array_merge([$name => null], $this->getChildNodes(), [$name => $node]);
+			$this->childNodes = array_merge([$name => null], $this->getChildren(), [$name => $node]);
 		} else {
 			$this->childNodes[$name] = $node;
 		}
 	}
 
-	public function adoptChildNodes(NodeInterface $node, $overwrite = false) {
+	public function adoptChildren(NodeInterface $node, $overwrite = false) {
 		$this->adopteeNodes[] = compact('node', 'overwrite');
 	}
 
@@ -95,9 +95,9 @@ class Node implements NodeInterface {
 		}
 		$this->registering = true;
 		foreach($this->adopteeNodes as $info) {
-			foreach($info['node']->getChildNodes() as $childNode) {
-				if($info['overwrite'] || !$this->hasChildNode($childNode->getName())) {
-					$this->wrapChildNode($childNode, null, null, true, $info['overwrite']);
+			foreach($info['node']->getChildren() as $childNode) {
+				if($info['overwrite'] || !$this->hasChild($childNode->getName())) {
+					$this->wrapChild($childNode, null, null, true, $info['overwrite']);
 				}
 			}
 		}
@@ -108,7 +108,7 @@ class Node implements NodeInterface {
 	public function getPath() {
 		$parts = [];
 		$node = $this;
-		while(null !== ($parent = $node->getParentNode())) {
+		while(null !== ($parent = $node->getParent())) {
 			array_unshift($parts, $node->getName());
 			$node = $parent;
 		}
@@ -119,21 +119,21 @@ class Node implements NodeInterface {
 		$parts = explode(static::SEPARATOR, $path);
 		$node = $this;
 		foreach($parts as $name) {
-			$node = $node->getChildNode($name);
+			$node = $node->getChild($name);
 		}
 		return $node;
 	}
 
-	public function getRootNode() {
+	public function getRoot() {
 		$node = $this;
-		while(($parentNode = $node->getParentNode()) instanceof NodeInterface) {
+		while(($parentNode = $node->getParent()) instanceof NodeInterface) {
 			$node = $parentNode;
 		}
 		return $node;
 	}
 
-	public function sortChildNodes($callback) {
-		$childNodes = $this->getChildNodes();
+	public function sortChildren($callback) {
+		$childNodes = $this->getChildren();
 		uasort($childNodes, $callback);
 		$this->childNodes = $childNodes;
 	}

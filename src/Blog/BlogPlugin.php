@@ -83,7 +83,7 @@ class BlogPlugin extends Plugin {
 		});
 
 		$app['home_node'] = $app->share($app->extend('home_node', function(ControllerNodeInterface $node) use($app) {
-			$node->wrapChildNode($app['blog.root_node'], $app['blog.url_fragment']);
+			$node->wrapChild($app['blog.root_node'], $app['blog.url_fragment']);
 			return $node;
 		}));
 

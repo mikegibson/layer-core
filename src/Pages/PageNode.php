@@ -43,24 +43,24 @@ class PageNode extends ControllerNode {
 		return isset($result[0]) ? $result[0] : null;
 	}
 
-	public function getChildNode($key) {
+	public function getChild($key) {
 		if(!isset($this->childNodes[$key])) {
 			$page = $this->getChildPage($key);
 			if($page instanceof Page) {
 				$this->initializeChildPage($page);
 			}
 		}
-		return parent::getChildNode($key);
+		return parent::getChild($key);
 	}
 
-	public function getChildNodes() {
+	public function getChildren() {
 		if(!$this->initialized) {
 			foreach($this->getChildPages() as $page) {
 				$this->initializeChildPage($page);
 			}
 			$this->initialized = true;
 		}
-		return parent::getChildNodes();
+		return parent::getChildren();
 	}
 
 	protected function initializeChildPage(Page $page) {
@@ -68,7 +68,7 @@ class PageNode extends ControllerNode {
 			return;
 		}
 		$node = new PageNode($this->getRepository(), $page, $this);
-		$this->registerChildNode($node);
+		$this->registerChild($node);
 	}
 
 	public function getRouteName() {

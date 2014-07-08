@@ -34,9 +34,9 @@ class WrappedControllerNode extends WrappedNode implements ControllerNodeInterfa
 		return $this->getBaseNode()->isDirectlyAccessible();
 	}
 
-	public function getVisibleChildNodes() {
+	public function getVisibleChildren() {
 		$nodes = [];
-		foreach($this->getChildNodes() as $name => $node) {
+		foreach($this->getChildren() as $name => $node) {
 			if($node->isVisible()) {
 				$nodes[$name] = $node;
 			}
@@ -63,7 +63,7 @@ class WrappedControllerNode extends WrappedNode implements ControllerNodeInterfa
 		foreach($this->controllerCollections as $collection) {
 			$controllers->mount($prefix, $collection);
 		}
-		foreach($this->getChildNodes() as $childNode) {
+		foreach($this->getChildren() as $childNode) {
 			$childNode->connectControllers($controllers);
 		}
 		$this->getBaseNode()->connectControllers($controllers, $prefix);

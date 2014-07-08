@@ -30,7 +30,7 @@ class PagesPlugin extends Plugin {
 		});
 
 		$app['home_node'] = $app->share($app->extend('home_node', function(ControllerNodeInterface $node) use($app) {
-			$node->adoptChildNodes($app['pages.root_node']);
+			$node->adoptChildren($app['pages.root_node']);
 			return $node;
 		}));
 

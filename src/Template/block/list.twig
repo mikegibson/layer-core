@@ -1,6 +1,6 @@
 {% block list %}
 	{% if node.areChildrenOrdered %}<ol>{% else %}<ul>{% endif %}
-		{% for childNode in node.childNodes %}
+		{% for childNode in node.children %}
 		{{ list_item( childNode, theme ) }}
 		{% endfor %}
 	{% if not node.areChildrenOrdered %}</ul>{% else %}</ol>{% endif %}
@@ -18,7 +18,7 @@
 	{% else %}
 		{% block list_item_value_plain %}{{ node.label|default('') }}{% endblock %}
 	{% endif %}
-	{% if node.childNodes is not empty %}
+	{% if node.children is not empty %}
 		{{ list( node, theme ) }}
 	{% endif %}
 {% endblock list_item_value %}

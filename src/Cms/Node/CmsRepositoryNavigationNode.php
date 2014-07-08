@@ -28,10 +28,10 @@ class CmsRepositoryNavigationNode extends ControllerNodeListNode {
 		$this->currentControllerNode = $currentControllerNode;
 		$diff = $currentControllerNode === null ? [] : [$currentControllerNode->getActionName() => null];
 		foreach(array_diff(['index', 'add'], array_keys($diff)) as $action) {
-			if(!$this->hasChildNode($action) && $repository->queryMetadata('hasCmsNode', compact('action'))) {
+			if(!$this->hasChild($action) && $repository->queryMetadata('hasCmsNode', compact('action'))) {
 				$node = $repository->queryMetadata('getCmsNode', compact('action'));
 				$listNode = $this->createListNode($node);
-				$this->wrapChildNode($listNode, $action, $node->getActionLabel(), false);
+				$this->wrapChild($listNode, $action, $node->getActionLabel(), false);
 			}
 		}
 		$this->childNodes = array_diff_key($this->childNodes, $diff);

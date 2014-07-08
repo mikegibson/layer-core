@@ -120,15 +120,15 @@ class ControllerNode extends Node implements ControllerNodeInterface, ActionInte
 		if($this->passthrough !== null) {
 			return !!$this->passthrough;
 		}
-		if($parent = $this->getParentNode()) {
+		if($parent = $this->getParent()) {
 			return $parent->isPassthrough();
 		}
 		return false;
 	}
 
-	public function getVisibleChildNodes() {
+	public function getVisibleChildren() {
 		$nodes = [];
-		foreach($this->getChildNodes() as $node) {
+		foreach($this->getChildren() as $node) {
 			if($node->isVisible()) {
 				$nodes[] = $node;
 			}
@@ -136,11 +136,11 @@ class ControllerNode extends Node implements ControllerNodeInterface, ActionInte
 		return $nodes;
 	}
 
-	public function registerChildNode(NodeInterface $childNode) {
+	public function registerChild(NodeInterface $childNode) {
 		if(!$childNode instanceof ControllerNodeInterface) {
 			throw new \InvalidArgumentException('Child nodes must implement ControllerNodeInterface.');
 		}
-		parent::registerChildNode($childNode);
+		parent::registerChild($childNode);
 	}
 
 	public function mountControllers(ControllerCollection $controllers) {
@@ -155,7 +155,7 @@ class ControllerNode extends Node implements ControllerNodeInterface, ActionInte
 		foreach($this->controllerCollections as $collection) {
 			$controllers->mount($prefix, $collection);
 		}
-		foreach($this->getChildNodes() as $childNode) {
+		foreach($this->getChildren() as $childNode) {
 			$childNode->connectControllers($controllers);
 		}
 	}

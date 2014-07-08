@@ -139,8 +139,8 @@ class CmsPlugin extends Plugin {
 
 		$app['cms.root_node'] = $app->share(function() use($app) {
 			$node = new ControllerNode();
-			$node->wrapChildNode($app['cms.login_node']);
-			$node->wrapChildNode($app['cms.content_node']);
+			$node->wrapChild($app['cms.login_node']);
+			$node->wrapChild($app['cms.content_node']);
 			return $node;
 		});
 
