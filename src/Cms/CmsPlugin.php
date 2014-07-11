@@ -5,9 +5,9 @@ namespace Sentient\Cms;
 use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
 use Sentient\Action\ReskinnedAction;
-use Sentient\Cms\Action\AddActionFactory;
-use Sentient\Cms\Action\EditActionFactory;
-use Sentient\Cms\Action\IndexActionFactory;
+use Sentient\Cms\Action\AddAction;
+use Sentient\Cms\Action\EditAction;
+use Sentient\Cms\Action\IndexAction;
 use Sentient\Cms\Data\HtmlStripperDecorator;
 use Sentient\Cms\Data\LinkerDecorator;
 use Sentient\Cms\Data\Metadata\Query\GetCmsNodePathQuery;
@@ -113,16 +113,16 @@ class CmsPlugin extends Plugin {
 			]);
 		});
 
-		$app['cms.action_factories'] = $app->share(function() use($app) {
+		$app['cms.actions'] = $app->share(function() use($app) {
 			return [
-				new IndexActionFactory($app['paginator.decorators.cmsIndex'], $app['property_accessor']),
-				new AddActionFactory($app['form.factory'], $app['url_generator']),
-				new EditActionFactory($app['form.factory'], $app['url_generator'])
+				new IndexAction($app['property_accessor'], $app['paginator.decorators.cmsIndex']),
+				new AddAction($app['form.factory'], $app['url_generator']),
+				new EditAction($app['form.factory'], $app['url_generator'])
 			];
 		});
 
 		$app['cms.repository_node_factory'] = $app->share(function() use($app) {
-			return new RepositoryCmsNodeFactory($app['cms.root_node'], $app['cms.action_factories']);
+			return new RepositoryCmsNodeFactory($app['cms.root_node'], $app['cms.actions']);
 		});
 
 		$app['cms.login_action'] = $app->share(function() use($app) {

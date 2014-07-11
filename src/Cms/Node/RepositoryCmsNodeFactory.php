@@ -2,8 +2,8 @@
 
 namespace Sentient\Cms\Node;
 
-use Sentient\Action\ActionInterface;
-use Sentient\Cms\Action\RepositoryCmsActionFactoryInterface;
+use Sentient\Cms\Action\RepositoryActionAdapter;
+use Sentient\Cms\Action\RepositoryActionInterface;
 use Sentient\Data\ManagedRepositoryInterface;
 use Sentient\Node\ControllerNode;
 use Sentient\Node\ControllerNodeInterface;
@@ -17,26 +17,26 @@ class RepositoryCmsNodeFactory implements RepositoryCmsNodeFactoryInterface {
 	private $rootCmsNode;
 
 	/**
-	 * @var RepositoryCmsActionFactoryInterface[]
+	 * @var RepositoryActionInterface[]
 	 */
-	private $actionFactories = [];
+	private $actions = [];
 
 	/**
 	 * @param ControllerNodeInterface $rootCmsNode
-	 * @param RepositoryCmsActionFactoryInterface[] $actionFactories
+	 * @param RepositoryActionInterface[] $actions
 	 */
-	public function __construct(ControllerNodeInterface $rootCmsNode, array $actionFactories = []) {
+	public function __construct(ControllerNodeInterface $rootCmsNode, array $actions = []) {
 		$this->rootCmsNode = $rootCmsNode;
-		foreach($actionFactories as $factory) {
-			$this->registerActionFactory($factory);
+		foreach($actions as $action) {
+			$this->registerAction($action);
 		}
 	}
 
 	/**
-	 * @param RepositoryCmsActionFactoryInterface $actionFactory
+	 * @param RepositoryActionInterface $action
 	 */
-	public function registerActionFactory(RepositoryCmsActionFactoryInterface $actionFactory) {
-		$this->actionFactories[] = $actionFactory;
+	public function registerAction(RepositoryActionInterface $action) {
+		$this->actions[] = $action;
 	}
 
 	/**
@@ -48,9 +48,9 @@ class RepositoryCmsNodeFactory implements RepositoryCmsNodeFactoryInterface {
 
 		$actions = $nodes = [];
 
-		foreach($this->actionFactories as $factory) {
-			if($factory->isRepositoryEligible($repository)) {
-				$actions[] = $factory->createAction($repository);
+		foreach($this->actions as $action) {
+			if($action->isRepositoryEligible($repository)) {
+				$actions[] = $action;
 			}
 		}
 
@@ -59,7 +59,7 @@ class RepositoryCmsNodeFactory implements RepositoryCmsNodeFactoryInterface {
 			$name = $repository->queryMetadata('getCmsEntitySlug');
 			$label = $repository->queryMetadata('getEntityHumanName', ['plural' => true, 'capitalize' => true]);
 			$rootAction = array_shift($actions);
-			$repositoryBaseNode = $this->createNodeFromAction($rootAction);
+			$repositoryBaseNode = $this->createNodeFromAction($repository, $rootAction);
 			if($nodePath = $repository->queryMetadata('getCmsNodePath')) {
 				$parts = explode(NodeInterface::SEPARATOR, $nodePath);
 				$name = array_pop($parts);
@@ -74,7 +74,7 @@ class RepositoryCmsNodeFactory implements RepositoryCmsNodeFactoryInterface {
 			}
 			$nodes[] = $repositoryRoot = $parentNode->wrapChild($repositoryBaseNode, $name, $label);
 			foreach($actions as $action) {
-				$nodes[] = $repositoryRoot->wrapChild($this->createNodeFromAction($action), $action->getName());
+				$nodes[] = $repositoryRoot->wrapChild($this->createNodeFromAction($repository, $action), $action->getName());
 			}
 
 		}
@@ -83,11 +83,12 @@ class RepositoryCmsNodeFactory implements RepositoryCmsNodeFactoryInterface {
 	}
 
 	/**
-	 * @param ActionInterface $action
+	 * @param ManagedRepositoryInterface $repository
+	 * @param RepositoryActionInterface $action
 	 * @return ControllerNode
 	 */
-	protected function createNodeFromAction(ActionInterface $action) {
-		return new ControllerNode($action);
+	protected function createNodeFromAction(ManagedRepositoryInterface $repository, RepositoryActionInterface $action) {
+		return new ControllerNode(new RepositoryActionAdapter($repository, $action));
 	}
 
 }

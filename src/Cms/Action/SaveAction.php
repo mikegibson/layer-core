@@ -2,7 +2,6 @@
 
 namespace Sentient\Cms\Action;
 
-use Sentient\Action\ActionInterface;
 use Sentient\Cms\Data\CmsEntityFormType;
 use Sentient\Cms\Data\EntityFormType;
 use Sentient\Data\ManagedRepositoryInterface;
@@ -11,12 +10,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-abstract class SaveAction implements ActionInterface {
-
-	/**
-	 * @var ManagedRepositoryInterface
-	 */
-	private $repository;
+abstract class SaveAction implements RepositoryActionInterface {
 
 	/**
 	 * @var \Symfony\Component\Form\FormFactoryInterface
@@ -34,19 +28,16 @@ abstract class SaveAction implements ActionInterface {
 	 * @param UrlGeneratorInterface $urlGenerator
 	 */
 	public function __construct(
-		ManagedRepositoryInterface $repository,
 		FormFactoryInterface $formFactory,
 		UrlGeneratorInterface $urlGenerator
 	) {
-		$this->repository = $repository;
 		$this->formFactory = $formFactory;
 		$this->urlGenerator = $urlGenerator;
 	}
 
-	public function invoke(Request $request) {
+	public function invoke(ManagedRepositoryInterface $repository, Request $request) {
 
-		$form = $this->getForm($request);
-		$repository = $this->getRepository();
+		$form = $this->getForm($repository, $request);
 
 		if ($form->isSubmitted()) {
 			$singularName = $repository->queryMetadata('getEntityHumanName');
@@ -54,7 +45,7 @@ abstract class SaveAction implements ActionInterface {
 			if($form->isValid()) {
 				$postData = $form->getData();
 				$entity = $postData->entity;
-				$this->getRepository()->save($entity);
+				$repository->save($entity);
 				$message = sprintf('The %s was saved', $singularName);
 				$flashBag->add('message', $message);
 				if(
@@ -92,13 +83,24 @@ abstract class SaveAction implements ActionInterface {
 		return $this->isCreate();
 	}
 
+	public function isEntityRequired() {
+		return !$this->isCreate();
+	}
+
+	public function isRepositoryEligible(ManagedRepositoryInterface $repository) {
+		$crud = $repository->queryMetadata('getEntityCrud');
+		$property = $this->isCreate() ? 'create' : 'update';
+		return !empty($crud->{$property});
+	}
+
 	/**
+	 * @param ManagedRepositoryInterface $repository
 	 * @param Request $request
 	 * @return \Symfony\Component\Form\Form
 	 */
-	protected function getForm(Request $request) {
-		$formData = $this->getFormData($request);
-		$entityForm = new EntityFormType($this->getRepository(), $this->isCreate());
+	protected function getForm(ManagedRepositoryInterface $repository, Request $request) {
+		$formData = $this->getFormData($repository, $request);
+		$entityForm = new EntityFormType($repository, $this->isCreate());
 		$cmsForm = new CmsEntityFormType('edit', $entityForm);
 		$name = $cmsForm->getName();
 		$options = [
@@ -108,13 +110,6 @@ abstract class SaveAction implements ActionInterface {
 		$form = $formBuilder->getForm();
 		$form->handleRequest($request);
 		return $form;
-	}
-
-	/**
-	 * @return ManagedRepositoryInterface
-	 */
-	protected function getRepository() {
-		return $this->repository;
 	}
 
 	/**
@@ -140,6 +135,6 @@ abstract class SaveAction implements ActionInterface {
 	 * @param Request $request
 	 * @return mixed
 	 */
-	abstract protected function getFormData(Request $request);
+	abstract protected function getFormData(ManagedRepositoryInterface $repository, Request $request);
 
 }
