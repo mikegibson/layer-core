@@ -273,6 +273,18 @@ body {
 				padding-left:0.6rem;
 				position: relative;
 			}
+			ul {
+				margin-left:1rem;
+				> li {
+					list-style-type: disc;
+				}
+			}
+			ol {
+				margin-left: 1rem;
+				> li {
+					list-style-type: decimal;
+				}
+			}
 		}
 		.scribe-textarea {
 			display:none;
