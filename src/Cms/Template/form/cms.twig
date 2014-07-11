@@ -1,4 +1,5 @@
 {% use "form/default" %}
+{% use "@cms/element/scribe_widget" %}
 
 {% block form_widget_compound %}
 	{% spaceless %}
@@ -32,3 +33,7 @@
 		</div>
 	{% endspaceless %}
 {% endblock button_row %}
+
+{% block html_widget %}
+	{{ block('scribe_widget') }}
+{% endblock html_widget %}

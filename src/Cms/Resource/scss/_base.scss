@@ -12,6 +12,7 @@ $color-link:#556;
 $font-body: Arial, "Helvetica Neue", Helvetica, sans-serif;
 $font-heading: $font-body;
 $color-panel-background:#f0f0f0;
+$font-serif: Crimson, Garamond, "Hoefler Text", "Times New Roman", Times, serif;
 
 @mixin button {
 	@include box-sizing('border-box');
@@ -37,13 +38,17 @@ $color-panel-background:#f0f0f0;
 	}
 }
 
-@mixin fa-icon($var) {
+@mixin fa-base {
 	display: inline-block;
 	font-family: FontAwesome;
 	font-style: normal;
 	font-weight: normal;
-	line-height: 1;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+}
+
+@mixin fa-icon($var) {
+	@include fa-base;
+	line-height: 1;
 	content: $var;
 }

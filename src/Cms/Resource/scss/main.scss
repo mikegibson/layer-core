@@ -2,6 +2,18 @@
 
 @include global-reset;
 
+@mixin panel-icon($icon) {
+	> header {
+		> h1 {
+			&:before {
+				@include fa-icon($icon);
+				font-size:1rem;
+				margin-right:0.4rem;
+			}
+		}
+	}
+}
+
 body {
 	background:$color-body-background;
 }
@@ -17,6 +29,18 @@ body {
 	}
 	a {
 		color:$color-link;
+	}
+	b {
+		font-weight:bold;
+	}
+	i {
+		font-style:italic;
+	}
+	p {
+		margin-bottom:0.6em;
+		&:last-child {
+			margin-bottom:0;
+		}
 	}
 	button, input[type=submit] {
 		@include button;
@@ -67,6 +91,7 @@ body {
 				position:relative;
 				padding:0.5rem 1rem;
 				overflow: scroll;
+				line-height:1.2em;
 				> table, > form {
 					flex:1;
 				}
@@ -79,6 +104,15 @@ body {
 				> .content {
 					padding:0;
 				}
+			}
+			&.edit {
+				@include panel-icon($fa-var-edit);
+			}
+			&.add {
+				@include panel-icon($fa-var-plus-square-o);
+			}
+			&.index {
+				@include panel-icon($fa-var-list-alt);
 			}
 		}
 	}
@@ -176,22 +210,168 @@ body {
 		label {
 			color:#666;
 		}
-		input, select, textarea {
+		input, select, textarea, .scribe-content {
 			outline:none;
 		}
-		input[type=text], input[type=number], input[type=password], input[type=email], textarea {
+		input[type=text], input[type=number], input[type=password], input[type=email], textarea, .scribe-content-outer {
 			@include box-sizing('border-box');
 			@include transition-property('border-color');
 			@include transition-duration(0.2s);
 			width:100%;
-			padding:0.3rem 0.6rem;
+			padding:0.2rem 0.6rem;
 			border:0.1rem solid #aaa;
+			background: #fff;
+			font-size:0.9rem;
 			&:focus {
 				border-color:#888;
 			}
 		}
 		textarea {
 			height:6rem;
+		}
+		.scribe-content-outer {
+			overflow: scroll;
+			height:6rem;
+			resize:both;
+		}
+		.scribe-content {
+			@include nested-reset;
+			@include box-sizing(border-box);
+			padding-top:0.4rem;
+			padding-bottom:0.4rem;
+			min-height:100%;
+			font-size:1em;
+			* {
+				color: #333;
+			}
+			p, h1, h2, h3, h4, blockquote, > ul, > ol {
+				margin-bottom:0.5em;
+			}
+			h1 {
+				font-weight:bold;
+				font-size:1.6rem;
+			}
+			h2 {
+				font-weight:bold;
+				font-size:1.4rem;
+			}
+			h3 {
+				font-weight:bold;
+				font-size:1.2rem;
+			}
+			h4 {
+				font-weight:bold;
+				font-size:1rem;
+			}
+			b, strong {
+				font-weight:bold;
+			}
+			i, em {
+				font-style:italic;
+			}
+			blockquote {
+				padding-left:0.6rem;
+				position: relative;
+			}
+		}
+		.scribe-textarea {
+			display:none;
+		}
+		.scribe-toolbar {
+			button {
+				display:inline-block;
+				margin:0 0.2rem 0.3rem 0;
+				width:1.2rem;
+				height:1.2rem;
+				text-indent:-100rem;
+				position:relative;
+				&:before {
+					@include fa-base;
+					display: block;
+					width:1.2rem;
+					height:1.2rem;
+					overflow: hidden;
+					position:absolute;
+					left:0;
+					top:0;
+					line-height:1.5rem;
+					text-align:center;
+					text-indent:0;
+				}
+				&.btn-bold:before {
+					content: $fa-var-bold;
+				}
+				&.btn-italic:before {
+					content: $fa-var-italic;
+				}
+				&.btn-strikeThrough:before {
+					content: $fa-var-strikethrough;
+				}
+				&.btn-linkPrompt:before {
+					content: $fa-var-link;
+				}
+				&.btn-unlink:before {
+					content: $fa-var-unlink;
+				}
+				&.btn-insertOrderedList:before {
+					content: $fa-var-list-ol;
+				}
+				&.btn-insertUnorderedList:before {
+					content: $fa-var-list-ul;
+				}
+				&.btn-indent:before {
+					content: $fa-var-indent;
+				}
+				&.btn-outdent:before {
+					content: $fa-var-outdent;
+				}
+				&.btn-undo:before {
+					content: $fa-var-undo;
+				}
+				&.btn-redo:before {
+					content: $fa-var-rotate-right;
+				}
+				&.btn-blockquote:before {
+					content: $fa-var-quote-left;
+				}
+				&.btn-removeFormat:before {
+					content: $fa-var-eraser;
+				}
+				&.btn-h1, &.btn-h2, &.btn-h3, &.btn-h4 {
+					&:before {
+						font-family: $font-serif;
+						content: 'H1';
+						font-size:0.7rem;
+						font-weight: bold;
+					}
+				}
+				&.btn-h2:before {
+					content: 'H2';
+				}
+				&.btn-h3:before {
+					content: 'H3';
+				}
+				&.btn-h4:before {
+					content: 'H4';
+				}
+			}
+		}
+	}
+	> .flash-container {
+		padding:0.6rem 0.5rem 0;
+		.flash-message {
+			@include border-radius(0.2rem);
+			background:#1c2;
+			color:#fff;
+			padding:0.4rem 1rem;
+			font-size:0.9rem;
+			font-weight:bold;
+			&:before {
+				@include fa-icon($fa-var-info-circle);
+				margin-right:0.4rem;
+				position:relative;
+				top:-0.05rem;
+			}
 		}
 	}
 }

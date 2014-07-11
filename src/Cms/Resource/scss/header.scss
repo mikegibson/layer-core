@@ -1,5 +1,17 @@
 @import "base";
 
+@mixin nav-icon($icon) {
+	> a, > .label {
+		&:before {
+			@include fa-icon($icon);
+			margin-right:0.3rem;
+			font-size:0.8rem;
+			color:#555;
+			@include text-shadow(none);
+		}
+	}
+}
+
 body {
 	padding-top:1.6rem !important;
 }
@@ -27,6 +39,7 @@ body {
 		line-height:1.6rem;
 		padding-right:2rem;
 		color:#666;
+		margin:0;
 		a {
 			text-decoration: none;
 			&, &:visited, &:hover, &:active {
@@ -54,6 +67,11 @@ body {
 		float:left;
 		&, ul, li {
 			position:relative;
+		}
+		ul, li {
+			margin:0;
+			padding:0;
+			list-style: none;
 		}
 		> ul {
 			> li {
@@ -116,6 +134,24 @@ body {
 				> ul {
 					display:block;
 				}
+			}
+			&.li-content {
+				@include nav-icon($fa-var-file-text-o);
+			}
+			&.li-users {
+				@include nav-icon($fa-var-users);
+			}
+			&.li-logout {
+				@include nav-icon($fa-var-sign-out);
+			}
+			&.li-media {
+				@include nav-icon($fa-var-folder-open-o);
+			}
+			&.li-files {
+				@include nav-icon($fa-var-file-o);
+			}
+			&.li-images {
+				@include nav-icon($fa-var-file-image-o);
 			}
 		}
 	}

@@ -1,8 +1,8 @@
-define(['jquery'], function($) {
+define('cms-form', ['jquery', 'cms-html-widget'], function($, HtmlWidget) {
 
 	'use strict';
 
-	var Form, FormRow, HtmlWidget;
+	var Form, FormRow;
 
 	Form = function(form) {
 		this.form = form;
@@ -34,11 +34,6 @@ define(['jquery'], function($) {
 				break;
 		}
 
-	};
-
-	HtmlWidget = function(widget) {
-		this.widget = widget;
-		this.textarea = widget.find('textarea');
 	};
 
 	return Form;

@@ -1,4 +1,4 @@
-define(['jquery', 'cms/form'], function($, CmsForm) {
+define('cms-panel', ['jquery', 'cms-form'], function($, CmsForm) {
 
 	'use strict';
 
@@ -8,7 +8,7 @@ define(['jquery', 'cms/form'], function($, CmsForm) {
 		this.container.data('cms-panel', this);
 		this._init();
 
-	}
+	};
 
 	CmsPanel.prototype = {
 

@@ -1,0 +1,44 @@
+{% block scribe_widget %}
+
+{% if scribe_toolbar_buttons is not defined %}
+	{% set scribe_toolbar_buttons = {
+		bold: 'Bold',
+		italic: 'Italic',
+		strikeThrough: 'Strike Through',
+		removeFormat: 'Remove Formatting',
+		linkPrompt: 'Link',
+		unlink: 'Unlink',
+		insertOrderedList: 'Ordered List',
+		insertUnorderedList: 'Unordered List',
+		indent: 'Indent',
+		outdent: 'Outdent',
+		blockquote: 'Blockquote',
+		h1: 'H1',
+		h2: 'H2',
+		h3: 'H3',
+		h4: 'H4',
+		undo: 'Undo',
+		redo: 'Redo'
+	} %}
+{% endif %}
+
+<div class="scribe-container">
+{% block scribe_container %}
+	<div class="scribe-toolbar">
+	{% block scribe_toolbar %}
+		{% for key, label in scribe_toolbar_buttons %}
+		<button type="button" class="btn-{{ key }}" data-command-name="{{ key }}" title="{{ label }}">{{ label }}</button>
+		{% endfor %}
+	{% endblock scribe_toolbar %}
+	</div>
+	<div class="scribe-content-outer">
+		<div class="scribe-content"></div>
+	</div>
+	<div class="scribe-textarea">
+	{% block scribe_textarea %}
+		{{ block('textarea_widget') }}
+	{% endblock scribe_textarea %}
+	</div>
+{% endblock scribe_container %}
+</div>
+{% endblock scribe_widget %}

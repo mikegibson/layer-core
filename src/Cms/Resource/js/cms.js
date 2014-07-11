@@ -1,4 +1,4 @@
-require(['jquery', 'cms/panel'], function($, CmsPanel) {
+require(['jquery', 'cms-panel'], function($, CmsPanel) {
 
 	'use strict';
 

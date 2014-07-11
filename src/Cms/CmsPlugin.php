@@ -197,10 +197,36 @@ class CmsPlugin extends Plugin {
 
 		$app['assets.register_scss']('cms/main', '@cms/scss/main.scss');
 		$app['assets.register_scss']('cms/header', '@cms/scss/header.scss');
-		$app['assets.register_js']('cms/main', '@cms/js/cms.js');
-		$app['assets.register_js']('cms/header', '@cms/js/header.js');
-		$app['assets.register_js']('cms/panel', '@cms/js/panel.js');
-		$app['assets.register_js']('cms/form', '@cms/js/form.js');
+
+		$app['assetic.asset_manager']->set('js_cms_header', $app['assetic.factory']->createAsset(
+			[
+				'@sentient/js/dropdown.js',
+				'@cms/js/cms-header.js'
+			],
+			[],
+			['output' => 'js/cms/header.js']
+		));
+
+		$scripts = [];
+
+		$json = file_get_contents($this->getPath() . '/Resource/js/bower.json');
+		$bower = json_decode($json);
+		foreach($bower->dependencies as $name => $version) {
+			$scripts[] = '@cms/js/bower_components/' . $name . '/' . $name . '.js';
+		}
+
+		$scripts[] = '@cms/js/cms-panel.js';
+		$scripts[] = '@cms/js/cms-form.js';
+		$scripts[] = '@cms/js/cms-html-widget.js';
+		$scripts[] = '@cms/js/cms.js';
+
+		$cmsJs = $app['assetic.factory']->createAsset(
+			(array) $scripts,
+			['uglifyjs'],
+			['output' => 'js/cms/main.js']
+		);
+
+		$app['assetic.asset_manager']->set('js_cms', $cmsJs);
 
 	}
 
