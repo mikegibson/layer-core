@@ -14,17 +14,21 @@ class FormServiceProvider extends \Silex\Provider\FormServiceProvider {
 			return md5('form_secret' . $app['config']->read('salt'));
 		});
 
+		$app['html_purifier.allowed_elements'] = [
+			'p', 'ul', 'ol', 'li', 'b', 'i', 'strong', 'em', 'img', 'sub', 'sup', 'blockquote', 'table', 'thead',
+			'tbody', 'tr', 'th', 'td', 'a', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'address', 'br', 'dl', 'dt', 'dd'
+		];
+
+		$app['html_purifier.allowed_attributes'] = [
+			'*.class', 'img.src', 'img.alt', 'a.href', 'a.title', 'td.abbr', 'td.colspan', 'td.rowspan', 'th.abbr',
+			'th.colspan', 'th.rowspan', 'table.summary'
+		];
+
 		$app['html_purifier.config'] = $app->share(function() use($app) {
 			$config = new \HTMLPurifier_Config(\HTMLPurifier_ConfigSchema::instance());
 			$config->set('HTML.Doctype', 'XHTML 1.0 Strict');
-			$config->set('HTML.AllowedElements', implode(',', [
-				'p', 'ul', 'ol', 'li', 'strong', 'em', 'img', 'sub', 'sup', 'blockquote', 'table', 'thead', 'tbody',
-				'tr', 'th', 'td', 'a', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'address', 'br', 'dl', 'dt', 'dd'
-			]));
-			$config->set('HTML.AllowedAttributes', implode(',', [
-				'*.class', 'img.src', 'img.alt', 'a.href', 'a.title', 'td.abbr', 'td.colspan', 'td.rowspan', 'th.abbr',
-				'th.colspan', 'th.rowspan', 'table.summary'
-			]));
+			$config->set('HTML.AllowedElements', implode(',', $app['html_purifier.allowed_elements']));
+			$config->set('HTML.AllowedAttributes', implode(',', $app['html_purifier.allowed_attributes']));
 			$config->set('AutoFormat.RemoveEmpty', true);
 			$config->set('AutoFormat.AutoParagraph', true);
 			$config->set('AutoFormat.RemoveEmpty.RemoveNbsp', true);
