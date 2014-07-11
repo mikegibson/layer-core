@@ -1,4 +1,4 @@
-define(['jquery'], function($) {
+define('dropdown', ['jquery'], function($) {
 
 	'use strict';
 
