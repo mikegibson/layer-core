@@ -7,9 +7,9 @@
 {% endblock list %}
 
 {% block list_item %}
-	<li>
+	{% block list_item_tag %}<li>{% endblock %}
 		{{ list_item_value( node, theme ) }}
-	</li>
+	{% block list_item_closing_tag %}</li>{% endblock %}
 {% endblock list_item %}
 
 {% block list_item_value %}
