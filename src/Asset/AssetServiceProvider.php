@@ -5,8 +5,8 @@ namespace Sentient\Asset;
 use Assetic\AssetManager;
 use Assetic\AssetWriter;
 use Assetic\Filter\CompassFilter;
-use Assetic\Filter\Yui\CssCompressorFilter;
-use Assetic\Filter\Yui\JsCompressorFilter;
+use Assetic\Filter\UglifyCssFilter;
+use Assetic\Filter\UglifyJs2Filter;
 use Assetic\FilterManager;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
@@ -41,14 +41,12 @@ class AssetServiceProvider implements ServiceProviderInterface {
 			return new AssetManager();
 		});
 
-		$app['assetic.filters.yui.jar_path'] = $app['paths.vendor'] . '/packagist/yuicompressor-bin/bin/yuicompressor.jar';
-
-		$app['assetic.filters.yui_js'] = $app->share(function () use($app) {
-			return new JsCompressorFilter($app['assetic.filters.yui.jar_path']);
+		$app['assetic.filters.uglifyjs2'] = $app->share(function () {
+			return new UglifyJs2Filter();
 		});
 
-		$app['assetic.filters.yui_css'] = $app->share(function () use($app) {
-			return new CssCompressorFilter($app['assetic.filters.yui.jar_path']);
+		$app['assetic.filters.uglifycss'] = $app->share(function () {
+			return new UglifyCssFilter();
 		});
 
 		$app['assetic.filters.compass'] = $app->share(function () use ($app) {
@@ -65,8 +63,8 @@ class AssetServiceProvider implements ServiceProviderInterface {
 		 */
 		$app['assetic.filter_manager'] = $app->share(function () use ($app) {
 			$manager = new FilterManager();
-			$manager->set('yui_js', $app['assetic.filters.yui_js']);
-			$manager->set('yui_css', $app['assetic.filters.yui_css']);
+			$manager->set('uglifyjs', $app['assetic.filters.uglifyjs2']);
+			$manager->set('uglifycss', $app['assetic.filters.uglifycss']);
 			$manager->set('compass', $app['assetic.filters.compass']);
 			return $manager;
 		});
@@ -132,7 +130,7 @@ class AssetServiceProvider implements ServiceProviderInterface {
 		$app['assets.register_js'] = $app->protect(function($name, $scripts) use($app) {
 			$asset = $app['assetic.factory']->createAsset(
 				(array) $scripts,
-				['yui_js'],
+				['uglifyjs'],
 				['output' => 'js/' . $name . '.js']
 			);
 			$app['assetic.asset_manager']->set('js_' . str_replace('/', '_', $name), $asset);
@@ -142,7 +140,7 @@ class AssetServiceProvider implements ServiceProviderInterface {
 		$app['assets.register_scss'] = $app->protect(function($name, $stylesheets) use($app) {
 			$asset = $app['assetic.factory']->createAsset(
 				(array) $stylesheets,
-				['compass', 'yui_css'],
+				['compass', 'uglifycss'],
 				['output' => 'css/' . $name . '.css']
 			);
 			$app['assetic.asset_manager']->set('css_' . str_replace('/', '_', $name), $asset);
