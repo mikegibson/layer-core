@@ -1,3 +1,5 @@
 {% extends 'block/list' %}
 
+{% block list_item_tag %}<li class="li-{{ node.name }}">{% endblock %}
+
 {% block list_item_value_plain %}<span class="label">{{ parent() }}</span>{% endblock %}
