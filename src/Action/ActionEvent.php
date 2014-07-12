@@ -48,7 +48,6 @@ class ActionEvent extends Event {
 	 * @param ActionInterface $action
 	 * @param Request $request
 	 * @param ViewInterface $view
-	 * @param string|null $routeName
 	 */
 	public function __construct(ActionInterface $action, Request $request, ViewInterface $view) {
 		$this->action = $action;

@@ -35,7 +35,6 @@ class ActionDispatcher {
 	/**
 	 * @param ActionInterface $action
 	 * @param Request $request
-	 * @param null $routeName
 	 * @return mixed
 	 */
 	public function dispatch(ActionInterface $action, Request $request) {
