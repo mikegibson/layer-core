@@ -213,7 +213,8 @@ body {
 		input, select, textarea, .scribe-content {
 			outline:none;
 		}
-		input[type=text], input[type=number], input[type=password], input[type=email], textarea, .scribe-content-outer {
+		input[type=text], input[type=number], input[type=password], input[type=email], input[type=date], input[type=time]
+		textarea, .scribe-content-outer {
 			@include box-sizing('border-box');
 			@include transition-property('border-color');
 			@include transition-duration(0.2s);
@@ -225,6 +226,9 @@ body {
 			&:focus {
 				border-color:#888;
 			}
+		}
+		input[type=date], input[type=time] {
+			width:auto;
 		}
 		textarea {
 			height:6rem;
@@ -371,7 +375,7 @@ body {
 	}
 	> .flash-container {
 		padding:0.6rem 0.5rem 0;
-		.flash-message {
+		.flash {
 			@include border-radius(0.2rem);
 			background:#1c2;
 			color:#fff;
@@ -383,6 +387,9 @@ body {
 				margin-right:0.4rem;
 				position:relative;
 				top:-0.05rem;
+			}
+			&.flash-error {
+				background:red;
 			}
 		}
 	}
