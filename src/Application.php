@@ -10,6 +10,7 @@ use Sentient\Asset\AssetServiceProvider;
 use Sentient\Cms\CmsPlugin;
 use Sentient\Config\ConfigServiceProvider;
 use Sentient\Data\DataProvider;
+use Sentient\Data\ValidatorServiceProvider;
 use Sentient\Form\FormServiceProvider;
 use Sentient\Media\MediaPlugin;
 use Sentient\Node\ControllerNode;
@@ -32,7 +33,6 @@ use Silex\Provider\SessionServiceProvider;
 use Silex\Provider\SwiftmailerServiceProvider;
 use Silex\Provider\TranslationServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
-use Silex\Provider\ValidatorServiceProvider;
 use Silex\ServiceProviderInterface;
 use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\Debug\ExceptionHandler;
@@ -221,8 +221,8 @@ class Application extends Silex {
 				'locale_fallbacks' => ['en'],
 			])
 			->register(new FormServiceProvider())
-			->register(new ValidatorServiceProvider())
 			->register(new DataProvider())
+			->register(new ValidatorServiceProvider())
 			->register(new CmsPlugin())
 			->register(new UsersPlugin())
 			->register(new MediaPlugin())
