@@ -56,12 +56,6 @@ class DataProvider implements ServiceProviderInterface {
 
 		$app->register(new DoctrineServiceProvider());
 
-		$initializer = $app['dbs.options.initializer'];
-		$app['dbs.options.initializer'] = $app->protect(function() use($app, $initializer) {
-			$app['dbs.options'] = $app['config']->read('database');
-			$initializer();
-		});
-
 		foreach ($this->_getOrmDefaults($app) as $key => $value) {
 			if (!isset($app[$key])) {
 				$app[$key] = $value;

@@ -8,7 +8,6 @@ use Sentient\Action\ActionInterface;
 use Sentient\Action\SimpleAction;
 use Sentient\Asset\AssetServiceProvider;
 use Sentient\Cms\CmsPlugin;
-use Sentient\Config\ConfigServiceProvider;
 use Sentient\Data\DataProvider;
 use Sentient\Data\ValidatorServiceProvider;
 use Sentient\Form\FormServiceProvider;
@@ -64,19 +63,6 @@ class Application extends Silex {
 			$app['paths.' . $key] = $path;
 		}
 
-		if(!isset($app['config.autoload'])) {
-			$app['config.autoload'] = [
-				'app' => [
-					'nest' => false
-				],
-				'database',
-				'local' => [
-					'nest' => false,
-					'ignoreMissing' => true
-				]
-			];
-		}
-
 		$app['class_loader'] = $app->share(function() use($app) {
 			return require $app['paths.vendor'] . '/autoload.php';
 		});
@@ -100,10 +86,6 @@ class Application extends Silex {
 		$app['security.firewalls'] = $app->share(function() {
 			return [];
 		});
-
-		$app->register(new ConfigServiceProvider());
-
-		$this->setTimezone();
 
 		$app['route_class'] = 'Sentient\\Route\\Route';
 
@@ -172,6 +154,8 @@ class Application extends Silex {
 
 		$app['name'] = 'Sentient';
 
+		$app['timezone'] = 'Europe/London';
+
 		$app['home_template'] = 'view/home';
 
 		$app['home_action'] = $app->share(function() use($app) {
@@ -229,6 +213,17 @@ class Application extends Silex {
 			->register(new MediaPlugin())
 		;
 
+		if(!isset($app['environment'])) {
+			$app['environment'] = getenv('ENVIRONMENT');
+		}
+
+		if($app['environment']) {
+			$configPath = $app['paths.config'] . '/' . $app['environment'] . '.php';
+			if(is_file($configPath)) {
+				include $configPath;
+			}
+		}
+
 	}
 
 	/**
@@ -238,10 +233,20 @@ class Application extends Silex {
 
 		if (!$this->booted) {
 
+			if(!isset($this['debug'])) {
+				$this['debug'] = false;
+			}
+
+			if(!isset($this['salt'])) {
+				$this['salt'] = md5(__DIR__);
+			}
+
+			date_default_timezone_set($this['timezone']);
+
 			$this->initialize();
 			$this->initializeSecurity();
 			$this->connectRoutes();
-			if($this->config('debug')) {
+			if($this['debug']) {
 				$this->initializeProfiler();
 			}
 
@@ -294,16 +299,6 @@ class Application extends Silex {
 	 */
 	public function getPluginNames() {
 		return array_keys($this->plugins);
-	}
-
-	/**
-	 * Read a configuration value
-	 *
-	 * @param $key
-	 * @return mixed
-	 */
-	public function config($key) {
-		return $this['config']->read($key);
 	}
 
 	/**
@@ -399,14 +394,6 @@ class Application extends Silex {
 			return $app['twig']->render('view/error.twig', compact('error'));
 		});
 
-	}
-
-	protected function setTimezone() {
-		if ($timezone = $this['config']->read('timezone')) {
-			date_default_timezone_set($timezone);
-		} else {
-			throw new \RuntimeException('No timezone has been configured.');
-		}
 	}
 
 	protected function initializeSecurity() {

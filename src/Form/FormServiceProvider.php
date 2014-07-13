@@ -12,7 +12,7 @@ class FormServiceProvider extends \Silex\Provider\FormServiceProvider {
 		parent::register($app);
 
 		$app['form.secret'] = $app->share(function() use($app) {
-			return md5('form_secret' . $app['config']->read('salt'));
+			return md5('form_secret' . $app['salt']);
 		});
 
 		$app['html_purifier.allowed_elements'] = [
