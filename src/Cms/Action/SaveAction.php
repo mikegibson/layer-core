@@ -23,7 +23,6 @@ abstract class SaveAction implements RepositoryActionInterface {
 	private $urlGenerator;
 
 	/**
-	 * @param ManagedRepositoryInterface $repository
 	 * @param FormFactoryInterface $formFactory
 	 * @param UrlGeneratorInterface $urlGenerator
 	 */
@@ -132,6 +131,7 @@ abstract class SaveAction implements RepositoryActionInterface {
 	abstract protected function isCreate();
 
 	/**
+	 * @param ManagedRepositoryInterface $repository
 	 * @param Request $request
 	 * @return mixed
 	 */
