@@ -32,7 +32,6 @@ use Silex\Provider\SessionServiceProvider;
 use Silex\Provider\SwiftmailerServiceProvider;
 use Silex\Provider\TranslationServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
-use Silex\Provider\WebProfilerServiceProvider;
 use Silex\ServiceProviderInterface;
 use Symfony\Component\Debug\ErrorHandler;
 use Symfony\Component\Debug\ExceptionHandler;
@@ -213,6 +212,8 @@ class Application extends Silex {
 			->register(new MediaPlugin())
 		;
 
+		$this->initializeSecurity();
+
 		if(!isset($app['environment'])) {
 			$app['environment'] = getenv('ENVIRONMENT');
 		}
@@ -244,18 +245,20 @@ class Application extends Silex {
 			date_default_timezone_set($this['timezone']);
 
 			$this->initialize();
-			$this->initializeSecurity();
-			$this->connectRoutes();
-			if($this['debug']) {
-				$this->initializeProfiler();
-			}
 
 		}
 
 		parent::boot();
 	}
 
-	protected function initialize() {}
+	protected function initialize() {
+
+		/**
+		 * Mount the base app controller
+		 */
+		$this->mount('/', $this['home_controllers']);
+
+	}
 
 	/**
 	 * @param ServiceProviderInterface $serviceProvider
@@ -340,15 +343,6 @@ class Application extends Silex {
 		return (php_sapi_name() === 'cli');
 	}
 
-	protected function connectRoutes() {
-
-		/**
-		 * Mount the base app controller
-		 */
-		$this->mount('/', $this['home_controllers']);
-
-	}
-
 	protected function getPaths() {
 
 		$root = realpath(__DIR__ . '/../../../..');
@@ -397,19 +391,10 @@ class Application extends Silex {
 	}
 
 	protected function initializeSecurity() {
-		if(!empty($this['security.firewalls'])) {
-			$hierarchy = $this['security.role_hierarchy'];
-			$this->register(new SecurityServiceProvider());
-			$this['security.role_hierarchy'] = $hierarchy;
-			$this->register(new RememberMeServiceProvider());
-		}
-	}
-
-	protected function initializeProfiler() {
-		$this->register(new WebProfilerServiceProvider(), [
-			'profiler.cache_dir' => $this['paths.cache'] . '/profiler',
-			'profiler.mount_prefix' => '/_profiler'
-		]);
+		$hierarchy = $this['security.role_hierarchy'];
+		$this->register(new SecurityServiceProvider());
+		$this['security.role_hierarchy'] = $hierarchy;
+		$this->register(new RememberMeServiceProvider());
 	}
 
 }
