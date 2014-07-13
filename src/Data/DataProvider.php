@@ -48,8 +48,6 @@ use Sentient\Data\Metadata\QueryCollection;
 use Silex\Application;
 use Silex\Provider\DoctrineServiceProvider;
 use Silex\ServiceProviderInterface;
-use Symfony\Bridge\Doctrine\Form\DoctrineOrmExtension;
-use Symfony\Component\Validator\Mapping\Factory\LazyLoadingMetadataFactory;
 use Symfony\Component\Validator\Mapping\Loader\AnnotationLoader;
 
 class DataProvider implements ServiceProviderInterface {
@@ -518,20 +516,11 @@ class DataProvider implements ServiceProviderInterface {
 			return new RepositoryManager($app['orm.repository_factory'], $app['dispatcher']);
 		});
 
-		$app['validator.mapping.class_metadata_factory'] = $app->share(function() use($app) {
-			return new LazyLoadingMetadataFactory($app['annotations.loader']);
-		});
-
 		$app['orm.manager_registry'] = $app->share(function() use($app) {
 			return new ManagerRegistry(
 				$app, 'sentient', [], ['default' => 'orm.em'], null, 'default', $app['orm.proxies_namespace']
 			);
 		});
-
-		$app['form.extensions'] = $app->share($app->extend('form.extensions', function ($extensions) use($app) {
-			$extensions[] = new DoctrineOrmExtension($app['orm.manager_registry']);
-			return $extensions;
-		}));
 
 		$app['console.commands.updateSchema'] = $app->share(function() {
 			return new UpdateSchemaCommand();

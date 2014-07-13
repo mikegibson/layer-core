@@ -3,6 +3,7 @@
 namespace Sentient\Form;
 
 use Silex\Application;
+use Symfony\Bridge\Doctrine\Form\DoctrineOrmExtension;
 
 class FormServiceProvider extends \Silex\Provider\FormServiceProvider {
 
@@ -56,6 +57,7 @@ class FormServiceProvider extends \Silex\Provider\FormServiceProvider {
 		});
 
 		$app['form.extensions'] = $app->share($app->extend('form.extensions', function(array $extensions) use($app) {
+			$extensions[] = new DoctrineOrmExtension($app['orm.manager_registry']);
 			$extensions[] = $app['form.html_extension'];
 			return $extensions;
 		}));
