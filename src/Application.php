@@ -347,7 +347,7 @@ class Application extends Silex {
 
 		$root = realpath(__DIR__ . '/../../../..');
 		$app = $root . '/app';
-		$config = $app . '/Config';
+		$config = $root . '/config';
 		$resources = $app . '/Resource';
 		$templates = $app . '/Template';
 		$vendor = $root . '/vendor';
