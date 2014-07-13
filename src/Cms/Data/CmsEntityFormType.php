@@ -5,6 +5,7 @@ namespace Sentient\Cms\Data;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormTypeInterface as BaseForm;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class CmsEntityFormType extends AbstractType {
 
@@ -42,6 +43,12 @@ class CmsEntityFormType extends AbstractType {
 		$builder->add('entity', $this->baseForm, ['label' => false]);
 		$builder->add('save', 'submit', ['label' => 'Save and edit']);
 		$builder->add('save_and_add', 'submit', ['label' => 'Save and add another']);
+	}
+
+	public function setDefaultOptions(OptionsResolverInterface $resolver) {
+		$resolver->setDefaults([
+			'cascade_validation' => true
+		]);
 	}
 
 }

@@ -52,7 +52,8 @@ class EntityFormType extends AbstractType {
 
 	public function setDefaultOptions(OptionsResolverInterface $resolver) {
 		$resolver->setDefaults(array(
-			'data_class' => $this->getRepository()->getClassName()
+			'data_class' => $this->getRepository()->getClassName(),
+			'cascade_validation' => true
 		));
 	}
 
