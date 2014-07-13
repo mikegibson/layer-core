@@ -38,7 +38,7 @@ define('dropdown', ['jquery'], function($) {
 	DropdownItem.prototype = {
 
 		_initChild: function() {
-			var hovering = this.childList.is(':hover');
+			var hovering = this.el.is(':hover');
 			this.submenu = new Dropdown(this.childList, this.config);
 			this.childList.css('display', 'block');
 			if(!hovering) {
