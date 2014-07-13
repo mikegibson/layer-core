@@ -21,7 +21,6 @@ use Sentient\Route\UrlMatcher;
 use Sentient\Users\UsersPlugin;
 use Sentient\Utility\StringHelper;
 use Sentient\View\Twig\TwigServiceProvider;
-use Sentient\Utility\ArrayHelper;
 use Sentient\Utility\Inflector;
 use Silex\Application as Silex;
 use Silex\Provider\HttpFragmentServiceProvider;
@@ -71,9 +70,6 @@ class Application extends Silex {
 		 */
 		$app['inflector'] = $app->share(function () use ($app) {
 			return new Inflector($app);
-		});
-		$app['array_helper'] = $app->share(function () use ($app) {
-			return new ArrayHelper($app);
 		});
 		$app['string_helper'] = $app->share(function() use($app) {
 			return new StringHelper($app['charset']);
