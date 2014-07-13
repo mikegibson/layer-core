@@ -203,7 +203,7 @@ class CmsPlugin extends Plugin {
 				'@sentient/js/dropdown.js',
 				'@cms/js/cms-header.js'
 			],
-			[],
+			['uglifyjs'],
 			['output' => 'js/cms/header.js']
 		));
 
