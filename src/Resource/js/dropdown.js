@@ -13,7 +13,7 @@ define('dropdown', ['jquery'], function($) {
 
 	Dropdown = function(el, config) {
 		this.config = $.extend({}, defaults, config);
-		this.el = el;
+		this.el = $(el);
 		this.items = [];
 		el.children('li').each(this._prepareChild.bind(this));
 	};
@@ -21,14 +21,14 @@ define('dropdown', ['jquery'], function($) {
 	Dropdown.prototype = {
 
 		_prepareChild: function(i, el) {
-			this.items.push(new DropdownItem($(el), this.config));
+			this.items.push(new DropdownItem(el, this.config));
 		}
 
 	};
 
 	DropdownItem = function(el, config) {
 		this.config = config;
-		this.el = el;
+		this.el = $(el);
 		this.childList = this.el.children('ul');
 		if(this.childList.length) {
 			this._initChild();
