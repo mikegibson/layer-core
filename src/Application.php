@@ -381,7 +381,7 @@ class Application extends Silex {
 		}
 
 		$app->error(function (\Exception $error) use($app) {
-			return $app['twig']->render('view/error.twig', compact('error'));
+			return $app['twig']->render('view/error.twig', ['error' => $error]);
 		});
 
 	}
