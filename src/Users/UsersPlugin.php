@@ -3,9 +3,6 @@
 namespace Sentient\Users;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Sentient\Node\ControllerNode;
-use Sentient\Node\ControllerNodeInterface;
-use Sentient\Node\ListNode;
 use Sentient\Node\ListNodeInterface;
 use Sentient\Plugin\Plugin;
 use Sentient\Users\Action\LoginAction;
@@ -59,22 +56,6 @@ class UsersPlugin extends Plugin {
 			return $action;
 		});
 
-		$app['users.login_node'] = $app->share(function() use($app) {
-			return new ControllerNode($app['users.login_action']);
-		});
-
-		$app['home_node'] = $app->share($app->extend('home_node', function(ControllerNodeInterface $node) use($app) {
-			$node->getChildren();
-			$node->wrapChild($app['users.login_node']);
-			return $node;
-		}));
-
-		$app['users.logout_list_node'] = $app->share(function() use($app) {
-			$firewalls = $app['security.firewalls'];
-			$logoutPath = $firewalls['default']['logout']['logout_path'];
-			return new ListNode(null, 'logout', 'Logout', $logoutPath);
-		});
-
 		$app['security.firewalls'] = $app->share(function() use($app) {
 			return [
 				'default' => [
@@ -116,8 +97,12 @@ class UsersPlugin extends Plugin {
 
 		$app['users.repository'];
 
+		$app->match('/login', $app['actions.dispatch']($app['users.login_action']))->bind('login');
+
+		$app->match('/logout')->bind('logout');
+
 		$app['cms.navigation_list'] = $app->share($app->extend('cms.navigation_list', function(ListNodeInterface $cmsNav) use($app) {
-			$cmsNav->getChild('users')->wrapChild($app['users.logout_list_node']);
+			$cmsNav->getChild('users')->addChild('logout', 'Logout', $app['url_generator']->generate('logout'));
 			return $cmsNav;
 		}));
 

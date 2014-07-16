@@ -3,8 +3,6 @@
 namespace Sentient\Blog;
 
 use Sentient\Blog\Action\ListPostsAction;
-use Sentient\Node\ControllerNode;
-use Sentient\Node\ControllerNodeInterface;
 use Sentient\Plugin\Plugin;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,8 +28,6 @@ class BlogPlugin extends Plugin {
 			return $app['orm.rm']->loadRepository($app['orm.em'], $app['blog.entity_classes.blog_categories']);
 		});
 
-		$app['blog.url_fragment'] = 'blog';
-
 		$app['blog.templates.list_posts'] = '@blog/view/list_posts';
 		$app['blog.templates.view_post'] = '@blog/view/view_post';
 
@@ -47,7 +43,7 @@ class BlogPlugin extends Plugin {
 			$controllers = $app['controllers_factory'];
 			$dispatchListPosts = $app['actions.dispatch']($app['blog.actions.list_posts']);
 			$controllers
-				->get('', $dispatchListPosts)
+				->get('/', $dispatchListPosts)
 				->bind('blog');
 			$controllers
 				->get('/categories/{slug}', $dispatchListPosts)
@@ -75,17 +71,6 @@ class BlogPlugin extends Plugin {
 				->bind('blog_post');
 			return $controllers;
 		});
-
-		$app['blog.root_node'] = $app->share(function() use($app) {
-			$node = new ControllerNode($app['blog.actions.list_posts'], null, 'blog', 'Blog', null, true, null, true);
-			$node->mountControllers($app['blog.controllers']);
-			return $node;
-		});
-
-		$app['home_node'] = $app->share($app->extend('home_node', function(ControllerNodeInterface $node) use($app) {
-			$node->wrapChild($app['blog.root_node'], $app['blog.url_fragment']);
-			return $node;
-		}));
 
 	}
 

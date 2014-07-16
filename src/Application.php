@@ -5,17 +5,13 @@ namespace Sentient;
 use Knp\Provider\ConsoleServiceProvider;
 use Sentient\Action\ActionDispatcher;
 use Sentient\Action\ActionInterface;
-use Sentient\Action\SimpleAction;
 use Sentient\Asset\AssetServiceProvider;
 use Sentient\Cms\CmsPlugin;
 use Sentient\Data\DataProvider;
 use Sentient\Data\ValidatorServiceProvider;
 use Sentient\Form\FormServiceProvider;
 use Sentient\Media\MediaPlugin;
-use Sentient\Node\ControllerNode;
 use Sentient\Node\ControllerNodeInterface;
-use Sentient\Node\ControllerNodeListNode;
-use Sentient\Node\ListNode;
 use Sentient\Plugin\PluginInterface;
 use Sentient\Route\UrlMatcher;
 use Sentient\Users\UsersPlugin;
@@ -151,32 +147,6 @@ class Application extends Silex {
 
 		$app['timezone'] = 'Europe/London';
 
-		$app['home_template'] = 'view/home';
-
-		$app['home_action'] = $app->share(function() use($app) {
-			return new SimpleAction('home', 'Home', $app['home_template']);
-		});
-
-		$app['home_node'] = $app->share(function() use($app) {
-			return new ControllerNode($app['home_action']);
-		});
-
-		$app['home_controllers'] = $app->share(function() use($app) {
-			return $app['nodes.controllers_factory']($app['home_node'], 'app');
-		});
-
-		$app['home_list_node'] = $app->share(function() use($app) {
-			return new ControllerNodeListNode($app['home_node'], 'app', $app['url_generator']);
-		});
-
-		$app['navigation'] = $app->share(function() use($app) {
-			$rootNode = new ListNode();
-			$homeNode = new ControllerNodeListNode($app['home_node'], 'app', $app['url_generator'], $rootNode, false);
-			$rootNode->registerChild($homeNode);
-			$rootNode->adoptChildren($app['home_list_node']);
-			return $rootNode;
-		});
-
 		$app
 			->register(new ServiceControllerServiceProvider())
 			->register(new UrlGeneratorServiceProvider())
@@ -247,14 +217,7 @@ class Application extends Silex {
 		parent::boot();
 	}
 
-	protected function initialize() {
-
-		/**
-		 * Mount the base app controller
-		 */
-		$this->mount('/', $this['home_controllers']);
-
-	}
+	protected function initialize() {}
 
 	/**
 	 * @param ServiceProviderInterface $serviceProvider

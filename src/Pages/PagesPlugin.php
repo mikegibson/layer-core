@@ -2,7 +2,6 @@
 
 namespace Sentient\Pages;
 
-use Sentient\Node\ControllerNodeInterface;
 use Sentient\Plugin\Plugin;
 use Silex\Application;
 
@@ -29,10 +28,9 @@ class PagesPlugin extends Plugin {
 			return new PageNode($app['pages.repository']);
 		});
 
-		$app['home_node'] = $app->share($app->extend('home_node', function(ControllerNodeInterface $node) use($app) {
-			$node->adoptChildren($app['pages.root_node']);
-			return $node;
-		}));
+		$app['pages.controllers'] = $app->share(function() use($app) {
+			return $app['nodes.controllers_factory']($app['pages.root_node'], 'pages');
+		});
 
 	}
 
