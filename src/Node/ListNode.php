@@ -11,6 +11,10 @@ class ListNode extends Node implements ListNodeInterface {
 		$this->url = $url;
 	}
 
+	public function addChild($name, $label, $url = null) {
+		$this->registerChild(new ListNode($this, $name, $label, $url));
+	}
+
 	public function areChildrenOrdered() {
 		return false;
 	}

@@ -21,6 +21,10 @@ class WrappedListNode extends WrappedNode implements ListNodeInterface {
 		parent::__construct($baseNode, $parentNode, $name, $label, $baseChildrenAccessible);
 	}
 
+	public function addChild($name, $label, $url = null) {
+		$this->registerChild(new ListNode($this, $name, $label, $url));
+	}
+
 	public function areChildrenOrdered() {
 		return $this->getBaseNode()->areChildrenOrdered();
 	}
