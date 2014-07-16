@@ -129,17 +129,12 @@ class CmsPlugin extends Plugin {
 			return new ReskinnedAction($app['users.login_action'], '@cms/view/login');
 		});
 
-		$app['cms.login_node'] = $app->share(function() use($app) {
-			return new ControllerNode($app['cms.login_action']);
-		});
-
 		$app['cms.content_node'] = $app->share(function() use($app) {
 			return new ControllerNode(null, null, 'content', 'Content', null, true, false);
 		});
 
 		$app['cms.root_node'] = $app->share(function() use($app) {
 			$node = new ControllerNode();
-			$node->wrapChild($app['cms.login_node']);
 			$node->wrapChild($app['cms.content_node']);
 			return $node;
 		});
